@@ -1,6 +1,0 @@
-{
-  "framework": "nextjs",
-  "buildCommand": "turbo build --filter=@eventos/web",
-  "installCommand": "pnpm install --frozen-lockfile --ignore-scripts",
-  "outputDirectory": "apps/web/.next"
-}
