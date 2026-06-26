@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Approval = {
   id: string;
@@ -42,12 +43,15 @@ export default function ApprovalsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('pending');
   const [selectedApproval, setSelectedApproval] = useState<Approval | null>(null);
   const [rejectionNote, setRejectionNote] = useState<string>('');
+  const [loading, setLoading] = useState(true);
 
   const fetchApprovals = useCallback(() => {
+    setLoading(true);
     fetch(`/api/v1/workflow/approvals?status=${statusFilter}`)
       .then((r) => r.json())
       .then(setApprovals)
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [statusFilter]);
 
   // Load approvals on filter change
@@ -163,7 +167,15 @@ export default function ApprovalsPage() {
         </div>
       </div>
 
-      <DataTable data={approvals} columns={columns} />
+      {loading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full" />
+          ))}
+        </div>
+      ) : (
+        <DataTable data={approvals} columns={columns} />
+      )}
 
       {/* Details & Interactive Resolution Dialog */}
       <Dialog open={selectedApproval !== null} onOpenChange={(open) => {

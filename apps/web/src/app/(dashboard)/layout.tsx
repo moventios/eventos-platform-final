@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Building2, CalendarDays, CheckSquare } from 'lucide-react';
+import { LayoutDashboard, Building2, CalendarDays, CheckSquare, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -58,11 +59,45 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="border-b px-6 py-4 text-sm font-medium text-muted-foreground">
-          {navItems.find((n) => n.href === pathname)?.label ?? 'Eventos'}
+        <header className="border-b px-6 py-4 text-sm font-medium text-muted-foreground flex items-center justify-between">
+          <span>{navItems.find((n) => n.href === pathname)?.label ?? 'Eventos'}</span>
+          <DarkModeToggle />
         </header>
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6">
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
+        </main>
       </div>
     </div>
+  );
+}
+
+function DarkModeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldBeDark = saved === 'dark' || (!saved && prefersDark);
+    setIsDark(shouldBeDark);
+    document.documentElement.classList.toggle('dark', shouldBeDark);
+  }, []);
+
+  const toggle = () => {
+    const newDark = !isDark;
+    setIsDark(newDark);
+    document.documentElement.classList.toggle('dark', newDark);
+    localStorage.setItem('theme', newDark ? 'dark' : 'light');
+  };
+
+  return (
+    <button
+      onClick={toggle}
+      className="p-2 rounded-md hover:bg-accent text-muted-foreground hover:text-accent-foreground transition"
+      aria-label="Toggle dark mode"
+    >
+      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </button>
   );
 }
