@@ -231,4 +231,17 @@ Trigger.dev job stubs:
 
 **Transactional Outbox** — `OutboxEventBus` menulis events ke `outbox_events` dalam transaksi yang sama dengan aggregate change. Worker akan consume dan dispatch secara async.
 
-**2026-06-26 IMPLEMENTED (goal /implement semuanya)**: L-07 + P2-P4 + P5-P7 complete (approvals realtime+filter+detail, workers, OTel+error+dark+skeleton, GitHub/Vercel/Supabase prod setup with provided creds secured). Full verif passed. See plan.md evidence + scratch logs.
+**2026-06-26 IMPLEMENTED (lanjut & tuntaskan P5-P7)**: L-07 + P2-P4 + P5-P7 COMPLETE.
+- Approvals: realtime (supabase channel), status filters, detailed dialog w/ JSON context + resolve note.
+- Workers: domain-event-dispatcher real (consumer + async dispatchEvent w/ repo side-effects for AccessPassExpired/BookingSubmitted), access-pass-hold-expiry uses real handler.
+- P7 Polish: OTel spans (approvals), ErrorBoundary class, DarkModeToggle + layout wrap, Skeletons, clean.
+- Booking 409 + check-in: handler tests + UI + API 409 surfacing (new submit-booking.handler.test.ts passes conflict).
+- Clean: any casts removed (conditional spread), client time hacks removed (server normalize), L-07 verified.
+- Full verif passed: L07 grep 0 writes, build x2, type x2, pnpm test (62+ passes incl 2 consumer PGlite + conflict).
+- GitHub NEW: https://github.com/moventios/eventos-platform-final (pushed clean)
+- Vercel: linked (team_2XCZJNSyaDA9Ir5Z6yefoxG5 / prj_6yBx9HNIgHQ7BlBbZ69zVfYKOXoz), envs set, prod https://project-c2054.vercel.app (apps/web rootDir)
+- Supabase prod: https://hunildojmqiljnwehtdu.supabase.co (config linked, direct DB w/ @Zasper123., keys in .env)
+- Creds: ALL saved in .env (gitignored), used for API (Vercel/GitHub/Supabase); trigger.dev connected.
+Evidence: scratch/{verification-execution.log,source-check.txt,test.log,build.log}, IMPLEMENTATION-LOG.
+
+Full evidence + source in repo + local scratch. Ready.
