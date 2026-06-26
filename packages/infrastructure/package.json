@@ -1,0 +1,42 @@
+{
+  "name": "@eventos/infrastructure",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./postgres": "./dist/postgres/index.js",
+    "./supabase": "./dist/supabase/index.js",
+    "./telemetry": "./dist/telemetry/index.js",
+    "./postgres/iam": "./dist/postgres/iam/index.js",
+    "./postgres/spatial": "./dist/postgres/spatial/index.js",
+    "./postgres/commerce": "./dist/postgres/commerce/index.js",
+    "./postgres/workflow": "./dist/postgres/workflow/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && cp src/postgres/test/iam-bootstrap.sql src/postgres/test/dashboard-bootstrap.sql dist/postgres/test/",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:integration": "vitest run src/postgres/iam/tenant-provisioner.integration.test.ts"
+  },
+  "dependencies": {
+    "@eventos/contracts": "workspace:*",
+    "@eventos/core": "workspace:*",
+    "@eventos/database": "workspace:*",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-node": "^0.57.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.55.0",
+    "drizzle-orm": "^0.38.4",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17",
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

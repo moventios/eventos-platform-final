@@ -1,0 +1,125 @@
+# Platform Enterprise Knowledge Base (EKB) — AI IDE Agent Rules v5.1.1
+
+## Mandatory Context Loading Order (for AI IDE Agents)
+
+Load in this exact sequence before any coding or implementation task:
+
+1. This file (`.cursorrules`)  ← Contains rules + essential file mapping
+2. `docs/ai-ide/EKB-AI-Agent-Instructions.md`
+3. `docs/layers/Layer-1-Constitution-v5.0.2.md` — ALWAYS (ontology + laws + events)
+4. `docs/layers/Layer-3-EPXA-v5.1.md` — when engineering/tech/DX decisions required
+5. `docs/layers/Layer-2-Database-SSOT-v5.0.2.md` — when schema/DB work required
+6. Specific `volumes/XX-*.md` — **only** when the task requires that domain
+
+**Rule:** Load the fewest files possible. This .cursorrules now includes the key mapping to decide.
+
+**NEVER load from `archive/` or `archive/meta/` — those are historical/superseded.**
+
+**Mapping note:** The detailed map has been integrated here in .cursorrules. (EKB-AI-INDEX archived.)
+
+## File Mapping (for quick decisions during coding)
+
+**Load only what you need:**
+
+- **Core / Laws / Ontology / Events / Commands:** `docs/layers/Layer-1-Constitution-v5.0.2.md` (always start here for most tasks)
+- **Engineering patterns, tech stack, monorepo, DX, traceability:** `docs/layers/Layer-3-EPXA-v5.1.md` + `docs/volumes/03-engineering.md`
+- **Database schema, RLS, enums, stored procedures:** `docs/layers/Layer-2-Database-SSOT-v5.0.2.md`
+- **New feature or domain work:** Layer-1 + Layer-3 + relevant `docs/volumes/XX-*.md` (use the mapping in this file)
+- **AI / Agents / MCP / RAG / L-06:** Layer-1 + Layer-3 + `docs/volumes/04-ai-architecture.md`
+- **Governance, ADR, compliance:** `docs/volumes/06-governance.md` + `docs/architecture/adr/`
+- **Business justification:** `docs/volumes/07-business.md`
+- **UX / Product:** `docs/volumes/08-product.md`
+- **AI IDE Skills / Tooling / SEO / UI tools:** `docs/volumes/09-skills-tooling.md`
+- **SEO, GEO, AEO tasks:** `docs/strategy/seo-aeo-geo-strategy.md` + use `agentic-seo` skill
+- **UI/UX design work:** `docs/volumes/08-product.md` + `docs/strategy/copywriting-system.md` + use `ui-ux-pro-max` skill
+- **Content / Copywriting:** `docs/strategy/copywriting-system.md` + `docs/strategy/messaging-framework.md`
+
+**Full detailed indexing:** See the mapping section above in this file. (Archived copy in archive/EKB-AI-INDEX.md)
+
+**Authority (always):** Layer-1 > Layer-2 > Layer-3 > EKB Volumes
+
+**Golden rule:** Start with Layer-1 + one other. Never dump the whole repo into context.
+
+**Authority:** Layer-1 > Layer-2 > Layer-3 > EKB Volumes
+
+**Never load everything.** Start minimal.
+
+## Authority Hierarchy
+
+```
+Layer-1 > Layer-2 > Layer-3 > EKB Volumes
+```
+
+When files conflict, the Layer wins. EKB Volumes add examples + practical guidance only.
+
+## Ubiquitous Language (STRICT)
+
+Canonical terms (Layer-1 Part 3-4):
+- `AccessPass` (NOT: Ticket, Token, Pass)
+- `Booking` (NOT: Reservation, Appointment)
+- `Supplier` (NOT: Vendor, Provider)
+- `Facility` (NOT: Space, Location, Venue — unless GeoCoordinate context)
+- `TicketType` (NOT: TicketTier, PassType)
+- `Workflow` (NOT: Process, Flow)
+
+Violation = mandatory refactor before merge.
+
+## Enterprise Laws (Canonical: Layer-1 Part 9)
+
+- **L-01** — No cross-BC SQL JOINs. Compose at application layer via Read Models.
+- **L-02** — Financial history append-only. Reversal entries only — no UPDATE/DELETE on journal_entries.
+- **L-03** — Soft delete on all business entities: `deleted_at` + `deleted_by` columns required.
+- **L-04** — Idempotency key on all financial/booking mutations. UNIQUE(tenant_id, idempotency_key).
+- **L-05** — Every entity has a tenant owner (directly or via FK chain). FORCE ROW LEVEL SECURITY.
+- **L-06** — AI WRITE→PENDING only. Create Approval record; never direct material state mutation.
+- **L-07** — All mutations flow through Command Handlers. No raw DB writes in API routes.
+- **L-08** — Zero-downtime migrations: Expand/Contract. No RENAME COLUMN or breaking DDL.
+- **L-09** — OpenTelemetry span on every Command Handler + Adapter (mandatory attributes).
+- **L-10** — No secrets in code, .env, or DB. HashiCorp Vault only.
+
+## Database Rules
+
+- ORM: Drizzle. All new tables need: `tenant_id`, `created_at/by`, `updated_at/by`, `deleted_at/by`
+- RLS: `ENABLE ROW LEVEL SECURITY` + `FORCE ROW LEVEL SECURITY` on every table
+- Money: `NUMERIC(19,4)` — never float. Use `Decimal.js` in TypeScript
+- No cross-bounded-context JOINs in any SQL query
+
+## Architecture Rules
+
+- Hexagonal Architecture: domain packages have ZERO infrastructure imports
+- Commands → imperative (`IssueAccessPass`). Events → past tense (`AccessPassIssued`)
+- Cross-BC communication: Domain Events via `domain_events` outbox table only. No RPC.
+- Every significant decision → ADR in `architecture/adr/`
+
+## AI Safety (L-06)
+
+- You have READ access to all knowledge
+- You have WRITE→PENDING for material state (propose via Approval, never execute directly)
+- New MCP tools: register in `mcp_tool_registry` with Level 0/1/2 (see volumes/04-ai-architecture.md)
+- Level 1 tools must call `create_ai_approval_pending()` before any state change
+
+## Output Quality
+
+- Reference Layers — never duplicate canonical definitions in EKB volumes
+- All amounts: use `<AmountDisplay>` component — never raw numbers
+- All tables: TanStack Table with URL-synced state (manualPagination + manualSorting)
+- All forms: react-hook-form + zodResolver + pre-generated idempotency_key
+
+## Skills Ecosystem (Volume 09)
+
+For tasks that need specialist skills, use the `eventos-skills` plugin.
+Full reference: `docs/volumes/09-skills-tooling.md`
+
+| Task | Use Skill |
+|------|----------|
+| SEO audit, GEO, AEO, sitemap | `agentic-seo` |
+| UI/UX design, design system | `ui-ux-pro-max` |
+| Codebase mapping, impact analysis | `understand-codebase` |
+| AI training dataset creation | `ai-dataset-generator` |
+| Structured feature development | `vibe-coder-workflow` |
+| Multi-step end-to-end delivery | `codymaster-workflow` |
+| Specialist: security, K8s, Next.js | `antigravity-skill-vault` |
+
+**Skill selection rule:** Before any UI task, check `docs/strategy/copywriting-system.md`.  
+Before any SEO task, check `docs/strategy/seo-aeo-geo-strategy.md`.  
+For all code tasks, apply L-01–L-10 laws without exception.
