@@ -34,8 +34,8 @@ export class DrizzleOutboxConsumer {
         actorId: row.actorId || 'SYSTEM',
         occurredAt: row.createdAt.toISOString(),
         payload: (row.payload ?? {}) as Record<string, unknown>,
+        ...(row.traceId ? { traceId: row.traceId } : {}),
       };
-      if (row.traceId) (base as any).traceId = row.traceId;
       return base;
     });
   }

@@ -7,7 +7,7 @@ import { DrizzleOutboxConsumer } from './outbox-consumer.js';
 
 describe('DrizzleOutboxConsumer (real impl)', () => {
   let client: PGlite;
-  let db: any;
+  let db: ReturnType<typeof drizzle<typeof schema>>;
   let consumer: DrizzleOutboxConsumer;
 
   beforeEach(async () => {

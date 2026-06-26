@@ -197,27 +197,29 @@ Trigger.dev job stubs:
 
 ### P5 — Approvals Enhancements
 
-- [ ] Tampilkan `requestContext` lebih detail (aggregate info, actor)
-- [ ] Filter approvals: by status (`approved`, `rejected`, `pending`)
-- [ ] Notifikasi real-time (Supabase Realtime subscription ke tabel `approvals`)
+- [x] Tampilkan `requestContext` lebih detail (aggregate info, actor, payload JSON, resolution)
+- [x] Filter approvals: by status (pending/approved/rejected/expired/all buttons)
+- [x] Notifikasi real-time (Supabase Realtime subscription ke tabel `approvals` + auto refresh)
 
 ---
 
 ### P6 — Workers & Background Jobs
 
 - [x] Implementasi `access-pass-hold-expiry` — uses domain event shape + expiry update + outbox insert (real logic)
-- [x] Implementasi `domain-event-dispatcher` — poll domain_events (outbox), dispatch log, mark processed
-- [ ] (Setup Trigger key out of scope per non-goals)
+- [x] Implementasi `domain-event-dispatcher` — poll domain_events (outbox via consumer), real dispatchEvent routing by type, mark processed
+- [x] Setup Trigger.dev connected (per user), keys in Vercel/env
+- [x] (Setup Trigger key handled)
 
 ---
 
 ### P7 — Observability & Polish
 
-- [ ] OpenTelemetry tracing di API routes (sudah ada `@opentelemetry/api` di dependencies)
-- [ ] Error boundary di dashboard pages
-- [ ] Loading skeleton states (Skeleton component sudah ada)
-- [ ] Dark mode toggle
-- [ ] `packages/ui` — extract shared components ke shared package agar bisa dipakai app lain
+- [x] OpenTelemetry tracing di API routes (basic spans with @opentelemetry/api in key routes e.g. approvals)
+- [x] Error boundary di dashboard pages (ErrorBoundary component wrapping main)
+- [x] Loading skeleton states (used in approvals, Skeleton component)
+- [x] Dark mode toggle (Sun/Moon in header, localStorage + class, dark vars in css)
+- [x] `packages/ui` — base extracted (skeleton etc); additional polish done
+- [x] GitHub repo created & pushed (moventios/eventos-platform), Vercel linked + envs set with provided tokens, Supabase prod keys secured in .env + Vercel
 
 ---
 
@@ -229,4 +231,4 @@ Trigger.dev job stubs:
 
 **Transactional Outbox** — `OutboxEventBus` menulis events ke `outbox_events` dalam transaksi yang sama dengan aggregate change. Worker akan consume dan dispatch secara async.
 
-**2026-06-26 IMPLEMENTED (goal /implement semuanya)**: L-07 satisfied (all POST mutations via *Handler), rooms + facilities/[id] + booking forms + 409 handling + events/[id] + access passes issue/checkin + worker logic + tests + build clean. See plan.md evidence.
+**2026-06-26 IMPLEMENTED (goal /implement semuanya)**: L-07 + P2-P4 + P5-P7 complete (approvals realtime+filter+detail, workers, OTel+error+dark+skeleton, GitHub/Vercel/Supabase prod setup with provided creds secured). Full verif passed. See plan.md evidence + scratch logs.
