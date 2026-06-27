@@ -29,12 +29,12 @@
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
   },
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@9.15.4",
   "dependencies": {
     "@trigger.dev/sdk": "^3.3.17"
   },
   "pnpm": {
-    "approvedBuilds": [
+    "onlyBuiltDependencies": [
       "@biomejs/biome",
       "esbuild",
       "protobufjs",
