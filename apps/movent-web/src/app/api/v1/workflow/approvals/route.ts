@@ -15,13 +15,15 @@ export const GET = withTenantContext(async (req: NextRequest, { tenantId }) => {
   try {
     const { db } = createDbWithTenant(tenantId);
     const statusParam = req.nextUrl.searchParams.get('status') || 'pending';
-    
+
     const conditions = [eq(approvals.tenantId, tenantId)];
     if (statusParam !== 'all') {
       conditions.push(eq(approvals.status, statusParam as any));
     }
 
-    const rows = await db.select().from(approvals)
+    const rows = await db
+      .select()
+      .from(approvals)
       .where(and(...conditions));
     span.setAttribute('rows_count', rows.length);
     return NextResponse.json(rows);

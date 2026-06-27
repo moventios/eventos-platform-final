@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 
 /**
  * Movent Infrastructure - Place Engine
- * 
+ *
  * Facility = Venue / Place (internal).
  * Node in the Network where Participation and Relationships are activated.
  * User-facing: Places.
@@ -62,10 +62,16 @@ export class Facility {
     return { facility, event };
   }
 
-  get id() { return this.props.id; }
-  get status() { return this.props.status; }
+  get id() {
+    return this.props.id;
+  }
+  get status() {
+    return this.props.status;
+  }
 
-  toRecord(): FacilityProps { return { ...this.props }; }
+  toRecord(): FacilityProps {
+    return { ...this.props };
+  }
 
   static reconstitute(props: FacilityProps): Facility {
     return new Facility(props);

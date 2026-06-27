@@ -1,319 +1,404 @@
-"use client";
+'use client';
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton';
+import { StatusBadge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
-	ArrowRight,
-	BookOpen,
-	Calendar,
-	FolderKanban,
-	Handshake,
-	MapPin,
-	Search,
-	Users,
-	Zap,
-} from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+  ArrowRight,
+  Building2,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Shield,
+  Ticket,
+  XCircle,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 type Event = {
-	id: string;
-	name: string;
-	description: string | null;
-	status?: string;
+  id: string;
+  name: string;
+  description: string | null;
+  status: string;
+  startsAt: string | null;
+  endsAt: string | null;
 };
-type Facility = { id: string; name: string; address?: string; status?: string };
 
-const intentCards = [
-	{ href: "/events", label: "Meet people", desc: "Profiles via events", icon: Users, color: "from-blue-500 to-indigo-600" },
-	{ href: "/facilities", label: "Find places", desc: "Spaces for gatherings", icon: MapPin, color: "from-emerald-500 to-teal-600" },
-	{ href: "/events", label: "Discover events", desc: "Happening near you", icon: Calendar, color: "from-violet-500 to-purple-600" },
-	{ href: "/events", label: "Find projects", desc: "Collaborate on work", icon: FolderKanban, color: "from-orange-500 to-rose-600" },
-	{ href: "/events", label: "Opportunities", desc: "Jobs, sponsorships", icon: Zap, color: "from-amber-500 to-orange-600" },
-	{ href: "/events", label: "Learn", desc: "Knowledge at events", icon: BookOpen, color: "from-teal-500 to-cyan-600" },
-	{ href: "/facilities", label: "Join communities", desc: "Groups at places", icon: Handshake, color: "from-pink-500 to-rose-600" },
-	{ href: "/events", label: "Collaborate", desc: "Build with others", icon: Users, color: "from-indigo-500 to-blue-600" },
-];
+type Facility = {
+  id: string;
+  name: string;
+  address?: string;
+  status: string;
+};
 
-const exploreNodes = [
-	{ href: "/events", label: "People", desc: "Active profiles via events", icon: Users },
-	{ href: "/events", label: "Organizations", desc: "Driving ecosystem impact", icon: Zap },
-	{ href: "/events", label: "Communities", desc: "Shared purpose at places", icon: Handshake },
-	{ href: "/events", label: "Projects", desc: "Collaborative work", icon: FolderKanban },
-	{ href: "/events", label: "Events", desc: "Happening now", icon: Calendar },
-	{ href: "/facilities", label: "Places", desc: "Spaces for gatherings", icon: MapPin },
-];
+type Booking = {
+  id: string;
+  title?: string;
+  roomId?: string;
+  startAt: string;
+  endAt: string;
+  status: string;
+};
+
+type Approval = {
+  id: string;
+  requestContext: {
+    command_type: string;
+    actor_id: string;
+    aggregate_id: string;
+    aggregate_type: string;
+    payload?: Record<string, unknown>;
+  };
+  status: string;
+  createdAt: string;
+};
 
 export default function EcosystemHome() {
-	const [events, setEvents] = useState<Event[]>([]);
-	const [facilities, setFacilities] = useState<Facility[]>([]);
-	const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [facilities, setFacilities] = useState<Facility[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [approvals, setApprovals] = useState<Approval[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actioningApproval, setActioningApproval] = useState<string | null>(null);
 
-	useEffect(() => {
-		setLoading(true);
-		Promise.all([
-			fetch("/api/v1/commerce/events").then((r) => (r.ok ? r.json() : [])),
-			fetch("/api/v1/spatial/facilities").then((r) => (r.ok ? r.json() : [])),
-		])
-			.then(([evs, facs]) => {
-				setEvents(evs || []);
-				setFacilities(facs || []);
-			})
-			.catch(() => {
-				setEvents([]);
-				setFacilities([]);
-			})
-			.finally(() => setLoading(false));
-	}, []);
+  const loadDashboardData = async () => {
+    try {
+      const [evsRes, facsRes, bksRes, appRes] = await Promise.all([
+        fetch('/api/v1/commerce/events').then((r) => (r.ok ? r.json() : [])),
+        fetch('/api/v1/spatial/facilities').then((r) => (r.ok ? r.json() : [])),
+        fetch('/api/v1/spatial/bookings').then((r) => (r.ok ? r.json() : [])),
+        fetch('/api/v1/workflow/approvals?status=pending').then((r) => (r.ok ? r.json() : [])),
+      ]);
+      setEvents(evsRes || []);
+      setFacilities(facsRes || []);
+      setBookings(bksRes || []);
+      setApprovals(appRes || []);
+    } catch (err) {
+      setError('Failed to synchronize active operational state.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-	const featuredEvents = events.slice(0, 3);
-	const featuredPlaces = facilities.slice(0, 3);
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
 
-	const recentActivity = [
-		...events.slice(0, 2).map((e, i) => ({
-			text: `${e.name} is live in the Network`,
-			sub: i ? "recently" : "just now",
-		})),
-		...facilities.slice(0, 1).map((f) => ({
-			text: `${f.name} ready for gatherings`,
-			sub: "today",
-		})),
-	];
+  const handleResolve = async (approvalId: string, resolution: 'approved' | 'rejected') => {
+    setActioningApproval(approvalId);
+    try {
+      const res = await fetch(`/api/v1/workflow/approvals/${approvalId}/resolve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ approvalId, resolution, note: 'Resolved from Mission Control' }),
+      });
+      if (res.ok) {
+        await loadDashboardData();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to resolve approval');
+      }
+    } catch {
+      alert('Communication failure with workflow gate.');
+    } finally {
+      setActioningApproval(null);
+    }
+  };
 
-	return (
-		<div className="min-h-full">
-			{/* Hero */}
-			<div className="bg-gradient-hero border-b border-border/40 px-6 py-12">
-				<div className="max-w-3xl mx-auto text-center space-y-6">
-					<div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-4 py-1.5 text-xs font-medium">
-						<span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-						Public Ecosystem Network
-					</div>
-					<h1 className="text-4xl font-bold tracking-tight text-foreground">
-						Discover Places, Events,
-						<span className="block text-gradient">Organizations & Opportunities</span>
-					</h1>
-					<p className="text-muted-foreground max-w-xl mx-auto text-base">
-						The public Relationship, Activation & Collaboration Network on Movent infrastructure.
-					</p>
+  const liveEvents = events.filter((e) => e.status === 'published' || e.status === 'live');
+  const activeBookings = bookings.filter((b) => b.status === 'confirmed' || b.status === 'active');
 
-					{/* Search */}
-					<div className="relative max-w-xl mx-auto">
-						<Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-						<form action="/events" method="get">
-							<input
-								type="text"
-								name="search"
-								placeholder="Search events, places, people, organizations..."
-								className="w-full pl-11 pr-6 py-3.5 text-sm border border-border rounded-xl bg-card/80 backdrop-blur-sm
-									focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200
-									shadow-sm placeholder:text-muted-foreground/60"
-							/>
-						</form>
-						<p className="text-center text-[10px] text-muted-foreground/60 mt-1.5">
-							Discover Events, Places, Organizations, and more across the ecosystem
-						</p>
-					</div>
-				</div>
-			</div>
+  return (
+    <div className="mx-auto max-w-6xl space-y-6 p-6">
+      {/* Operational Alerts Header */}
+      <div className="flex flex-col justify-between gap-4 border-b border-border/40 pb-5 md:flex-row md:items-center">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Mission Control</h1>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Real-time operational dashboard for orchestrating active event flows
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+          <span className="font-mono text-xs uppercase text-muted-foreground">
+            Live Ops Connection Active
+          </span>
+        </div>
+      </div>
 
-			<div className="max-w-6xl mx-auto px-6 py-10 space-y-12">
-				{/* Intent cards — What are you looking for? */}
-				<section>
-					<h2 className="text-lg font-semibold mb-5 text-foreground">
-						What are you looking for?
-					</h2>
-					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-						{intentCards.map((card) => (
-							<Link
-								key={card.label}
-								href={card.href}
-								className="group relative overflow-hidden rounded-xl border border-border/60 bg-card p-4 card-hover shadow-sm"
-							>
-								<div className={`mb-2.5 h-8 w-8 rounded-lg bg-gradient-to-br ${card.color} flex items-center justify-center shadow-sm`}>
-									<card.icon className="h-4 w-4 text-white" />
-								</div>
-								<div className="font-semibold text-sm text-foreground">{card.label}</div>
-								<div className="text-xs text-muted-foreground mt-0.5">{card.desc}</div>
-							</Link>
-						))}
-					</div>
-				</section>
+      {error && (
+        <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-3.5 text-xs text-destructive">
+          ⚠️ {error}
+        </div>
+      )}
 
-				{/* Trending / Featured */}
-				<section>
-					<div className="flex items-center justify-between mb-5">
-						<h2 className="text-lg font-semibold text-foreground">Trending in the Network</h2>
-						<Link href="/events" className="text-xs text-primary hover:underline flex items-center gap-1">
-							View all <ArrowRight className="h-3 w-3" />
-						</Link>
-					</div>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-						{loading ? (
-							<>
-								<Skeleton className="h-28 w-full rounded-xl" />
-								<Skeleton className="h-28 w-full rounded-xl" />
-								<Skeleton className="h-28 w-full rounded-xl" />
-							</>
-						) : featuredEvents.length > 0 ? (
-							featuredEvents.map((e) => (
-								<Link
-									key={e.id}
-									href={`/events/${e.id}`}
-									className="group rounded-xl border border-border/60 bg-card p-4 card-hover shadow-sm"
-								>
-									<div className="flex items-start gap-3">
-										<div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-sm">
-											<Calendar className="h-5 w-5 text-white" />
-										</div>
-										<div className="min-w-0">
-											<div className="font-semibold text-sm text-foreground truncate">{e.name}</div>
-											<div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-												{e.description || "Event in the network"}
-											</div>
-											<div className="text-[10px] text-primary mt-1.5 font-medium">
-												View & connect →
-											</div>
-										</div>
-									</div>
-								</Link>
-							))
-						) : (
-							<>
-								<FallbackCard icon={Calendar} title="AI Summit Jakarta" desc="Technology & Innovation" color="from-blue-500 to-indigo-600" />
-								<FallbackCard icon={Users} title="Startup Community" desc="Networking Event" color="from-violet-500 to-purple-600" />
-								<FallbackCard icon={MapPin} title="WeWork Sudirman" desc="Co-working Space" color="from-emerald-500 to-teal-600" />
-							</>
-						)}
-					</div>
-				</section>
+      {/* KPI Snapshot Indicators */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {[
+          {
+            label: 'Active Events',
+            val: liveEvents.length,
+            icon: Calendar,
+            color: 'from-blue-500 to-indigo-600',
+          },
+          {
+            label: 'Spaces Reserved',
+            val: activeBookings.length,
+            icon: Building2,
+            color: 'from-emerald-500 to-teal-600',
+          },
+          {
+            label: 'Pending Approvals',
+            val: approvals.length,
+            icon: Shield,
+            color: 'from-amber-500 to-orange-600',
+            alert: approvals.length > 0,
+          },
+          {
+            label: 'Total Venues',
+            val: facilities.length,
+            icon: Ticket,
+            color: 'from-violet-500 to-purple-600',
+          },
+        ].map((kpi) => (
+          <div
+            key={kpi.label}
+            className={`bg-card rounded-xl border p-4 shadow-sm transition-all duration-200 ${
+              kpi.alert
+                ? 'border-amber-500/50 bg-amber-500/5 ring-1 ring-amber-500/20'
+                : 'border-border/60 hover:shadow-md'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">{kpi.label}</span>
+              <div
+                className={`h-7 w-7 rounded-lg bg-gradient-to-br ${kpi.color} flex items-center justify-center shadow-sm`}
+              >
+                <kpi.icon className="h-3.5 w-3.5 text-white" />
+              </div>
+            </div>
+            <div className="mt-2 text-2xl font-bold text-foreground">
+              {loading ? <Skeleton className="h-8 w-12" /> : kpi.val}
+            </div>
+          </div>
+        ))}
+      </div>
 
-				{/* Featured Places */}
-				{(loading || featuredPlaces.length > 0) && (
-					<section>
-						<div className="flex items-center justify-between mb-5">
-							<h2 className="text-lg font-semibold text-foreground">Featured Places</h2>
-							<Link href="/facilities" className="text-xs text-primary hover:underline flex items-center gap-1">
-								View all <ArrowRight className="h-3 w-3" />
-							</Link>
-						</div>
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-							{loading ? (
-								<>
-									<Skeleton className="h-24 w-full rounded-xl" />
-									<Skeleton className="h-24 w-full rounded-xl" />
-									<Skeleton className="h-24 w-full rounded-xl" />
-								</>
-							) : (
-								featuredPlaces.map((f) => (
-									<Link
-										key={f.id}
-										href={`/facilities/${f.id}`}
-										className="group flex items-center gap-3 rounded-xl border border-border/60 bg-card p-4 card-hover shadow-sm"
-									>
-										<div className="h-10 w-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0">
-											<MapPin className="h-5 w-5 text-white" />
-										</div>
-										<div className="min-w-0">
-											<div className="font-semibold text-sm text-foreground truncate">{f.name}</div>
-											<div className="text-xs text-muted-foreground mt-0.5 truncate">
-												{f.address || "Place for gatherings"}
-											</div>
-										</div>
-									</Link>
-								))
-							)}
-						</div>
-					</section>
-				)}
+      {/* Active Operational Sections */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Column 1 & 2: Approvals Queue and Spatial Occupancy */}
+        <div className="space-y-6 lg:col-span-2">
+          {/* Approvals Queue */}
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Shield className="h-4.5 w-4.5 text-amber-500" />
+                <h2 className="text-base font-semibold">Pending Approvals Queue</h2>
+              </div>
+              <Link href="/approvals" className="text-xs font-medium text-primary hover:underline">
+                View Queue →
+              </Link>
+            </div>
 
-				{/* Activity Feed */}
-				{recentActivity.length > 0 && (
-					<section>
-						<h2 className="text-lg font-semibold mb-5">Recent Activity</h2>
-						<div className="rounded-xl border border-border/60 bg-card shadow-sm overflow-hidden">
-							{recentActivity.map((a, i) => (
-								<div
-									key={`act-${i}`}
-									className={`flex items-start gap-3 px-5 py-3.5 text-sm ${
-										i < recentActivity.length - 1 ? "border-b border-border/40" : ""
-									}`}
-								>
-									<div className="h-2 w-2 rounded-full bg-primary shrink-0 mt-1.5" />
-									<div className="flex-1">{a.text}</div>
-									<span className="text-xs text-muted-foreground shrink-0">{a.sub}</span>
-								</div>
-							))}
-							<div className="px-5 py-3 bg-muted/30">
-								<Link href="/events" className="text-xs text-primary font-medium hover:underline">
-									Discover more activity →
-								</Link>
-							</div>
-						</div>
-					</section>
-				)}
+            <div className="bg-card overflow-hidden rounded-xl border border-border/60 shadow-sm">
+              {loading ? (
+                <div className="space-y-2 p-4">
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                </div>
+              ) : approvals.length === 0 ? (
+                <div className="space-y-2 p-8 text-center text-muted-foreground">
+                  <CheckCircle2 className="mx-auto h-8 w-8 text-emerald-500 opacity-50" />
+                  <p className="text-sm">
+                    Governance queue cleared. All AI agent writes validated.
+                  </p>
+                </div>
+              ) : (
+                <div className="divide-y divide-border/40">
+                  {approvals.slice(0, 4).map((app) => (
+                    <div
+                      key={app.id}
+                      className="flex items-center justify-between gap-4 p-4 transition-colors hover:bg-muted/10"
+                    >
+                      <div className="min-w-0 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 font-mono text-xs font-bold text-amber-600">
+                            {app.requestContext.command_type}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {new Date(app.createdAt).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                        <p className="truncate text-xs text-muted-foreground">
+                          Target:{' '}
+                          <span className="font-mono">
+                            {app.requestContext.aggregate_type} ({app.requestContext.aggregate_id})
+                          </span>
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        <Button
+                          size="sm"
+                          className="h-7 border-0 bg-emerald-600 text-xs text-white hover:bg-emerald-700"
+                          disabled={actioningApproval !== null}
+                          onClick={() => handleResolve(app.id, 'approved')}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-xs text-destructive hover:bg-destructive/10"
+                          disabled={actioningApproval !== null}
+                          onClick={() => handleResolve(app.id, 'rejected')}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
 
-				{/* Explore the Network */}
-				<section>
-					<h2 className="text-lg font-semibold mb-5">Explore the Network</h2>
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-						{exploreNodes.map((node) => (
-							<Link
-								key={node.label}
-								href={node.href}
-								className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-4 text-center card-hover shadow-sm"
-							>
-								<div className="h-9 w-9 rounded-lg bg-accent flex items-center justify-center">
-									<node.icon className="h-4 w-4 text-muted-foreground" />
-								</div>
-								<div className="font-semibold text-xs text-foreground">{node.label}</div>
-								<div className="text-[10px] text-muted-foreground leading-tight">{node.desc}</div>
-							</Link>
-						))}
-					</div>
-				</section>
+          {/* Spatial Booking Feeds */}
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Building2 className="h-4.5 w-4.5 text-primary" />
+                <h2 className="text-base font-semibold">Active Space Allocations</h2>
+              </div>
+              <Link href="/bookings" className="text-xs font-medium text-primary hover:underline">
+                Open Scheduler →
+              </Link>
+            </div>
 
-				{/* CTA */}
-				<section className="rounded-2xl border border-primary/20 bg-primary/5 px-8 py-10 text-center">
-					<h2 className="text-2xl font-bold mb-2 text-foreground">
-						Become part of the network
-					</h2>
-					<p className="text-muted-foreground mb-6 max-w-sm mx-auto text-sm">
-						Create your profile and start discovering real opportunities and relationships.
-					</p>
-					<Link
-						href="/onboarding"
-						className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-brand text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
-					>
-						Join Moventios <ArrowRight className="h-4 w-4" />
-					</Link>
-				</section>
-			</div>
-		</div>
-	);
-}
+            <div className="bg-card overflow-hidden rounded-xl border border-border/60 shadow-sm">
+              {loading ? (
+                <div className="space-y-2 p-4">
+                  <Skeleton className="h-10 w-full rounded-lg" />
+                  <Skeleton className="h-10 w-full rounded-lg" />
+                </div>
+              ) : activeBookings.length === 0 ? (
+                <div className="p-8 text-center text-muted-foreground">
+                  <p className="text-sm">No spaces occupied right now.</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-border/40">
+                  {activeBookings.slice(0, 4).map((b) => (
+                    <div
+                      key={b.id}
+                      className="flex items-center justify-between gap-4 p-4 transition-colors hover:bg-muted/10"
+                    >
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-semibold">
+                          {b.title || 'Allocated Space'}
+                        </div>
+                        <div className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+                          <Clock className="h-3 w-3" />
+                          <span>
+                            {new Date(b.startAt).toLocaleString([], {
+                              dateStyle: 'short',
+                              timeStyle: 'short',
+                            })}{' '}
+                            -{' '}
+                            {new Date(b.endAt).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                      <StatusBadge status={b.status} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
 
-function FallbackCard({
-	icon: Icon,
-	title,
-	desc,
-	color,
-}: {
-	icon: React.ComponentType<{ className?: string }>;
-	title: string;
-	desc: string;
-	color: string;
-}) {
-	return (
-		<div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
-			<div className="flex items-start gap-3">
-				<div className={`h-10 w-10 rounded-lg bg-gradient-to-br ${color} flex items-center justify-center shrink-0`}>
-					<Icon className="h-5 w-5 text-white" />
-				</div>
-				<div>
-					<div className="font-semibold text-sm text-foreground">{title}</div>
-					<div className="text-xs text-muted-foreground mt-0.5">{desc}</div>
-				</div>
-			</div>
-		</div>
-	);
+        {/* Column 3: Live Events Activity */}
+        <div className="space-y-6">
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Ticket className="h-4.5 w-4.5 text-emerald-500" />
+                <h2 className="text-base font-semibold">Live Event Hub</h2>
+              </div>
+              <Link href="/events" className="text-xs font-medium text-primary hover:underline">
+                All Events →
+              </Link>
+            </div>
+
+            <div className="bg-card space-y-4 rounded-xl border border-border/60 p-4 shadow-sm">
+              {loading ? (
+                <div className="space-y-3">
+                  <Skeleton className="h-16 w-full rounded-lg" />
+                  <Skeleton className="h-16 w-full rounded-lg" />
+                </div>
+              ) : liveEvents.length === 0 ? (
+                <div className="py-6 text-center text-muted-foreground">
+                  <p className="text-sm">No live events today.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {liveEvents.slice(0, 3).map((e) => (
+                    <div
+                      key={e.id}
+                      className="rounded-lg border border-border/50 bg-muted/20 p-3 transition-colors hover:bg-muted/30"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="block truncate text-sm font-semibold text-foreground">
+                          {e.name}
+                        </span>
+                        <StatusBadge status={e.status} />
+                      </div>
+                      {e.startsAt && (
+                        <p className="mt-1 text-[10px] text-muted-foreground">
+                          📅 {new Date(e.startsAt).toLocaleString()}
+                        </p>
+                      )}
+                      <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2.5">
+                        <span className="font-mono text-[10px] uppercase text-muted-foreground">
+                          Gate Checked-in
+                        </span>
+                        <Link
+                          href={`/passes?eventId=${e.id}`}
+                          className="text-[10px] font-medium text-primary hover:underline"
+                        >
+                          Manage Tickets →
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Platform Onboarding CTA */}
+          <div className="space-y-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-center shadow-sm">
+            <h3 className="text-sm font-bold text-foreground">Operational Administration</h3>
+            <p className="text-xs text-muted-foreground">
+              Configure tenant parameters, roles, and integrations in the Administration workspace.
+            </p>
+            <Link
+              href="/admin"
+              className="bg-gradient-brand inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-medium text-white shadow transition-all hover:opacity-90"
+            >
+              Open Administration
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

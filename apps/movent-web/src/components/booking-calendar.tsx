@@ -52,7 +52,11 @@ export function BookingCalendar({ bookings, onSelectSlot }: BookingCalendarProps
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
-      headerToolbar={{ left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' }}
+      headerToolbar={{
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek',
+      }}
       events={events}
       height="auto"
       selectable={!!onSelectSlot}

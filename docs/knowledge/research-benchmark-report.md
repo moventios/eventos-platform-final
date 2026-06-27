@@ -28,12 +28,13 @@ Gaps in market: Integrated AI for scheduling/optimization without losing control
 
 - **Event/Ticketing**: Hi.Events (modern self-hosted Eventbrite alt, AGPL, payments, check-in, capacity); Pretix (flexible for conferences, AGPL, shop + POS); Attendize (Laravel, basic ticketing); Eventmie (Laravel, self-hosted).
 - **Project/PM**: Plane (modern Jira alt, open-core, issues, cycles, AI features); OpenProject (hybrid PM, Gantt, boards, GPL); AppFlowy (Notion-like with AI, AGPL); Taiga, Redmine.
-- **Scheduling/Booking**: Cal.com (open scheduling, embeddable); 
+- **Scheduling/Booking**: Cal.com (open scheduling, embeddable);
 - **Low-code/ERP-like**: ERPNext (full ERP with events/inventory, AGPL); Odoo community (modules for events/projects/finance); NocoDB, ToolJet, Budibase (for custom ops UIs).
 - **Workflow/Automation**: n8n (visual workflows); Trigger.dev (durable jobs); Kestra, Windmill (orchestration); Temporal (durable execution).
 - **Backend/AI**: Supabase (auth, realtime, pgvector); Postgres + pgvector (RAG); LangGraph/CrewAI (agents).
 
 **Patterns**:
+
 - Many strong in one area (ticketing or PM) but not unified.
 - AGPL for core (self-host friendly, copyleft for SaaS).
 - Modern stacks: Next.js/React, Postgres, good DX.
@@ -43,23 +44,24 @@ Gaps in market: Integrated AI for scheduling/optimization without losing control
 
 ## 3. Competitive Benchmark Matrix
 
-| Dimension | Eventbrite/Pretix | Plane/OpenProject | Monday/Asana | Odoo/ERPNext | Our Platform (Target) |
-|-----------|-------------------|-------------------|--------------|--------------|-----------------------|
-| Event Ticketing/Registration | Strong | Weak | Weak | Medium | Strong + AI |
-| Project/Task Management | Weak | Strong | Strong | Medium | Strong + event context |
-| Resource/Venue Booking | Weak-Medium | Weak | Weak | Medium | Strong (GiST, conflicts) |
-| Finance/Payments | Weak | Weak | Weak | Strong | Strong (immutable, double-entry) |
-| AI/Intelligence | Low | Emerging | Low | Low | Native (RAG, agents, optimization) |
-| Audit/Traceability | Low | Medium | Low | Medium | High (event sourcing, immutable) |
-| UX for Ops Teams | Consumer | Dev-focused | Flexible | ERP-bloated | Stoic/dense, ops-first |
-| Open/Self-host | Pretix strong | Strong | None | Strong | Strong (open core) |
-| Pricing | % ticket or free OSS | Per user or OSS | Per seat | Per user/module | Per event/org + usage + OSS |
+| Dimension                    | Eventbrite/Pretix    | Plane/OpenProject | Monday/Asana | Odoo/ERPNext    | Our Platform (Target)              |
+| ---------------------------- | -------------------- | ----------------- | ------------ | --------------- | ---------------------------------- |
+| Event Ticketing/Registration | Strong               | Weak              | Weak         | Medium          | Strong + AI                        |
+| Project/Task Management      | Weak                 | Strong            | Strong       | Medium          | Strong + event context             |
+| Resource/Venue Booking       | Weak-Medium          | Weak              | Weak         | Medium          | Strong (GiST, conflicts)           |
+| Finance/Payments             | Weak                 | Weak              | Weak         | Strong          | Strong (immutable, double-entry)   |
+| AI/Intelligence              | Low                  | Emerging          | Low          | Low             | Native (RAG, agents, optimization) |
+| Audit/Traceability           | Low                  | Medium            | Low          | Medium          | High (event sourcing, immutable)   |
+| UX for Ops Teams             | Consumer             | Dev-focused       | Flexible     | ERP-bloated     | Stoic/dense, ops-first             |
+| Open/Self-host               | Pretix strong        | Strong            | None         | Strong          | Strong (open core)                 |
+| Pricing                      | % ticket or free OSS | Per user or OSS   | Per seat     | Per user/module | Per event/org + usage + OSS        |
 
 **Differentiation**: AI deeply embedded in ops (not chat), unified event+project+finance, audit-grade by design, practical for physical ops.
 
 ## 4. Feature Gap Analysis
 
 Gaps in market:
+
 - No single system for end-to-end event/project ops with finance and AI.
 - Weak handling of resource conflicts across events/projects.
 - Limited offline/field ops support.
@@ -74,6 +76,7 @@ Gaps in market:
 Build on existing (from current docs): Next.js/React, Postgres + pgvector, Drizzle, shadcn/ui, Trigger.dev or n8n for workflows, OpenTelemetry.
 
 Add/Confirm:
+
 - Backend: Supabase or custom (auth, realtime, storage).
 - Scheduling/Resource: Custom with GiST for conflicts (inspired by spatial in current docs) + Cal.com patterns.
 - Workflow: Trigger.dev/n8n + Temporal for complex.
@@ -129,12 +132,14 @@ Avoid pure seat-based if ops scale with events.
 ## 10. Recommended Information Architecture
 
 **Public**:
+
 - Home: Value prop, ICP, demos.
 - Product: Features (by ops area: scheduling, resources, finance, AI), pricing, use cases (events, projects, venues).
 - Docs: User guides, API, self-host.
 - Resources: Blog, community, benchmarks.
 
 **Internal/EKB**:
+
 - Strategy (this folder)
 - Layers (SSOT)
 - Volumes (detailed knowledge)
@@ -153,6 +158,7 @@ Use consistent nav, search (with RAG), versioning. AI-optimized (structured, exa
 ## 12. Recommended Engineering Architecture
 
 Build on current (Layers 1-3):
+
 - DDD with bounded contexts (Events, Projects, Resources, Finance, AI).
 - Hexagonal + CQRS + Event Sourcing (immutable, traceable).
 - Workflow: Trigger.dev/n8n + custom for complex.
@@ -173,12 +179,14 @@ Build on current (Layers 1-3):
 ## 14. Build vs Buy Matrix
 
 **Build** (core differentiators):
+
 - Unified event+project+finance+resource model.
 - AI agents for ops.
 - Immutable audit layer.
 - Stoic ops UX.
 
 **Buy/Integrate** (commodity):
+
 - Auth (Supabase/Auth0).
 - Payments (Stripe/etc. via adapters).
 - Calendar libs (FullCalendar).
@@ -212,17 +220,20 @@ Risks: Copyleft may deter some; mitigate with clear commercial options.
 ## 18. Implementation Priority Roadmap
 
 **Now (MVP focus)**:
+
 - Core event/project CRUD + scheduling + resource allocation + basic finance.
 - AI RAG for docs/knowledge.
 - Stoic UX for key views.
 
 **Next (6-12 months)**:
+
 - AI agents for suggestions/optimization.
 - Advanced approvals/workflows.
 - Self-host packaging + SaaS parity.
 - Marketplace basics.
 
 **Later**:
+
 - Full vertical templates (festivals, corporate, logistics).
 - Advanced analytics/intelligence.
 - Ecosystem (integrations, white-label).
@@ -233,4 +244,4 @@ All based on benchmarks. Update EKB docs (especially strategy and volumes) to re
 
 ---
 
-*Research synthesized from public sources (GitHub, product sites, blogs). For deeper, specific repos can be cloned/analyzed. All recommendations support the AI-Native Project & Event Operations Platform focus.*
+_Research synthesized from public sources (GitHub, product sites, blogs). For deeper, specific repos can be cloned/analyzed. All recommendations support the AI-Native Project & Event Operations Platform focus._

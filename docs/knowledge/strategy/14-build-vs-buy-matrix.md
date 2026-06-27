@@ -3,6 +3,7 @@
 **Platform**: AI-Native Project & Event Operations Platform
 
 ## Build (Core Differentiators)
+
 - Unified data model for events + projects + resources + finance + AI.
 - AI agents for ops (scheduling, optimization, extraction).
 - Immutable audit and traceability layer.
@@ -12,6 +13,7 @@
 **Why Build**: These are the unique value; hard to integrate perfectly.
 
 ## Buy/Integrate (Commodities)
+
 - Auth/Backend: Supabase or similar.
 - Payments: Stripe, Xendit, etc. (adapters).
 - Calendar/Scheduling libs: FullCalendar or Cal.com patterns.

@@ -26,8 +26,8 @@ const PUBLIC_PATHS = [
 // Synthetic tenant/actor for public unauthenticated discovery reads on events/facilities lists.
 // Uses the seeded test tenant so RLS + explicit .where(tenantId) return live data for public ecosystem.
 // Only injected for GET on the read APIs (POSTs fall through to full tenant enforcement).
-const PUBLIC_DISCOVERY_TENANT_ID = '00000000-0000-0000-0000-000000000001';
-const PUBLIC_DISCOVERY_ACTOR_ID = '00000000-0000-0000-0000-0000000000aa';
+const PUBLIC_DISCOVERY_TENANT_ID = process.env['MOVENT_PUBLIC_DISCOVERY_TENANT_ID'] ?? '00000000-0000-0000-0000-000000000001';
+const PUBLIC_DISCOVERY_ACTOR_ID = process.env['MOVENT_PUBLIC_DISCOVERY_ACTOR_ID'] ?? '00000000-0000-0000-0000-0000000000aa';
 
 function copyResponseCookies(from: NextResponse, to: NextResponse): void {
   for (const cookie of from.cookies.getAll()) {
@@ -53,7 +53,12 @@ function buildAuthedPassThrough(
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
+  const isPublic = PUBLIC_PATHS.some((p) => {
+    if (p === '/') return pathname === '/';
+    return pathname === p || pathname.startsWith(p + '/');
+  });
+
+  if (isPublic) {
     const isPublicReadApi =
       request.method === 'GET' &&
       (pathname === '/api/v1/commerce/events' || pathname === '/api/v1/spatial/facilities');
@@ -70,8 +75,7 @@ export async function middleware(request: NextRequest) {
   if (process.env['MOVENT_E2E_CAPTURE'] === '1') {
     // Accept x-e2e-actor-id on page requests and x-actor-id on SSR sub-fetches
     // (fetchWithRequestContext forwards middleware-injected auth headers).
-    const e2eActorId =
-      request.headers.get('x-e2e-actor-id') ?? request.headers.get('x-actor-id');
+    const e2eActorId = request.headers.get('x-e2e-actor-id') ?? request.headers.get('x-actor-id');
     if (e2eActorId) {
       const cookieTenantId = await verifyTenantCookie(
         request.cookies.get('movent_tenant_id')?.value,
@@ -152,7 +156,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 };

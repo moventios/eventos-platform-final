@@ -48,16 +48,27 @@ export class PassTier {
       tenantId: params.tenantId,
       actorId: params.actorId,
       occurredAt: new Date().toISOString(),
-      payload: { passTierId: id, eventId: params.eventId, name: params.name, capacity: params.capacity },
+      payload: {
+        passTierId: id,
+        eventId: params.eventId,
+        name: params.name,
+        capacity: params.capacity,
+      },
     };
 
     return { passTier: tier, event: createdEvent };
   }
 
-  get id() { return this.props.id; }
-  get capacity() { return this.props.capacity; }
+  get id() {
+    return this.props.id;
+  }
+  get capacity() {
+    return this.props.capacity;
+  }
 
-  toRecord(): PassTierProps { return { ...this.props }; }
+  toRecord(): PassTierProps {
+    return { ...this.props };
+  }
 
   static reconstitute(props: PassTierProps): PassTier {
     return new PassTier(props);

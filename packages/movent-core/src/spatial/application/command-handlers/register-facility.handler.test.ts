@@ -15,12 +15,18 @@ describe('RegisterFacilityHandler', () => {
 
     const saved: Facility[] = [];
     const repo: IFacilityRepository = {
-      save: vi.fn(async (f) => { saved.push(f); }),
+      save: vi.fn(async (f) => {
+        saved.push(f);
+      }),
       findById: vi.fn(),
     };
 
     const published: any[] = [];
-    const bus: IEventBus = { publish: vi.fn(async (e) => { published.push(e); }) };
+    const bus: IEventBus = {
+      publish: vi.fn(async (e) => {
+        published.push(e);
+      }),
+    };
 
     const handler = new RegisterFacilityHandler(repo, bus);
     const result = await handler.handle(cmd, 'tenant-1', 'actor-1');

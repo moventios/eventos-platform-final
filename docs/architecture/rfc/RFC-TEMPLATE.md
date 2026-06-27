@@ -24,16 +24,20 @@
 > Be deterministic — leave no ambiguity.
 
 ### Changes to Layer 1 (Constitution)
-*(if applicable)*
+
+_(if applicable)_
 
 ### Changes to Layer 2 (Database SSOT)
-*(if applicable — schema, enums, RLS)*
+
+_(if applicable — schema, enums, RLS)_
 
 ### Changes to Layer 3 (EPXA)
-*(if applicable — technology, patterns)*
+
+_(if applicable — technology, patterns)_
 
 ### Changes to Volumes
-*(if applicable — which volumes update and how)*
+
+_(if applicable — which volumes update and how)_
 
 ## Backward Compatibility
 
@@ -51,15 +55,15 @@
 
 ## Enterprise Laws Impact
 
-| Law | Impact | Mitigation |
-|-----|--------|-----------|
+| Law   | Impact   | Mitigation       |
+| ----- | -------- | ---------------- |
 | L-{N} | {Impact} | {How maintained} |
 
 ## Votes
 
-| Reviewer | Decision | Date | Comment |
-|----------|----------|------|---------|
-| {Name} | APPROVE / REJECT / ABSTAIN | YYYY-MM-DD | {Comment} |
+| Reviewer | Decision                   | Date       | Comment   |
+| -------- | -------------------------- | ---------- | --------- |
+| {Name}   | APPROVE / REJECT / ABSTAIN | YYYY-MM-DD | {Comment} |
 
 **Quorum Required:** {e.g., Lead Architect + 2 ARB members}
 
@@ -70,5 +74,5 @@
 
 ---
 
-*RFCs require minimum 5 business days of review before vote.*
-*Accepted RFCs must produce a corresponding ADR within 10 business days.*
+_RFCs require minimum 5 business days of review before vote._
+_Accepted RFCs must produce a corresponding ADR within 10 business days._

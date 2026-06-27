@@ -7,6 +7,7 @@
 This repository contains the documentation, strategy, architecture, and knowledge base for **Movent** — the reusable Relationship Infrastructure.
 
 **Movent** is the underlying platform engine:
+
 - Graph infrastructure
 - Identity engine
 - Place engine
@@ -15,6 +16,7 @@ This repository contains the documentation, strategy, architecture, and knowledg
 - Trust and activity engine
 
 **Moventios** is the first public ecosystem built on Movent:
+
 - A Relationship, Activation and Collaboration Network
 - Public discovery of people, organizations, communities, places, events, projects and opportunities
 - Public-first: relationships and reputation before private workspace
@@ -82,6 +84,7 @@ This repository implements **Movent** (the reusable Relationship Infrastructure 
 See `docs/IMPLEMENTATION-LOG.md` for the detailed history of the transition from earlier Event/Project platform framing to the current infrastructure + ecosystem model.
 
 Documentation Freeze Mode is active.
+
 - [x] Removed leftover old dirs (apps/web)
 - [x] Created docs/core, build, operate, knowledge structure + moved representative existing files
 - [x] Rewrote AI context loading + 4-layer model in .cursorrules + EKB-AI instructions
@@ -91,6 +94,7 @@ Documentation Freeze Mode is active.
 - [ ] Update any external Vercel/Trigger/Git remote names
 
 ### Notes
+
 - Historical references in `archive/` must remain untouched.
 - ADR historical references must remain untouched.
 - "Tenant Sovereignty" and principle names are kept (they are not product names).

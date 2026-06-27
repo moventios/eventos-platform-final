@@ -14,6 +14,7 @@
 - **Users:** Operations team, finance, event managers, facility staff, IT admins.
 
 **Why They Buy:**
+
 - Need one system that handles space + commerce + money + workflow with proof.
 - Value tenant-like control even internally (multiple depts).
 - Want to avoid vendor lock-in for long-term ops.

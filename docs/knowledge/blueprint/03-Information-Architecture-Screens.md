@@ -1,11 +1,13 @@
 # Phases 7 + 8: Information Architecture + Screen Blueprints (Workflow-First)
 
 ## Top Navigation (Work, Not Modules)
+
 Home | Workspace Switcher | Projects | Events | Calendar | Resources | Approvals | Finance | Reports | Knowledge | (minimal) Settings
 
 Rationale: Matches user's mental model ("I need to prepare tomorrow's event") vs "open the Spatial module".
 
 ## Within Any Project/Event (Persistent Structure — Answers Goal/Decision/Action)
+
 1. **Overview** — Status at a glance + "What must I do today?" + AI summary + key metrics + next actions.
 2. **Timeline / Schedule** — Visual plan + drag to adjust + conflict detection.
 3. **Tasks** — Kanban or list + assignment + due + dependencies.
@@ -23,6 +25,7 @@ Rationale: Matches user's mental model ("I need to prepare tomorrow's event") vs
 ## High-Priority Screen Blueprints (Text Spec)
 
 **Home / Command Center**
+
 - Purpose: Single place for "what requires attention or action from me right now?"
 - Audience: All internal personas (personalized).
 - Primary Action: "Go to Project X" or "Approve Y" or "Resolve conflict Z".
@@ -32,28 +35,33 @@ Rationale: Matches user's mental model ("I need to prepare tomorrow's event") vs
 - Mobile: Prioritized cards + floating actions.
 
 **Project Overview**
+
 - Header: Name + status + client + dates + overall health indicators.
 - Sections: AI Summary, Key Dates, Budget Burn, Resource Summary, Pending Actions, Recent Activity.
 - Actions: Edit plan, Add task, Request approval, Message client, Generate report.
 
 **Approvals (Unified)**
+
 - Filters: Status, Type (budget, resource, scope, vendor), Urgency, Project.
 - Table + Detail Drawer: Full request context (who, what, impact, history), resolution note, approve/reject with reason.
 - Realtime updates.
 - Mobile: Card list + one-tap approve.
 
 **Resource Allocation**
+
 - Calendar + list or board view.
 - Drag resources onto timeline slots.
 - Immediate visual conflict highlighting + alternative suggestions.
 - "Reserve with conditions" option.
 
 **Budget View**
+
 - Hierarchical lines (auto-created from planning).
 - Forecast vs actual.
 - Change impact preview ("Adding 2 crew will increase by $X and requires approval").
 
 **AI Copilot Panel** (contextual, available on most screens)
+
 - Triggered by "Ask AI" or always visible in wide views.
 - Suggestions are cards: "Proposed timeline adjustment" with "Why", "Impact", "Apply / Edit / Dismiss".
 - Grounded answers to natural language questions.
@@ -61,6 +69,7 @@ Rationale: Matches user's mental model ("I need to prepare tomorrow's event") vs
 All screens must pass the "Goal / Decision / Next Action" test before implementation.
 
 **Empty States Examples:**
+
 - No projects: "Run your first event. Start with a venue or import from calendar." + 2 primary CTAs.
 - No approvals: "Clear queue. Great work." + link to knowledge or recommended actions.
 

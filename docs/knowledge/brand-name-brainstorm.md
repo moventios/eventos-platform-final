@@ -26,6 +26,7 @@ From Layer 1 (Constitution), Layer 2 (DB SSOT), Layer 3 (EPXA), and Volumes:
 ## Brainstormed Name Options
 
 I generated 12 solid candidates. Criteria:
+
 - Evokes reliability, immutability, precision, quiet strength, operations backbone.
 - Works as "The [Name]" or "[Name] OS/Platform".
 - Professional, not cute/tech-bro.
@@ -87,6 +88,7 @@ I generated 12 solid candidates. Criteria:
 12. Imperium OS — Command/control, but may sound too imperial.
 
 **Naming Evaluation Criteria (for next brainstorm):**
+
 - Availability (domain, trademark, GitHub).
 - Pronunciation / memorability.
 - International neutrality.
@@ -110,6 +112,7 @@ Using the structure from prior Brand Canvas + references (brand.md style, modula
 **Overview**: The Platform gives organizations a single source of truth for hybrid physical-digital operations. Built on immutable principles, it lets teams scale confidently while keeping AI as a servant, not a master.
 
 **Positioning**:
+
 - Category: Enterprise Hybrid Operations Platform.
 - Not: General ERP, simple booking tool, or uncontrolled AI layer.
 - Is: The reliable foundation for operations that cannot afford ambiguity or lock-in.
@@ -119,6 +122,7 @@ Using the structure from prior Brand Canvas + references (brand.md style, modula
 **Promise**: Every state change is recorded truth. Every decision respects human sovereignty. The system endures.
 
 **Guardrails** (from Stoic principles + Layer 1):
+
 - No hype language.
 - Every claim traceable to data or invariants.
 - Complexity is engineered away, not hidden.
@@ -130,11 +134,13 @@ Using the structure from prior Brand Canvas + references (brand.md style, modula
 **Identity**: We are precise, data-driven, and calm under pressure. We document because truth matters more than persuasion.
 
 **Tonal Rules**:
+
 - Write with evidence and invariants.
 - Prefer "immutable", "deterministic", "traceable", "sovereign".
 - Never: "seamless", "revolutionary", "AI magic", "effortless".
 
 **Example Phrases**:
+
 - "Every booking, every payment, every state change — recorded once, trusted forever."
 - "AI that helps you see clearly. Humans who decide with confidence."
 
@@ -163,6 +169,7 @@ Here are deeper explorations for the top 5. Each includes:
 - Extension potential
 
 ### 1. AetherOS (Top Recommendation)
+
 - **Meaning**: From Greek "aithēr" — the pure upper air, the clear sky, the element of the gods. Symbolizes a clean, elevated, unchanging foundation above the chaos of daily ops.
 - **Taglines**:
   - "The immutable sky for your operations."
@@ -176,6 +183,7 @@ Here are deeper explorations for the top 5. Each includes:
 - **Extension Potential**: High. "Aether" works as master brand for ecosystem.
 
 ### 2. StoicOS
+
 - **Meaning**: Direct from Stoicism — calm endurance, virtue through discipline, living according to reason and nature.
 - **Taglines**:
   - "Boring to maintain. Impossible to break."
@@ -189,6 +197,7 @@ Here are deeper explorations for the top 5. Each includes:
 - **Extension Potential**: Excellent for "Stoic by Design" as a platform principle.
 
 ### 3. Veritas Platform
+
 - **Meaning**: Latin "veritas" = truth. Immutable records = objective, undeniable truth.
 - **Taglines**:
   - "Every state is truth. Every decision is traceable."
@@ -202,6 +211,7 @@ Here are deeper explorations for the top 5. Each includes:
 - **Extension Potential**: Good — Veritas Ledger, Veritas Operations.
 
 ### 4. AxiomOS
+
 - **Meaning**: Self-evident truth or foundational principle that requires no further proof (like the Layers themselves).
 - **Taglines**:
   - "The axioms your operations run on."
@@ -215,6 +225,7 @@ Here are deeper explorations for the top 5. Each includes:
 - **Extension Potential**: Strong for ecosystem (Axiom Finance, etc.).
 
 ### 5. PraxisOS
+
 - **Meaning**: Greek "praxis" — the process of putting theory into practice, disciplined action.
 - **Taglines**:
   - "Where principles become operations."
@@ -231,15 +242,16 @@ Here are deeper explorations for the top 5. Each includes:
 
 ## Comparison Matrix (Top 5 + Criteria)
 
-| Name       | Alignment to Stoic/Immutable/Quiet Power | Memorability & Clarity | Enterprise Gravitas | International / Neutral | Extension Potential | Risk (Hype / Confusion) | Overall Score (out of 10) | Recommendation |
-|------------|------------------------------------------|------------------------|---------------------|-------------------------|---------------------|--------------------------|---------------------------|----------------|
-| AetherOS  | Excellent (elevated, pure, unchanging)  | High (unique but evocative) | Very High          | Excellent              | Excellent          | Low                     | 9.3                      | Top pick |
-| StoicOS   | Perfect (direct match)                  | High (philosophical but clear) | Very High       | High                   | Very Good          | Medium (academic feel)  | 8.8                      | Strong #2 |
-| Veritas   | Excellent (truth = immutable)           | High                   | Very High          | Excellent              | Good               | Very Low                | 8.7                      | Excellent for finance-heavy |
-| AxiomOS   | Very Good (foundational principles)     | Medium-High            | High               | High                   | Good               | Low                     | 8.0                      | Good for architects |
-| PraxisOS  | Good (execution of principles)          | Medium                 | Medium-High        | High                   | Good               | Low                     | 7.5                      | Solid alternative |
+| Name     | Alignment to Stoic/Immutable/Quiet Power | Memorability & Clarity         | Enterprise Gravitas | International / Neutral | Extension Potential | Risk (Hype / Confusion) | Overall Score (out of 10) | Recommendation              |
+| -------- | ---------------------------------------- | ------------------------------ | ------------------- | ----------------------- | ------------------- | ----------------------- | ------------------------- | --------------------------- |
+| AetherOS | Excellent (elevated, pure, unchanging)   | High (unique but evocative)    | Very High           | Excellent               | Excellent           | Low                     | 9.3                       | Top pick                    |
+| StoicOS  | Perfect (direct match)                   | High (philosophical but clear) | Very High           | High                    | Very Good           | Medium (academic feel)  | 8.8                       | Strong #2                   |
+| Veritas  | Excellent (truth = immutable)            | High                           | Very High           | Excellent               | Good                | Very Low                | 8.7                       | Excellent for finance-heavy |
+| AxiomOS  | Very Good (foundational principles)      | Medium-High                    | High                | High                    | Good                | Low                     | 8.0                       | Good for architects         |
+| PraxisOS | Good (execution of principles)           | Medium                         | Medium-High         | High                    | Good                | Low                     | 7.5                       | Solid alternative           |
 
 **Scoring criteria** (equal weight):
+
 - How well it evokes Layer 1 principles (Stoic, Quiet Power, immutable, sovereignty, AI under control).
 - Ease of understanding and pronunciation.
 - Professional, trustworthy feel for B2B enterprise buyers.
@@ -262,7 +274,7 @@ Here are deeper explorations for the top 5. Each includes:
 ## Recommended Next Steps for Brainstorm
 
 1. **Shortlist**: Pick your top 3-4 from above (I recommend starting with AetherOS, StoicOS, Veritas).
-2. **Test**: 
+2. **Test**:
    - Say the names out loud in context ("We're building AetherOS...").
    - Check domain availability (.com, .io), GitHub org, trademark rough search.
    - Run by a few stakeholders (ops, finance, engineering leads).
@@ -274,11 +286,12 @@ Here are deeper explorations for the top 5. Each includes:
 
 This keeps the EKB clean and ready. The brainstorm is fully contained in this file for easy review.
 
-What do you think of the top 3? Want me to expand full brand elements for AetherOS (or your favorite), generate more names, or start drafting how the name would appear in the AI instructions / volumes? 
+What do you think of the top 3? Want me to expand full brand elements for AetherOS (or your favorite), generate more names, or start drafting how the name would appear in the AI instructions / volumes?
 
 Ready to iterate!
 
 ### 3. Veritas Platform
+
 - **Meaning**: Latin "veritas" = truth. Immutable records = objective truth.
 - **Taglines**:
   - "Every state is truth."
@@ -292,6 +305,7 @@ Ready to iterate!
 - **Extension Potential**: Good — Veritas Ledger, Veritas Operations.
 
 ### 4. AxiomOS
+
 - **Meaning**: Self-evident truth or foundational principle that requires no proof.
 - **Taglines**:
   - "The axioms your operations are built on."
@@ -303,6 +317,7 @@ Ready to iterate!
 - **Cons**: Abstract; "axiom" not everyday language.
 
 ### 5. PraxisOS
+
 - **Meaning**: From Greek "praxis" — action, practice, the process of doing or enacting theory.
 - **Taglines**:
   - "Where principles become operations."
@@ -317,13 +332,13 @@ Ready to iterate!
 
 ## Comparison Table (Top 5)
 
-| Name       | Memorability | Enterprise Gravitas | Alignment to "Stoic/Quiet/Immutable" | Extension Ease | Risk of Hype Misuse | Score (1-10) |
-|------------|--------------|---------------------|--------------------------------------|----------------|---------------------|--------------|
-| AetherOS  | High        | High               | Excellent                           | Excellent     | Low                | 9.2         |
-| StoicOS   | High        | Very High          | Perfect                             | Very Good     | Low                | 9.0         |
-| Veritas   | High        | Very High          | Excellent                           | Good          | Very Low           | 8.7         |
-| AxiomOS   | Medium      | High               | Very Good                           | Good          | Low                | 7.8         |
-| PraxisOS  | Medium      | Medium-High        | Good                                | Good          | Medium             | 7.2         |
+| Name     | Memorability | Enterprise Gravitas | Alignment to "Stoic/Quiet/Immutable" | Extension Ease | Risk of Hype Misuse | Score (1-10) |
+| -------- | ------------ | ------------------- | ------------------------------------ | -------------- | ------------------- | ------------ |
+| AetherOS | High         | High                | Excellent                            | Excellent      | Low                 | 9.2          |
+| StoicOS  | High         | Very High           | Perfect                              | Very Good      | Low                 | 9.0          |
+| Veritas  | High         | Very High           | Excellent                            | Good           | Very Low            | 8.7          |
+| AxiomOS  | Medium       | High                | Very Good                            | Good           | Low                 | 7.8          |
+| PraxisOS | Medium       | Medium-High         | Good                                 | Good           | Medium              | 7.2          |
 
 **Recommendation**: Start workshop with **AetherOS** and **StoicOS** as finalists. Both strongly echo the Stoic Ledger / Quiet Power philosophy without being too literal.
 
@@ -352,7 +367,7 @@ Ready to iterate!
 
 This keeps everything ready for the real brand canvas once we decide.
 
-Let me know which names you like most, or if you want me to expand one into a full 1-page brand brief, or run a comparison against specific competitors from the strategy docs! 
+Let me know which names you like most, or if you want me to expand one into a full 1-page brand brief, or run a comparison against specific competitors from the strategy docs!
 
 Ready to keep going.
 

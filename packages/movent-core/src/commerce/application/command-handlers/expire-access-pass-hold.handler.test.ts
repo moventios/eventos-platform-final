@@ -15,7 +15,9 @@ class InMemoryAccessPassRepo implements IAccessPassRepository {
     if (!r || r.tenantId !== tenantId) return null;
     return AccessPass.reconstitute(r);
   }
-  async countIssued(): Promise<number> { return 0; }
+  async countIssued(): Promise<number> {
+    return 0;
+  }
   async findPendingPastHold(limit: number): Promise<AccessPass[]> {
     const now = new Date();
     const results: AccessPass[] = [];
@@ -34,15 +36,26 @@ describe('ExpireAccessPassHoldHandler', () => {
     const tenantId = 't1';
     const pastHold = new Date(Date.now() - 1000 * 60 * 20); // 20 min ago
     const pass = AccessPass.reconstitute({
-      id: 'p-exp', tenantId, passTierId: 'tier1', eventId: 'e1', customerId: 'c1',
-      status: 'pending', idempotencyKey: 'k-exp', holdsUntil: pastHold, issuedAt: new Date(Date.now() - 1000*60*30),
+      id: 'p-exp',
+      tenantId,
+      passTierId: 'tier1',
+      eventId: 'e1',
+      customerId: 'c1',
+      status: 'pending',
+      idempotencyKey: 'k-exp',
+      holdsUntil: pastHold,
+      issuedAt: new Date(Date.now() - 1000 * 60 * 30),
     });
 
     const repo = new InMemoryAccessPassRepo();
     await repo.save(pass);
 
     const published: any[] = [];
-    const bus: IEventBus = { publish: async (e) => { published.push(e); } };
+    const bus: IEventBus = {
+      publish: async (e) => {
+        published.push(e);
+      },
+    };
 
     const handler = new ExpireAccessPassHoldHandler(repo, bus);
     const result = await handler.handle(10);

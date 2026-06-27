@@ -23,7 +23,6 @@ export const POST = withTenantContext(async (req: NextRequest, { tenantId, actor
 
 export const GET = withTenantContext(async (_req: NextRequest, { tenantId }) => {
   const { db } = createDbWithTenant(tenantId);
-  const rows = await db.select().from(facilities)
-    .where(eq(facilities.tenantId, tenantId));
+  const rows = await db.select().from(facilities).where(eq(facilities.tenantId, tenantId));
   return NextResponse.json(rows);
 });

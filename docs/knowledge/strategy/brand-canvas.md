@@ -55,7 +55,7 @@ We help teams that run real operations. We speak clearly about coordination, exe
 - Focus on how it helps run events and projects.
 - Use concrete terms: scheduling, resources, approvals, audit trail, visibility.
 - Avoid leading with internal architecture language in customer-facing copy.
-| "Zero-conflict booking" | "Smart scheduling" |
+  | "Zero-conflict booking" | "Smart scheduling" |
 
 ### Message Pillars
 

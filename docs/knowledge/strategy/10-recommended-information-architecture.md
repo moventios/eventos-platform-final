@@ -23,6 +23,7 @@
   - docs/architecture/ : ADRs.
 
 ## Principles
+
 - Keep focused on ops (not generic OS).
 - AI-optimized: Structured, searchable, RAG-friendly.
 - Clear separation: Public (benefits) vs Internal (how).

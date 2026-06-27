@@ -12,7 +12,10 @@ export interface IAccessPassRepository {
 
 export interface IPassTierRepository {
   save(passTier: unknown): Promise<void>;
-  findById(id: string, tenantId: string): Promise<{ id: string; capacity: number; eventId: string } | null>;
+  findById(
+    id: string,
+    tenantId: string,
+  ): Promise<{ id: string; capacity: number; eventId: string } | null>;
   incrementIssued(id: string, tenantId: string): Promise<void>;
 }
 

@@ -2,7 +2,7 @@
 
 **VERSION:** 5.0.1-ENTERPRISE (RELEASE: 2026-06-25) **STATUS:** CANONICAL SINGLE SOURCE OF TRUTH (SSOT) — RATIFIED **COMPATIBILITY:** PostgreSQL 16+ / Supabase Native / Drizzle ORM **SUPERSEDES:** v3.0.0, v4.0.0, v5.0.0-ENTERPRISE
 
-**Panduan Penggunaan:** Dokumen ini merupakan turunan langsung dari *Platform Canonical Model & Reference Architecture v5.0.1* (Constitution). Dokumen ini adalah **satu-satunya** sumber kebenaran untuk skema basis data Sovereign OS — menggabungkan narasi arsitektur, Drizzle ORM Schema, dan SQL Migration ke dalam satu artefak yang saling konsisten. Setiap implementasi Drizzle ORM dan file migrasi SQL Supabase wajib berkiblat pada dokumen ini. Konflik antara dokumen ini dengan artefak implementasi diselesaikan dengan mengacu pada Constitution sebagai otoritas tertinggi.
+**Panduan Penggunaan:** Dokumen ini merupakan turunan langsung dari _Platform Canonical Model & Reference Architecture v5.0.1_ (Constitution). Dokumen ini adalah **satu-satunya** sumber kebenaran untuk skema basis data Sovereign OS — menggabungkan narasi arsitektur, Drizzle ORM Schema, dan SQL Migration ke dalam satu artefak yang saling konsisten. Setiap implementasi Drizzle ORM dan file migrasi SQL Supabase wajib berkiblat pada dokumen ini. Konflik antara dokumen ini dengan artefak implementasi diselesaikan dengan mengacu pada Constitution sebagai otoritas tertinggi.
 
 Dokumen ini telah menyelesaikan **19 gap** yang ditemukan pada audit selaras antara Constitution v5.0.1 dengan implementasi database sebelumnya (lihat Section 12 — Gap Resolution Summary), mencakup: entitas kanonikal yang hilang, enum state machine yang tidak lengkap, RLS yang parsial, bug indeks, dan stored procedure yang belum terdefinisi.
 
@@ -10,21 +10,21 @@ Dokumen ini telah menyelesaikan **19 gap** yang ditemukan pada audit selaras ant
 
 ## **DAFTAR ISI**
 
-1. Executive Summary  
-2. Domain Coverage & Bounded Context Matrix  
-3. Canonical Naming Standards  
-4. Complete Enum Registry  
-5. Aggregate Map & Complete Table Inventory  
-6. Enterprise Laws Enforcement Matrix  
-7. CQRS Read Model Registry  
-8. Row-Level Security Coverage  
-9. AI Schema Alignment  
-10. `post_ledger_transaction` Stored Procedure  
-11. Index Optimization Strategy  
-12. Gap Resolution Summary  
-13. Production Readiness Checklist  
-14. Document Dependency Position  
-15. **Drizzle ORM Schema (Lengkap)**  
+1. Executive Summary
+2. Domain Coverage & Bounded Context Matrix
+3. Canonical Naming Standards
+4. Complete Enum Registry
+5. Aggregate Map & Complete Table Inventory
+6. Enterprise Laws Enforcement Matrix
+7. CQRS Read Model Registry
+8. Row-Level Security Coverage
+9. AI Schema Alignment
+10. `post_ledger_transaction` Stored Procedure
+11. Index Optimization Strategy
+12. Gap Resolution Summary
+13. Production Readiness Checklist
+14. Document Dependency Position
+15. **Drizzle ORM Schema (Lengkap)**
 16. **Supabase SQL Migration (Lengkap)**
 
 ---
@@ -37,47 +37,47 @@ Arsitektur basis data ini mendefinisikan skema fisik, batasan relasional, pola C
 
 ## **2\. DOMAIN COVERAGE & BOUNDED CONTEXT MATRIX**
 
-| Bounded Context | Tabel / Agregat Utama | Pola CQRS | Tanggung Jawab Utama |
-| ----- | ----- | ----- | ----- |
-| Governance & IAM | `tenants`, `organizations`, `memberships`, `profiles` | Normalized | Isolasi multi-tenant, Otorisasi RBAC/ABAC |
-| CRM | `customers`, `suppliers` | Normalized | Manajemen relasi klien dan pemasok B2B |
-| Spatial & Facility | `facilities`, `rooms`, `assets`, `bookings` | Write \+ Read Model | Resolusi konflik Spatio-Temporal (GiST) |
-| Commerce & Inventory | `events`, `pass_tiers`, `access_passes`, `products`, `inventory_lots`, `campaigns` | Write \+ Read Model | Manajemen siklus event, tiket, & stok |
-| Finance (Ledger) | `ledgers`, `ledger_accounts`, `journal_entries`, `journal_lines`, `invoices`, `payments`, `escrows` | Write \+ Read Model | Double-Entry Accounting Swiss-Standard |
-| Workflow & Ops | `workflows`, `workflow_instances`, `tasks`, `approvals` | Normalized | Orkestrasi state machine deterministik |
-| AI & Knowledge | `knowledge_bases`, `documents`, `embeddings`, `prompts`, `ai_agents` | Vector \+ Relational | pgvector RAG, OpenRouter routing, MCP tools |
-| Observability | `domain_events` (Outbox), `audit_logs`, `metric_snapshots` | Append-Only Log | Trace-ID end-to-end, Immutable Audit Trail |
+| Bounded Context      | Tabel / Agregat Utama                                                                               | Pola CQRS            | Tanggung Jawab Utama                        |
+| -------------------- | --------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------------- |
+| Governance & IAM     | `tenants`, `organizations`, `memberships`, `profiles`                                               | Normalized           | Isolasi multi-tenant, Otorisasi RBAC/ABAC   |
+| CRM                  | `customers`, `suppliers`                                                                            | Normalized           | Manajemen relasi klien dan pemasok B2B      |
+| Spatial & Facility   | `facilities`, `rooms`, `assets`, `bookings`                                                         | Write \+ Read Model  | Resolusi konflik Spatio-Temporal (GiST)     |
+| Commerce & Inventory | `events`, `pass_tiers`, `access_passes`, `products`, `inventory_lots`, `campaigns`                  | Write \+ Read Model  | Manajemen siklus event, tiket, & stok       |
+| Finance (Ledger)     | `ledgers`, `ledger_accounts`, `journal_entries`, `journal_lines`, `invoices`, `payments`, `escrows` | Write \+ Read Model  | Double-Entry Accounting Swiss-Standard      |
+| Workflow & Ops       | `workflows`, `workflow_instances`, `tasks`, `approvals`                                             | Normalized           | Orkestrasi state machine deterministik      |
+| AI & Knowledge       | `knowledge_bases`, `documents`, `embeddings`, `prompts`, `ai_agents`                                | Vector \+ Relational | pgvector RAG, OpenRouter routing, MCP tools |
+| Observability        | `domain_events` (Outbox), `audit_logs`, `metric_snapshots`                                          | Append-Only Log      | Trace-ID end-to-end, Immutable Audit Trail  |
 
 ---
 
 ## **3\. CANONICAL NAMING STANDARDS (PER APPENDIX A CONSTITUTION)**
 
-| Artefak | Konvensi | Contoh |
-| ----- | ----- | ----- |
-| Table | snake\_case, plural | `journal_entries`, `access_passes` |
-| Column | snake\_case, singular | `tenant_id`, `created_at` |
-| Foreign Key | `fk_{child}_{parent}` | `fk_journal_lines_journal_entries` |
-| Index | `idx_{table}_{column(s)}` | `idx_bookings_time_range` |
-| Constraint | `chk_{table}_{rule}` | `chk_bookings_no_overlap` |
-| Enum Type | snake\_case | `booking_state`, `payment_state` |
-| Policy | `{isolation_type}_{table}` | `tenant_isolation_bookings` |
+| Artefak     | Konvensi                   | Contoh                             |
+| ----------- | -------------------------- | ---------------------------------- |
+| Table       | snake_case, plural         | `journal_entries`, `access_passes` |
+| Column      | snake_case, singular       | `tenant_id`, `created_at`          |
+| Foreign Key | `fk_{child}_{parent}`      | `fk_journal_lines_journal_entries` |
+| Index       | `idx_{table}_{column(s)}`  | `idx_bookings_time_range`          |
+| Constraint  | `chk_{table}_{rule}`       | `chk_bookings_no_overlap`          |
+| Enum Type   | snake_case                 | `booking_state`, `payment_state`   |
+| Policy      | `{isolation_type}_{table}` | `tenant_isolation_bookings`        |
 
 ---
 
 ## **4\. COMPLETE ENUM REGISTRY (Constitution Part 12 — State Machines)**
 
-| Enum | Values | Sumber |
-| ----- | ----- | ----- |
-| `booking_state` | pending, under\_review, approved, active, completed, **rejected**, canceled | Part 12.1 |
-| `invoice_state` | draft, issued, partially\_paid, paid, settled, voided | Part 12.4 |
-| `access_pass_state` | pending, issued, checked\_in, consumed, revoked, **expired** | Part 12.3 |
-| `workflow_state` | running, pending\_approval, completed, suspended, aborted | Part 12.5 |
-| `account_classification` | asset, liability, equity, revenue, expense | Part 3.3 |
-| `actor_type` | USER, AI\_AGENT, SYSTEM | Part 15.5 |
-| `payment_state` ⭐ | initiated, processing, captured, settled, reconciled, failed, refunded, refund\_settled | Part 12.2 |
-| `journal_state` ⭐ | draft, posted, voided | Part 12.6 |
-| `asset_state` ⭐ | procured, active, retired | Part 3.2 |
-| `campaign_state` ⭐ | planned, active, concluded | Part 3.2 |
+| Enum                     | Values                                                                                 | Sumber    |
+| ------------------------ | -------------------------------------------------------------------------------------- | --------- |
+| `booking_state`          | pending, under_review, approved, active, completed, **rejected**, canceled             | Part 12.1 |
+| `invoice_state`          | draft, issued, partially_paid, paid, settled, voided                                   | Part 12.4 |
+| `access_pass_state`      | pending, issued, checked_in, consumed, revoked, **expired**                            | Part 12.3 |
+| `workflow_state`         | running, pending_approval, completed, suspended, aborted                               | Part 12.5 |
+| `account_classification` | asset, liability, equity, revenue, expense                                             | Part 3.3  |
+| `actor_type`             | USER, AI_AGENT, SYSTEM                                                                 | Part 15.5 |
+| `payment_state` ⭐       | initiated, processing, captured, settled, reconciled, failed, refunded, refund_settled | Part 12.2 |
+| `journal_state` ⭐       | draft, posted, voided                                                                  | Part 12.6 |
+| `asset_state` ⭐         | procured, active, retired                                                              | Part 3.2  |
+| `campaign_state` ⭐      | planned, active, concluded                                                             | Part 3.2  |
 
 ⭐ \= ditambahkan pada gap-resolution v5.0.1
 
@@ -87,33 +87,33 @@ Arsitektur basis data ini mendefinisikan skema fisik, batasan relasional, pola C
 
 ### **5.1 Governance, Identity & CRM**
 
-tenants              — Root Tenant Aggregate; slug unik global
+tenants — Root Tenant Aggregate; slug unik global
 
-├── legal\_holds      — Blokir data retention saat sengketa hukum
+├── legal_holds — Blokir data retention saat sengketa hukum
 
-├── organizations    — Badan usaha di bawah Tenant
+├── organizations — Badan usaha di bawah Tenant
 
-│   ├── departments  — Sub-divisi fungsional
+│ ├── departments — Sub-divisi fungsional
 
-│   └── workspaces   — Batas isolasi kolaborasi
+│ └── workspaces — Batas isolasi kolaborasi
 
-├── profiles         — Identitas personal User (auth.users ref)
+├── profiles — Identitas personal User (auth.users ref)
 
-├── memberships      — Relasi User ↔ Tenant dengan Role
+├── memberships — Relasi User ↔ Tenant dengan Role
 
-├── customers        — Lead → Active → Churned
+├── customers — Lead → Active → Churned
 
-└── suppliers        ⭐ — Draft → Approved → Suspended → Banned
+└── suppliers ⭐ — Draft → Approved → Suspended → Banned
 
 ### **5.2 Spatial, Facility & Commerce**
 
 organizations
 
-├── facilities       — Aset properti fisik
+├── facilities — Aset properti fisik
 
-│   └── rooms        — Sub-unit bookable
+│ └── rooms — Sub-unit bookable
 
-├── assets           ⭐ — Unit fisik/digital bernilai (Constitution Part 3.2)
+├── assets ⭐ — Unit fisik/digital bernilai (Constitution Part 3.2)
 
 └── projects
 
@@ -135,7 +135,7 @@ tenants
 
 ├── products
 
-│   └── product\_variants
+│ └── product_variants
 
 └── warehouses
 
@@ -145,7 +145,7 @@ tenants
 
 tenants
 
-└── ledgers          — Satu per Tenant
+└── ledgers — Satu per Tenant
 
     └── ledger\_accounts — Chart of Accounts hirarki
 
@@ -167,11 +167,11 @@ tenants
 
 workspaces
 
-├── workflows → workflow\_states → workflow\_transitions
+├── workflows → workflow_states → workflow_transitions
 
-│   └── workflow\_instances → tasks, approvals
+│ └── workflow_instances → tasks, approvals
 
-└── knowledge\_bases
+└── knowledge_bases
 
     └── documents
 
@@ -183,38 +183,38 @@ workspaces
 
 tenants
 
-├── prompts          (+ input\_schema, output\_format, guardrails)
+├── prompts (+ input_schema, output_format, guardrails)
 
-└── ai\_agents        (+ tools JSONB — MCP Tool Registry)
+└── ai_agents (+ tools JSONB — MCP Tool Registry)
 
 ---
 
 ## **6\. ENTERPRISE LAWS ENFORCEMENT MATRIX**
 
-| Law | Deskripsi | Enforcement Mechanism |
-| ----- | ----- | ----- |
-| L-01 | No Direct Balance Update | Saldo diproyeksikan via `mv_ledger_summary_view`; tidak ada kolom balance yang dapat di-UPDATE |
+| Law  | Deskripsi                   | Enforcement Mechanism                                                                                                       |
+| ---- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| L-01 | No Direct Balance Update    | Saldo diproyeksikan via `mv_ledger_summary_view`; tidak ada kolom balance yang dapat di-UPDATE                              |
 | L-02 | Immutable Financial History | Trigger `block_journal_entry_mutations` \+ `block_journal_lines_mutations` — reject UPDATE/DELETE pada status posted/voided |
-| L-03 | Soft Delete Everywhere | Kolom `deleted_at` TIMESTAMPTZ \+ `deleted_by` UUID di semua entitas bisnis |
-| L-04 | Idempotency Mandate | Kolom `idempotency_key` VARCHAR(255) UNIQUE di `invoices`, `payments`, `bookings` |
-| L-05 | No Entity Without Owner | Semua tabel memiliki `tenant_id` (langsung atau via foreign key chain); RLS enforced |
-| L-06 | AI Write Interception | `ai_agents.tools` hanya mengekspos WRITE → PENDING tools; kolom status pada draft states |
-| L-07 | Command Handler Mandate | Stored procedure `post_ledger_transaction()` — wajib digunakan untuk semua posting; validasi zero-balance sebelum commit |
-| L-08 | Zero-Downtime Migration | Pola Expand → Backfill → Contract; semua DDL menggunakan `IF NOT EXISTS` |
-| L-09 | API Versioning | Ditangani di lapisan API; migration file `20260625000000_v5_0_1_*` immutable |
-| L-10 | Secrets Never at Rest | Kolom `secret` di `webhook_subscriptions` harus di-encrypt via Vault sebelum INSERT |
+| L-03 | Soft Delete Everywhere      | Kolom `deleted_at` TIMESTAMPTZ \+ `deleted_by` UUID di semua entitas bisnis                                                 |
+| L-04 | Idempotency Mandate         | Kolom `idempotency_key` VARCHAR(255) UNIQUE di `invoices`, `payments`, `bookings`                                           |
+| L-05 | No Entity Without Owner     | Semua tabel memiliki `tenant_id` (langsung atau via foreign key chain); RLS enforced                                        |
+| L-06 | AI Write Interception       | `ai_agents.tools` hanya mengekspos WRITE → PENDING tools; kolom status pada draft states                                    |
+| L-07 | Command Handler Mandate     | Stored procedure `post_ledger_transaction()` — wajib digunakan untuk semua posting; validasi zero-balance sebelum commit    |
+| L-08 | Zero-Downtime Migration     | Pola Expand → Backfill → Contract; semua DDL menggunakan `IF NOT EXISTS`                                                    |
+| L-09 | API Versioning              | Ditangani di lapisan API; migration file `20260625000000_v5_0_1_*` immutable                                                |
+| L-10 | Secrets Never at Rest       | Kolom `secret` di `webhook_subscriptions` harus di-encrypt via Vault sebelum INSERT                                         |
 
 ---
 
 ## **7\. CQRS READ MODEL REGISTRY (Constitution Part 14.2)**
 
-| Materialized View | Sumber Events | Kegunaan | Refresh Strategy |
-| ----- | ----- | ----- | ----- |
-| `mv_booking_calendar_view` | BookingApproved, BookingCanceled | Timeline ketersediaan Facility | Event-driven via Outbox |
-| `mv_ledger_summary_view` | JournalPosted | Dashboard saldo CoA per Tenant | Event-driven (async debounce) |
-| `mv_event_sales_view` | AccessPassIssued, PaymentCaptured | Statistik penjualan Event | Event-driven \+ nightly recompute |
-| `mv_workflow_status_view` ⭐ | WorkflowStarted, ApprovalResolved | Status task dan approval aktif | Event-driven |
-| `mv_customer_invoice_history_view` ⭐ | InvoiceIssued, PaymentSettled | Riwayat tagihan Customer | Event-driven |
+| Materialized View                     | Sumber Events                     | Kegunaan                       | Refresh Strategy                  |
+| ------------------------------------- | --------------------------------- | ------------------------------ | --------------------------------- |
+| `mv_booking_calendar_view`            | BookingApproved, BookingCanceled  | Timeline ketersediaan Facility | Event-driven via Outbox           |
+| `mv_ledger_summary_view`              | JournalPosted                     | Dashboard saldo CoA per Tenant | Event-driven (async debounce)     |
+| `mv_event_sales_view`                 | AccessPassIssued, PaymentCaptured | Statistik penjualan Event      | Event-driven \+ nightly recompute |
+| `mv_workflow_status_view` ⭐          | WorkflowStarted, ApprovalResolved | Status task dan approval aktif | Event-driven                      |
+| `mv_customer_invoice_history_view` ⭐ | InvoiceIssued, PaymentSettled     | Riwayat tagihan Customer       | Event-driven                      |
 
 ⭐ \= ditambahkan pada gap-resolution v5.0.1
 
@@ -228,24 +228,24 @@ Dokumen ini menerapkan RLS pada **100% tabel bisnis** (38 tabel). Sebelumnya han
 
 **Pattern Utama:**
 
-\-- Direct tenant isolation (tabel dengan tenant\_id langsung)
+\-- Direct tenant isolation (tabel dengan tenant_id langsung)
 
-CREATE POLICY "tenant\_isolation\_{table}" ON public.{table}
+CREATE POLICY "tenant_isolation\_{table}" ON public.{table}
 
-  FOR ALL USING (
+FOR ALL USING (
 
     tenant\_id \= (auth.jwt() \-\> 'user\_metadata' \-\>\> 'tenant\_id')::uuid
 
-  );
+);
 
 \-- Indirect isolation (traversal via foreign key chain)
 
-\-- Contoh: access\_passes → pass\_tiers → events → projects → tenant\_id
+\-- Contoh: access_passes → pass_tiers → events → projects → tenant_id
 
 **Perbaikan Kritis:**
 
-* Policy `access_passes` sebelumnya mereferensikan kolom `event_id` yang tidak ada di tabel → sekarang menggunakan traversal `pass_tier_id → event_id → project_id → tenant_id`.  
-* Service Role (background workers) dapat bypass RLS dengan `SET ROLE service_role`; hanya untuk worker internal yang tidak terekspos ke API publik.
+- Policy `access_passes` sebelumnya mereferensikan kolom `event_id` yang tidak ada di tabel → sekarang menggunakan traversal `pass_tier_id → event_id → project_id → tenant_id`.
+- Service Role (background workers) dapat bypass RLS dengan `SET ROLE service_role`; hanya untuk worker internal yang tidak terekspos ke API publik.
 
 ---
 
@@ -253,31 +253,31 @@ CREATE POLICY "tenant\_isolation\_{table}" ON public.{table}
 
 **`prompts`** — Penambahan Kolom Part 16.4
 
-input\_schema  JSONB  \-- Variabel yang dapat diinjeksi ke template
+input_schema JSONB \-- Variabel yang dapat diinjeksi ke template
 
-output\_format JSONB  \-- JSON Schema respons yang diharapkan
+output_format JSONB \-- JSON Schema respons yang diharapkan
 
-guardrails    JSONB  \-- Daftar filter aktif (PII, hallucination, dll.)
+guardrails JSONB \-- Daftar filter aktif (PII, hallucination, dll.)
 
-status        VARCHAR \-- draft | active | deprecated (lifecycle manajemen)
+status VARCHAR \-- draft | active | deprecated (lifecycle manajemen)
 
 **`ai_agents`** — MCP Tool Registry (Part 16.3)
 
-tools JSONB  \-- Array MCPToolDefinition: {name, access\_type, description}
+tools JSONB \-- Array MCPToolDefinition: {name, access_type, description}
 
              \-- access\_type: READ | WRITE→PENDING (L-06 enforcement)
 
-max\_budget\_per\_call NUMERIC  \-- Cost control per OpenRouter request
+max_budget_per_call NUMERIC \-- Cost control per OpenRouter request
 
 **`embeddings`** — pgvector Alignment
 
-* Tipe: `VECTOR(1536)` — konsisten antara Drizzle dan SQL.  
-* Index: HNSW (`vector_data vector_cosine_ops`) untuk cosine similarity optimal.  
-* Ditautkan ke `chunk_id` untuk konteks granular saat RAG retrieval.
+- Tipe: `VECTOR(1536)` — konsisten antara Drizzle dan SQL.
+- Index: HNSW (`vector_data vector_cosine_ops`) untuk cosine similarity optimal.
+- Ditautkan ke `chunk_id` untuk konteks granular saat RAG retrieval.
 
 ---
 
-## **10\. POST\_LEDGER\_TRANSACTION STORED PROCEDURE (L-07)**
+## **10\. POST_LEDGER_TRANSACTION STORED PROCEDURE (L-07)**
 
 Stored procedure `public.post_ledger_transaction(p_journal_entry_id, p_actor_id, p_trace_id)` mengimplementasikan Command Handler Mandate secara penuh:
 
@@ -287,15 +287,15 @@ Stored procedure `public.post_ledger_transaction(p_journal_entry_id, p_actor_id,
 
 3\. SUM(debit) \== SUM(credit) → reject seluruh transaksi jika diff \!= 0
 
-4\. UPDATE status \= 'posted' → set posted\_at, updated\_by
+4\. UPDATE status \= 'posted' → set posted_at, updated_by
 
-5\. INSERT ke domain\_events → emit JournalPosted event ke Outbox
+5\. INSERT ke domain_events → emit JournalPosted event ke Outbox
 
 **Penggunaan di Command Handler:**
 
 await db.execute(sql\`
 
-  SELECT public.post\_ledger\_transaction(
+SELECT public.post_ledger_transaction(
 
     ${journalEntryId}::uuid,
 
@@ -303,7 +303,7 @@ await db.execute(sql\`
 
     ${traceId}::uuid
 
-  )
+)
 
 \`);
 
@@ -313,61 +313,61 @@ Definisi lengkap stored procedure ada di **Section 16, SECTION 11** dari SQL Mig
 
 ## **11\. INDEX OPTIMIZATION STRATEGY**
 
-| Jenis Index | Tabel | Kolom | Tujuan |
-| ----- | ----- | ----- | ----- |
-| B-Tree | memberships | (tenant\_id, profile\_id) | Lookup membership cepat |
-| B-Tree | bookings | (tenant\_id, status) | Filter booking per tenant |
-| B-Tree | journal\_entries | (ledger\_id, status) | Query ledger per status |
-| B-Tree | access\_passes | secure\_qr\_hash | Scan QR O(log n) |
-| B-Tree | workflow\_instances | (entity\_type, entity\_id) | Lookup instance per entitas |
-| B-Tree | audit\_logs | trace\_id | End-to-end trace reconstruction |
-| B-Tree | domain\_events | (event\_type, status) WHERE pending | Outbox worker polling |
-| GiST | bookings | (room\_id, time\_range) | Spatio-temporal overlap exclusion |
-| HNSW | embeddings | vector\_data vector\_cosine\_ops | RAG cosine similarity |
+| Jenis Index | Tabel              | Kolom                              | Tujuan                            |
+| ----------- | ------------------ | ---------------------------------- | --------------------------------- |
+| B-Tree      | memberships        | (tenant_id, profile_id)            | Lookup membership cepat           |
+| B-Tree      | bookings           | (tenant_id, status)                | Filter booking per tenant         |
+| B-Tree      | journal_entries    | (ledger_id, status)                | Query ledger per status           |
+| B-Tree      | access_passes      | secure_qr_hash                     | Scan QR O(log n)                  |
+| B-Tree      | workflow_instances | (entity_type, entity_id)           | Lookup instance per entitas       |
+| B-Tree      | audit_logs         | trace_id                           | End-to-end trace reconstruction   |
+| B-Tree      | domain_events      | (event_type, status) WHERE pending | Outbox worker polling             |
+| GiST        | bookings           | (room_id, time_range)              | Spatio-temporal overlap exclusion |
+| HNSW        | embeddings         | vector_data vector_cosine_ops      | RAG cosine similarity             |
 
 ---
 
 ## **12\. GAP RESOLUTION SUMMARY**
 
-| \# | Gap | Status |
-| ----- | ----- | ----- |
-| GAP-1 | Tambah `rejected` ke `booking_state`, `expired` ke `access_pass_state` | ✅ Resolved |
-| GAP-2 | Buat `payment_state` enum (Part 12.2) | ✅ Resolved |
-| GAP-3 | Buat `journal_state` enum (Part 12.6) | ✅ Resolved |
-| GAP-4 | Tambah tabel `assets` (Part 3.2) | ✅ Resolved |
-| GAP-5 | Tambah tabel `campaigns` (Part 3.2) | ✅ Resolved |
-| GAP-6 | Selaraskan `suppliers`: tambah ke SQL migration | ✅ Resolved |
-| GAP-7 | Selaraskan `booking_histories`: tambah ke SQL migration | ✅ Resolved |
-| GAP-8 | Tambah `idempotency_key` ke `invoices`, `payments`, `bookings` (L-04) | ✅ Resolved |
-| GAP-9 | Tambah `input_schema`, `output_format`, `guardrails` ke `prompts` (Part 16.4) | ✅ Resolved |
-| GAP-10 | Tambah `customer_id` ke `access_passes` (Part 3.2) | ✅ Resolved |
-| GAP-11 | Tambah `tools` JSONB ke `ai_agents` (Part 16.3) | ✅ Resolved |
-| GAP-12 | Tambah `voided_at`, `voided_by`, `reversal_of_id` ke `journal_entries` | ✅ Resolved |
-| GAP-13 | Fix forward reference Drizzle: `projects` didefinisikan sebelum `bookings` | ✅ Resolved |
-| GAP-14 | Fix Drizzle: tambah import `text`; selaraskan `embeddings` ke `vector(1536)` | ✅ Resolved |
-| GAP-15 | Fix RLS `access_passes`: hapus referensi `event_id` yang tidak ada | ✅ Resolved |
-| GAP-16 | Extend RLS ke seluruh tabel bisnis (dari 3 → 38 tabel) | ✅ Resolved |
-| GAP-17 | Definisikan `post_ledger_transaction()` stored procedure (L-07) | ✅ Resolved |
-| GAP-18 | Fix index bug: `createdAt` → `created_at` di `idx_domain_events_pending` | ✅ Resolved |
-| GAP-19 | Tambah `mv_workflow_status_view` dan `mv_customer_invoice_history_view` | ✅ Resolved |
+| \#     | Gap                                                                           | Status      |
+| ------ | ----------------------------------------------------------------------------- | ----------- |
+| GAP-1  | Tambah `rejected` ke `booking_state`, `expired` ke `access_pass_state`        | ✅ Resolved |
+| GAP-2  | Buat `payment_state` enum (Part 12.2)                                         | ✅ Resolved |
+| GAP-3  | Buat `journal_state` enum (Part 12.6)                                         | ✅ Resolved |
+| GAP-4  | Tambah tabel `assets` (Part 3.2)                                              | ✅ Resolved |
+| GAP-5  | Tambah tabel `campaigns` (Part 3.2)                                           | ✅ Resolved |
+| GAP-6  | Selaraskan `suppliers`: tambah ke SQL migration                               | ✅ Resolved |
+| GAP-7  | Selaraskan `booking_histories`: tambah ke SQL migration                       | ✅ Resolved |
+| GAP-8  | Tambah `idempotency_key` ke `invoices`, `payments`, `bookings` (L-04)         | ✅ Resolved |
+| GAP-9  | Tambah `input_schema`, `output_format`, `guardrails` ke `prompts` (Part 16.4) | ✅ Resolved |
+| GAP-10 | Tambah `customer_id` ke `access_passes` (Part 3.2)                            | ✅ Resolved |
+| GAP-11 | Tambah `tools` JSONB ke `ai_agents` (Part 16.3)                               | ✅ Resolved |
+| GAP-12 | Tambah `voided_at`, `voided_by`, `reversal_of_id` ke `journal_entries`        | ✅ Resolved |
+| GAP-13 | Fix forward reference Drizzle: `projects` didefinisikan sebelum `bookings`    | ✅ Resolved |
+| GAP-14 | Fix Drizzle: tambah import `text`; selaraskan `embeddings` ke `vector(1536)`  | ✅ Resolved |
+| GAP-15 | Fix RLS `access_passes`: hapus referensi `event_id` yang tidak ada            | ✅ Resolved |
+| GAP-16 | Extend RLS ke seluruh tabel bisnis (dari 3 → 38 tabel)                        | ✅ Resolved |
+| GAP-17 | Definisikan `post_ledger_transaction()` stored procedure (L-07)               | ✅ Resolved |
+| GAP-18 | Fix index bug: `createdAt` → `created_at` di `idx_domain_events_pending`      | ✅ Resolved |
+| GAP-19 | Tambah `mv_workflow_status_view` dan `mv_customer_invoice_history_view`       | ✅ Resolved |
 
 ---
 
 ## **13\. PRODUCTION READINESS CHECKLIST**
 
-* \[x\] Seluruh entitas kanonikal Constitution Part 3 terdefinisi di database  
-* \[x\] Semua State Machine (Part 12\) memiliki enum yang lengkap dan akurat  
-* \[x\] Enterprise Laws L-01 s.d. L-10 memiliki mekanisme enforcement di DB layer  
-* \[x\] RLS aktif pada 100% tabel bisnis; traversal chain benar untuk semua indirect policies  
-* \[x\] `post_ledger_transaction()` mendefinisikan Command Handler wajib untuk Ledger  
-* \[x\] Semua Foreign Keys valid; tidak ada orphan entity (L-05)  
-* \[x\] Immutable trigger aktif pada `journal_entries` dan `journal_lines`  
-* \[x\] 5 Materialized Views aktif sesuai Constitution Part 14.2  
-* \[x\] HNSW index aktif untuk pgvector RAG pipeline  
-* \[x\] Idempotency key pada semua mutation endpoint finansial  
-* \[x\] Drizzle schema dan SQL migration selaras 100% (tipe, nama, relasi)  
-* \[x\] Soft delete (`deleted_at`, `deleted_by`) pada semua entitas bisnis  
-* \[x\] `legal_holds` aktif sebagai bloker data retention
+- \[x\] Seluruh entitas kanonikal Constitution Part 3 terdefinisi di database
+- \[x\] Semua State Machine (Part 12\) memiliki enum yang lengkap dan akurat
+- \[x\] Enterprise Laws L-01 s.d. L-10 memiliki mekanisme enforcement di DB layer
+- \[x\] RLS aktif pada 100% tabel bisnis; traversal chain benar untuk semua indirect policies
+- \[x\] `post_ledger_transaction()` mendefinisikan Command Handler wajib untuk Ledger
+- \[x\] Semua Foreign Keys valid; tidak ada orphan entity (L-05)
+- \[x\] Immutable trigger aktif pada `journal_entries` dan `journal_lines`
+- \[x\] 5 Materialized Views aktif sesuai Constitution Part 14.2
+- \[x\] HNSW index aktif untuk pgvector RAG pipeline
+- \[x\] Idempotency key pada semua mutation endpoint finansial
+- \[x\] Drizzle schema dan SQL migration selaras 100% (tipe, nama, relasi)
+- \[x\] Soft delete (`deleted_at`, `deleted_by`) pada semua entitas bisnis
+- \[x\] `legal_holds` aktif sebagai bloker data retention
 
 ---
 
@@ -409,65 +409,65 @@ Definisi lengkap stored procedure ada di **Section 16, SECTION 11** dari SQL Mig
 
 // PERUBAHAN DARI VERSI SEBELUMNYA (Gap Analysis Resolution):
 
-//   \[GAP-1\]  Tambah 'rejected' ke booking\_state enum (Constitution Part 12.1)
+// \[GAP-1\] Tambah 'rejected' ke booking_state enum (Constitution Part 12.1)
 
-//   \[GAP-2\]  Buat enum payment\_state (Constitution Part 12.2)
+// \[GAP-2\] Buat enum payment_state (Constitution Part 12.2)
 
-//   \[GAP-3\]  Buat enum journal\_state (Constitution Part 12.6)
+// \[GAP-3\] Buat enum journal_state (Constitution Part 12.6)
 
-//   \[GAP-4\]  Tambah tabel assets (Constitution Part 3.2)
+// \[GAP-4\] Tambah tabel assets (Constitution Part 3.2)
 
-//   \[GAP-5\]  Tambah tabel campaigns (Constitution Part 3.2)
+// \[GAP-5\] Tambah tabel campaigns (Constitution Part 3.2)
 
-//   \[GAP-6\]  Tambah tabel suppliers ke Drizzle (selaraskan dengan SQL)
+// \[GAP-6\] Tambah tabel suppliers ke Drizzle (selaraskan dengan SQL)
 
-//   \[GAP-7\]  Tambah tabel booking\_histories ke Drizzle (selaraskan dengan SQL)
+// \[GAP-7\] Tambah tabel booking_histories ke Drizzle (selaraskan dengan SQL)
 
-//   \[GAP-8\]  Tambah kolom idempotency\_key ke invoices, payments, bookings (L-04)
+// \[GAP-8\] Tambah kolom idempotency_key ke invoices, payments, bookings (L-04)
 
-//   \[GAP-9\]  Tambah kolom input\_schema, output\_format, guardrails ke prompts (Part 16.4)
+// \[GAP-9\] Tambah kolom input_schema, output_format, guardrails ke prompts (Part 16.4)
 
-//   \[GAP-10\] Tambah kolom customer\_id ke access\_passes (Part 3.2)
+// \[GAP-10\] Tambah kolom customer_id ke access_passes (Part 3.2)
 
-//   \[GAP-11\] Tambah kolom tools ke ai\_agents (Part 16.3)
+// \[GAP-11\] Tambah kolom tools ke ai_agents (Part 16.3)
 
-//   \[GAP-12\] Tambah kolom voided\_at, voided\_by ke journal\_entries (Part 12.6)
+// \[GAP-12\] Tambah kolom voided_at, voided_by ke journal_entries (Part 12.6)
 
-//   \[GAP-13\] Perbaiki forward reference: reorganisasi urutan definisi tabel
+// \[GAP-13\] Perbaiki forward reference: reorganisasi urutan definisi tabel
 
-//   \[GAP-14\] Tambah import text dari drizzle-orm/pg-core
+// \[GAP-14\] Tambah import text dari drizzle-orm/pg-core
 
-//   \[GAP-15\] Selaraskan embeddings ke vector(1536) konsisten
+// \[GAP-15\] Selaraskan embeddings ke vector(1536) konsisten
 
-//   \[GAP-16\] Selaraskan auditLogs.ipAddress ke inet type
+// \[GAP-16\] Selaraskan auditLogs.ipAddress ke inet type
 
 // \===============================================================================================
 
 import {
 
-  pgTable,
+pgTable,
 
-  pgEnum,
+pgEnum,
 
-  uuid,
+uuid,
 
-  varchar,
+varchar,
 
-  text,        // \[GAP-14\] tambah import
+text, // \[GAP-14\] tambah import
 
-  timestamp,
+timestamp,
 
-  boolean,
+boolean,
 
-  numeric,
+numeric,
 
-  integer,
+integer,
 
-  jsonb,
+jsonb,
 
-  customType,
+customType,
 
-  inet,        // \[GAP-16\] tambah import untuk ip\_address
+inet, // \[GAP-16\] tambah import untuk ip_address
 
 } from "drizzle-orm/pg-core";
 
@@ -477,151 +477,151 @@ import {
 
 // \===============================================================================================
 
-// \[GAP-1\] Tambah 'rejected' ke booking\_state
+// \[GAP-1\] Tambah 'rejected' ke booking_state
 
-export const bookingStateEnum \= pgEnum("booking\_state", \[
+export const bookingStateEnum \= pgEnum("booking_state", \[
 
-  "pending",
+"pending",
 
-  "under\_review",
+"under_review",
 
-  "approved",
+"approved",
 
-  "active",
+"active",
 
-  "completed",
+"completed",
 
-  "rejected",   // \[GAP-1\] Constitution Part 12.1: → Rejected adalah terminal state valid
+"rejected", // \[GAP-1\] Constitution Part 12.1: → Rejected adalah terminal state valid
 
-  "canceled",
-
-\]);
-
-export const invoiceStateEnum \= pgEnum("invoice\_state", \[
-
-  "draft",
-
-  "issued",
-
-  "partially\_paid",
-
-  "paid",
-
-  "settled",
-
-  "voided",
+"canceled",
 
 \]);
 
-export const accessPassStateEnum \= pgEnum("access\_pass\_state", \[
+export const invoiceStateEnum \= pgEnum("invoice_state", \[
 
-  "pending",
+"draft",
 
-  "issued",
+"issued",
 
-  "checked\_in",
+"partially_paid",
 
-  "consumed",
+"paid",
 
-  "revoked",
+"settled",
 
-  "expired",    // Constitution Part 12.3: → Expired dari Pending
-
-\]);
-
-export const workflowStateEnum \= pgEnum("workflow\_state", \[
-
-  "running",
-
-  "pending\_approval",
-
-  "completed",
-
-  "suspended",
-
-  "aborted",
+"voided",
 
 \]);
 
-export const accountClassificationEnum \= pgEnum("account\_classification", \[
+export const accessPassStateEnum \= pgEnum("access_pass_state", \[
 
-  "asset",
+"pending",
 
-  "liability",
+"issued",
 
-  "equity",
+"checked_in",
 
-  "revenue",
+"consumed",
 
-  "expense",
+"revoked",
 
-\]);
-
-export const actorTypeEnum \= pgEnum("actor\_type", \[
-
-  "USER",
-
-  "AI\_AGENT",
-
-  "SYSTEM",
+"expired", // Constitution Part 12.3: → Expired dari Pending
 
 \]);
 
-// \[GAP-2\] Buat payment\_state enum (Constitution Part 12.2)
+export const workflowStateEnum \= pgEnum("workflow_state", \[
 
-export const paymentStateEnum \= pgEnum("payment\_state", \[
+"running",
 
-  "initiated",
+"pending_approval",
 
-  "processing",
+"completed",
 
-  "captured",
+"suspended",
 
-  "settled",
-
-  "reconciled",
-
-  "failed",
-
-  "refunded",
-
-  "refund\_settled",
+"aborted",
 
 \]);
 
-// \[GAP-3\] Buat journal\_state enum (Constitution Part 12.6)
+export const accountClassificationEnum \= pgEnum("account_classification", \[
 
-export const journalStateEnum \= pgEnum("journal\_state", \[
+"asset",
 
-  "draft",
+"liability",
 
-  "posted",
+"equity",
 
-  "voided",
+"revenue",
+
+"expense",
+
+\]);
+
+export const actorTypeEnum \= pgEnum("actor_type", \[
+
+"USER",
+
+"AI_AGENT",
+
+"SYSTEM",
+
+\]);
+
+// \[GAP-2\] Buat payment_state enum (Constitution Part 12.2)
+
+export const paymentStateEnum \= pgEnum("payment_state", \[
+
+"initiated",
+
+"processing",
+
+"captured",
+
+"settled",
+
+"reconciled",
+
+"failed",
+
+"refunded",
+
+"refund_settled",
+
+\]);
+
+// \[GAP-3\] Buat journal_state enum (Constitution Part 12.6)
+
+export const journalStateEnum \= pgEnum("journal_state", \[
+
+"draft",
+
+"posted",
+
+"voided",
 
 \]);
 
 // \[GAP-4\] Asset state enum (Constitution Part 3.2)
 
-export const assetStateEnum \= pgEnum("asset\_state", \[
+export const assetStateEnum \= pgEnum("asset_state", \[
 
-  "procured",
+"procured",
 
-  "active",
+"active",
 
-  "retired",
+"retired",
 
 \]);
 
 // \[GAP-5\] Campaign state enum (Constitution Part 3.2)
 
-export const campaignStateEnum \= pgEnum("campaign\_state", \[
+export const campaignStateEnum \= pgEnum("campaign_state", \[
 
-  "planned",
+"planned",
 
-  "active",
+"active",
 
-  "concluded",
+"concluded",
 
 \]);
 
@@ -629,11 +629,11 @@ export const campaignStateEnum \= pgEnum("campaign\_state", \[
 
 const vector \= customType\<{ data: number\[\] }\>({
 
-  dataType() {
+dataType() {
 
     return "vector(1536)";
 
-  },
+},
 
 });
 
@@ -641,11 +641,11 @@ const vector \= customType\<{ data: number\[\] }\>({
 
 const tsrange \= customType\<{ data: string }\>({
 
-  dataType() {
+dataType() {
 
     return "tsrange";
 
-  },
+},
 
 });
 
@@ -653,17 +653,17 @@ const tsrange \= customType\<{ data: string }\>({
 
 const auditFields \= {
 
-  createdAt: timestamp("created\_at", { withTimezone: true }).defaultNow().notNull(),
+createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 
-  updatedAt: timestamp("updated\_at", { withTimezone: true }).defaultNow().notNull(),
+updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 
-  deletedAt: timestamp("deleted\_at", { withTimezone: true }),
+deletedAt: timestamp("deleted_at", { withTimezone: true }),
 
-  createdBy: uuid("created\_by"),
+createdBy: uuid("created_by"),
 
-  updatedBy: uuid("updated\_by"),
+updatedBy: uuid("updated_by"),
 
-  deletedBy: uuid("deleted\_by"),
+deletedBy: uuid("deleted_by"),
 
 };
 
@@ -671,119 +671,119 @@ const auditFields \= {
 
 // 2\. GOVERNANCE, IDENTITY & CRM BOUNDED CONTEXT
 
-//    — Urutan didahulukan karena di-referensikan oleh hampir semua context lain
+// — Urutan didahulukan karena di-referensikan oleh hampir semua context lain
 
 // \===============================================================================================
 
 export const tenants \= pgTable("tenants", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  slug: varchar("slug", { length: 255 }).notNull().unique(),
+slug: varchar("slug", { length: 255 }).notNull().unique(),
 
-  baseCurrency: varchar("base\_currency", { length: 3 }).default("IDR").notNull(),
+baseCurrency: varchar("base_currency", { length: 3 }).default("IDR").notNull(),
 
-  timezone: varchar("timezone", { length: 50 }).default("Asia/Jakarta").notNull(),
+timezone: varchar("timezone", { length: 50 }).default("Asia/Jakarta").notNull(),
 
-  status: varchar("status", { length: 50 }).default("active").notNull(),
+status: varchar("status", { length: 50 }).default("active").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
-export const legalHolds \= pgTable("legal\_holds", {
+export const legalHolds \= pgTable("legal_holds", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  reason: varchar("reason", { length: 500 }).notNull(),
+reason: varchar("reason", { length: 500 }).notNull(),
 
-  appliedAt: timestamp("applied\_at", { withTimezone: true }).defaultNow().notNull(),
+appliedAt: timestamp("applied_at", { withTimezone: true }).defaultNow().notNull(),
 
-  appliedBy: uuid("applied\_by").notNull(),
+appliedBy: uuid("applied_by").notNull(),
 
-  releasedAt: timestamp("released\_at", { withTimezone: true }),
+releasedAt: timestamp("released_at", { withTimezone: true }),
 
-  releasedBy: uuid("released\_by"),
+releasedBy: uuid("released_by"),
 
 });
 
 export const organizations \= pgTable("organizations", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  slug: varchar("slug", { length: 255 }).notNull(),
+slug: varchar("slug", { length: 255 }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const departments \= pgTable("departments", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  organizationId: uuid("organization\_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
+organizationId: uuid("organization_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  isActive: boolean("is\_active").default(true).notNull(),
+isActive: boolean("is_active").default(true).notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const workspaces \= pgTable("workspaces", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  organizationId: uuid("organization\_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
+organizationId: uuid("organization_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const profiles \= pgTable("profiles", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  userId: uuid("user\_id").notNull().unique(), // auth.users Supabase reference
+userId: uuid("user_id").notNull().unique(), // auth.users Supabase reference
 
-  fullName: varchar("full\_name", { length: 255 }).notNull(),
+fullName: varchar("full_name", { length: 255 }).notNull(),
 
-  email: varchar("email", { length: 255 }).notNull(),
+email: varchar("email", { length: 255 }).notNull(),
 
-  phone: varchar("phone", { length: 50 }),
+phone: varchar("phone", { length: 50 }),
 
-  avatarUrl: varchar("avatar\_url", { length: 500 }),
+avatarUrl: varchar("avatar_url", { length: 500 }),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const memberships \= pgTable("memberships", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  profileId: uuid("profile\_id").notNull().references(() \=\> profiles.id, { onDelete: "cascade" }),
+profileId: uuid("profile_id").notNull().references(() \=\> profiles.id, { onDelete: "cascade" }),
 
-  role: varchar("role", { length: 50 }).default("member").notNull(),
+role: varchar("role", { length: 50 }).default("member").notNull(),
 
-  status: varchar("status", { length: 50 }).default("active").notNull(),
+status: varchar("status", { length: 50 }).default("active").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -791,19 +791,19 @@ export const memberships \= pgTable("memberships", {
 
 export const customers \= pgTable("customers", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  email: varchar("email", { length: 255 }).notNull(),
+email: varchar("email", { length: 255 }).notNull(),
 
-  phone: varchar("phone", { length: 50 }),
+phone: varchar("phone", { length: 50 }),
 
-  status: varchar("status", { length: 50 }).default("lead").notNull(),
+status: varchar("status", { length: 50 }).default("lead").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -811,21 +811,21 @@ export const customers \= pgTable("customers", {
 
 export const suppliers \= pgTable("suppliers", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  companyName: varchar("company\_name", { length: 255 }).notNull(),
+companyName: varchar("company_name", { length: 255 }).notNull(),
 
-  contactName: varchar("contact\_name", { length: 255 }),
+contactName: varchar("contact_name", { length: 255 }),
 
-  email: varchar("email", { length: 255 }),
+email: varchar("email", { length: 255 }),
 
-  phone: varchar("phone", { length: 50 }),
+phone: varchar("phone", { length: 50 }),
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -837,19 +837,19 @@ export const suppliers \= pgTable("suppliers", {
 
 export const projects \= pgTable("projects", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  organizationId: uuid("organization\_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
+organizationId: uuid("organization_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
 
-  workspaceId: uuid("workspace\_id").notNull().references(() \=\> workspaces.id, { onDelete: "cascade" }),
+workspaceId: uuid("workspace_id").notNull().references(() \=\> workspaces.id, { onDelete: "cascade" }),
 
-  title: varchar("title", { length: 255 }).notNull(),
+title: varchar("title", { length: 255 }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("active").notNull(),
+status: varchar("status", { length: 50 }).default("active").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -861,31 +861,31 @@ export const projects \= pgTable("projects", {
 
 export const facilities \= pgTable("facilities", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  organizationId: uuid("organization\_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
+organizationId: uuid("organization_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  address: varchar("address", { length: 500 }),
+address: varchar("address", { length: 500 }),
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const rooms \= pgTable("rooms", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  facilityId: uuid("facility\_id").notNull().references(() \=\> facilities.id, { onDelete: "cascade" }),
+facilityId: uuid("facility_id").notNull().references(() \=\> facilities.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  capacity: integer("capacity").notNull(),
+capacity: integer("capacity").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -893,71 +893,71 @@ export const rooms \= pgTable("rooms", {
 
 export const assets \= pgTable("assets", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  organizationId: uuid("organization\_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
+organizationId: uuid("organization_id").notNull().references(() \=\> organizations.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  assetType: varchar("asset\_type", { length: 100 }).notNull(),
+assetType: varchar("asset_type", { length: 100 }).notNull(),
 
-  serialNumber: varchar("serial\_number", { length: 100 }),
+serialNumber: varchar("serial_number", { length: 100 }),
 
-  assignedTo: uuid("assigned\_to"), // Profile UUID
+assignedTo: uuid("assigned_to"), // Profile UUID
 
-  status: assetStateEnum("status").default("procured").notNull(),
+status: assetStateEnum("status").default("procured").notNull(),
 
-  metadata: jsonb("metadata").default("{}"),
+metadata: jsonb("metadata").default("{}"),
 
-  ...auditFields,
+...auditFields,
 
 });
 
-// \[GAP-8\] bookings — tambah idempotency\_key (L-04), forward ref ke projects sudah resolved \[GAP-13\]
+// \[GAP-8\] bookings — tambah idempotency_key (L-04), forward ref ke projects sudah resolved \[GAP-13\]
 
 export const bookings \= pgTable("bookings", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  roomId: uuid("room\_id").notNull().references(() \=\> rooms.id, { onDelete: "cascade" }),
+roomId: uuid("room_id").notNull().references(() \=\> rooms.id, { onDelete: "cascade" }),
 
-  projectId: uuid("project\_id").notNull().references(() \=\> projects.id, { onDelete: "cascade" }),
+projectId: uuid("project_id").notNull().references(() \=\> projects.id, { onDelete: "cascade" }),
 
-  customerId: uuid("customer\_id").references(() \=\> customers.id, { onDelete: "set null" }),
+customerId: uuid("customer_id").references(() \=\> customers.id, { onDelete: "set null" }),
 
-  timeRange: tsrange("time\_range").notNull(),
+timeRange: tsrange("time_range").notNull(),
 
-  idempotencyKey: varchar("idempotency\_key", { length: 255 }).unique(), // \[GAP-8\] L-04
+idempotencyKey: varchar("idempotency_key", { length: 255 }).unique(), // \[GAP-8\] L-04
 
-  status: bookingStateEnum("status").default("pending").notNull(),
+status: bookingStateEnum("status").default("pending").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
-// \[GAP-7\] booking\_histories — ada di Drizzle tapi hilang di SQL sebelumnya
+// \[GAP-7\] booking_histories — ada di Drizzle tapi hilang di SQL sebelumnya
 
-export const bookingHistories \= pgTable("booking\_histories", {
+export const bookingHistories \= pgTable("booking_histories", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  bookingId: uuid("booking\_id").notNull().references(() \=\> bookings.id, { onDelete: "cascade" }),
+bookingId: uuid("booking_id").notNull().references(() \=\> bookings.id, { onDelete: "cascade" }),
 
-  fromStatus: bookingStateEnum("from\_status"),
+fromStatus: bookingStateEnum("from_status"),
 
-  toStatus: bookingStateEnum("to\_status").notNull(),
+toStatus: bookingStateEnum("to_status").notNull(),
 
-  actorId: uuid("actor\_id").notNull(),
+actorId: uuid("actor_id").notNull(),
 
-  actorType: actorTypeEnum("actor\_type").notNull(),
+actorType: actorTypeEnum("actor_type").notNull(),
 
-  reason: varchar("reason", { length: 500 }),
+reason: varchar("reason", { length: 500 }),
 
-  createdAt: timestamp("created\_at", { withTimezone: true }).defaultNow().notNull(),
+createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 
 });
 
@@ -969,59 +969,59 @@ export const bookingHistories \= pgTable("booking\_histories", {
 
 export const events \= pgTable("events", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  projectId: uuid("project\_id").notNull().references(() \=\> projects.id, { onDelete: "cascade" }),
+projectId: uuid("project_id").notNull().references(() \=\> projects.id, { onDelete: "cascade" }),
 
-  title: varchar("title", { length: 255 }).notNull(),
+title: varchar("title", { length: 255 }).notNull(),
 
-  startTime: timestamp("start\_time", { withTimezone: true }).notNull(),
+startTime: timestamp("start_time", { withTimezone: true }).notNull(),
 
-  endTime: timestamp("end\_time", { withTimezone: true }).notNull(),
+endTime: timestamp("end_time", { withTimezone: true }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
-
-});
-
-export const passTiers \= pgTable("pass\_tiers", {
-
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  eventId: uuid("event\_id").notNull().references(() \=\> events.id, { onDelete: "cascade" }),
-
-  name: varchar("name", { length: 100 }).notNull(),
-
-  price: numeric("price", { precision: 16, scale: 4 }).notNull(),
-
-  capacity: integer("capacity").notNull(),
-
-  quantityIssued: integer("quantity\_issued").default(0).notNull(),
-
-  ...auditFields,
+...auditFields,
 
 });
 
-// \[GAP-10\] access\_passes — tambah customer\_id (Constitution Part 3.2)
+export const passTiers \= pgTable("pass_tiers", {
 
-export const accessPasses \= pgTable("access\_passes", {
+id: uuid("id").primaryKey().defaultRandom(),
 
-  id: uuid("id").primaryKey().defaultRandom(),
+eventId: uuid("event_id").notNull().references(() \=\> events.id, { onDelete: "cascade" }),
 
-  passTierId: uuid("pass\_tier\_id").notNull().references(() \=\> passTiers.id, { onDelete: "restrict" }),
+name: varchar("name", { length: 100 }).notNull(),
 
-  customerId: uuid("customer\_id").references(() \=\> customers.id, { onDelete: "set null" }), // \[GAP-10\]
+price: numeric("price", { precision: 16, scale: 4 }).notNull(),
 
-  holderName: varchar("holder\_name", { length: 255 }).notNull(),
+capacity: integer("capacity").notNull(),
 
-  secureQrHash: varchar("secure\_qr\_hash", { length: 64 }).notNull().unique(),
+quantityIssued: integer("quantity_issued").default(0).notNull(),
 
-  expiresAt: timestamp("expires\_at", { withTimezone: true }),
+...auditFields,
 
-  status: accessPassStateEnum("status").default("pending").notNull(),
+});
 
-  ...auditFields,
+// \[GAP-10\] access_passes — tambah customer_id (Constitution Part 3.2)
+
+export const accessPasses \= pgTable("access_passes", {
+
+id: uuid("id").primaryKey().defaultRandom(),
+
+passTierId: uuid("pass_tier_id").notNull().references(() \=\> passTiers.id, { onDelete: "restrict" }),
+
+customerId: uuid("customer_id").references(() \=\> customers.id, { onDelete: "set null" }), // \[GAP-10\]
+
+holderName: varchar("holder_name", { length: 255 }).notNull(),
+
+secureQrHash: varchar("secure_qr_hash", { length: 64 }).notNull().unique(),
+
+expiresAt: timestamp("expires_at", { withTimezone: true }),
+
+status: accessPassStateEnum("status").default("pending").notNull(),
+
+...auditFields,
 
 });
 
@@ -1029,103 +1029,103 @@ export const accessPasses \= pgTable("access\_passes", {
 
 export const campaigns \= pgTable("campaigns", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  projectId: uuid("project\_id").references(() \=\> projects.id, { onDelete: "set null" }),
+projectId: uuid("project_id").references(() \=\> projects.id, { onDelete: "set null" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  targetType: varchar("target\_type", { length: 100 }), // EVENT, PRODUCT, etc.
+targetType: varchar("target_type", { length: 100 }), // EVENT, PRODUCT, etc.
 
-  targetId: uuid("target\_id"),
+targetId: uuid("target_id"),
 
-  startDate: timestamp("start\_date", { withTimezone: true }),
+startDate: timestamp("start_date", { withTimezone: true }),
 
-  endDate: timestamp("end\_date", { withTimezone: true }),
+endDate: timestamp("end_date", { withTimezone: true }),
 
-  budget: numeric("budget", { precision: 16, scale: 4 }),
+budget: numeric("budget", { precision: 16, scale: 4 }),
 
-  status: campaignStateEnum("status").default("planned").notNull(),
+status: campaignStateEnum("status").default("planned").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const products \= pgTable("products", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  sku: varchar("sku", { length: 100 }).notNull().unique(),
+sku: varchar("sku", { length: 100 }).notNull().unique(),
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
-export const productVariants \= pgTable("product\_variants", {
+export const productVariants \= pgTable("product_variants", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  productId: uuid("product\_id").notNull().references(() \=\> products.id, { onDelete: "cascade" }),
+productId: uuid("product_id").notNull().references(() \=\> products.id, { onDelete: "cascade" }),
 
-  skuOverride: varchar("sku\_override", { length: 100 }).unique(),
+skuOverride: varchar("sku_override", { length: 100 }).unique(),
 
-  price: numeric("price", { precision: 16, scale: 4 }).notNull(),
+price: numeric("price", { precision: 16, scale: 4 }).notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const warehouses \= pgTable("warehouses", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  isActive: boolean("is\_active").default(true).notNull(),
+isActive: boolean("is_active").default(true).notNull(),
 
-  ...auditFields,
-
-});
-
-export const inventoryLots \= pgTable("inventory\_lots", {
-
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  productVariantId: uuid("product\_variant\_id").notNull().references(() \=\> productVariants.id, { onDelete: "restrict" }),
-
-  warehouseId: uuid("warehouse\_id").notNull().references(() \=\> warehouses.id, { onDelete: "restrict" }),
-
-  quantity: integer("quantity").notNull(),
-
-  status: varchar("status", { length: 50 }).default("active").notNull(),
-
-  ...auditFields,
+...auditFields,
 
 });
 
-export const stockMovements \= pgTable("stock\_movements", {
+export const inventoryLots \= pgTable("inventory_lots", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  inventoryLotId: uuid("inventory\_lot\_id").notNull().references(() \=\> inventoryLots.id, { onDelete: "cascade" }),
+productVariantId: uuid("product_variant_id").notNull().references(() \=\> productVariants.id, { onDelete: "restrict" }),
 
-  quantity: integer("quantity").notNull(),
+warehouseId: uuid("warehouse_id").notNull().references(() \=\> warehouses.id, { onDelete: "restrict" }),
 
-  movementType: varchar("movement\_type", { length: 50 }).notNull(),
+quantity: integer("quantity").notNull(),
 
-  reason: varchar("reason", { length: 500 }),
+status: varchar("status", { length: 50 }).default("active").notNull(),
 
-  ...auditFields,
+...auditFields,
+
+});
+
+export const stockMovements \= pgTable("stock_movements", {
+
+id: uuid("id").primaryKey().defaultRandom(),
+
+inventoryLotId: uuid("inventory_lot_id").notNull().references(() \=\> inventoryLots.id, { onDelete: "cascade" }),
+
+quantity: integer("quantity").notNull(),
+
+movementType: varchar("movement_type", { length: 50 }).notNull(),
+
+reason: varchar("reason", { length: 500 }),
+
+...auditFields,
 
 });
 
@@ -1133,189 +1133,189 @@ export const stockMovements \= pgTable("stock\_movements", {
 
 // 6\. FINANCE & SWISS-STANDARD DOUBLE-ENTRY GENERAL LEDGER
 
-//    (Constitution Part 3.3, 10.4, 10.5, 12.2, 12.4, 12.6)
+// (Constitution Part 3.3, 10.4, 10.5, 12.2, 12.4, 12.6)
 
 // \===============================================================================================
 
 export const ledgers \= pgTable("ledgers", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  name: varchar("name", { length: 150 }).notNull(),
+name: varchar("name", { length: 150 }).notNull(),
 
-  currency: varchar("currency", { length: 3 }).default("IDR").notNull(),
+currency: varchar("currency", { length: 3 }).default("IDR").notNull(),
 
-  status: varchar("status", { length: 50 }).default("active").notNull(),
+status: varchar("status", { length: 50 }).default("active").notNull(),
 
-  ...auditFields,
-
-});
-
-export const ledgerAccounts \= pgTable("ledger\_accounts", {
-
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  ledgerId: uuid("ledger\_id").notNull().references(() \=\> ledgers.id, { onDelete: "cascade" }),
-
-  parentId: uuid("parent\_id"), // self-ref, CoA hirarki
-
-  code: varchar("code", { length: 50 }).notNull(),
-
-  name: varchar("name", { length: 150 }).notNull(),
-
-  classification: accountClassificationEnum("classification").notNull(),
-
-  normalBalance: varchar("normal\_balance", { length: 10 }).notNull(),
-
-  ...auditFields,
+...auditFields,
 
 });
 
-// \[GAP-12\] journal\_entries — tambah voided\_at, voided\_by, gunakan journal\_state enum \[GAP-3\]
+export const ledgerAccounts \= pgTable("ledger_accounts", {
 
-export const journalEntries \= pgTable("journal\_entries", {
+id: uuid("id").primaryKey().defaultRandom(),
 
-  id: uuid("id").primaryKey().defaultRandom(),
+ledgerId: uuid("ledger_id").notNull().references(() \=\> ledgers.id, { onDelete: "cascade" }),
 
-  ledgerId: uuid("ledger\_id").notNull().references(() \=\> ledgers.id, { onDelete: "cascade" }),
+parentId: uuid("parent_id"), // self-ref, CoA hirarki
 
-  referenceType: varchar("reference\_type", { length: 100 }),
+code: varchar("code", { length: 50 }).notNull(),
 
-  referenceId: uuid("reference\_id"),
+name: varchar("name", { length: 150 }).notNull(),
 
-  narration: varchar("narration", { length: 500 }).notNull(),
+classification: accountClassificationEnum("classification").notNull(),
 
-  status: journalStateEnum("status").default("draft").notNull(), // \[GAP-3\]
+normalBalance: varchar("normal_balance", { length: 10 }).notNull(),
 
-  postedAt: timestamp("posted\_at", { withTimezone: true }),
-
-  voidedAt: timestamp("voided\_at", { withTimezone: true }),   // \[GAP-12\]
-
-  voidedBy: uuid("voided\_by"),                                 // \[GAP-12\]
-
-  reversalOfId: uuid("reversal\_of\_id"),   // FK circular — ditangani di SQL level
-
-  ...auditFields,
+...auditFields,
 
 });
 
-export const journalLines \= pgTable("journal\_lines", {
+// \[GAP-12\] journal_entries — tambah voided_at, voided_by, gunakan journal_state enum \[GAP-3\]
 
-  id: uuid("id").primaryKey().defaultRandom(),
+export const journalEntries \= pgTable("journal_entries", {
 
-  journalEntryId: uuid("journal\_entry\_id").notNull().references(() \=\> journalEntries.id, { onDelete: "cascade" }),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  accountId: uuid("account\_id").notNull().references(() \=\> ledgerAccounts.id, { onDelete: "restrict" }),
+ledgerId: uuid("ledger_id").notNull().references(() \=\> ledgers.id, { onDelete: "cascade" }),
 
-  type: varchar("type", { length: 10 }).notNull(), // 'debit' | 'credit'
+referenceType: varchar("reference_type", { length: 100 }),
 
-  amount: numeric("amount", { precision: 16, scale: 4 }).notNull(),
+referenceId: uuid("reference_id"),
+
+narration: varchar("narration", { length: 500 }).notNull(),
+
+status: journalStateEnum("status").default("draft").notNull(), // \[GAP-3\]
+
+postedAt: timestamp("posted_at", { withTimezone: true }),
+
+voidedAt: timestamp("voided_at", { withTimezone: true }), // \[GAP-12\]
+
+voidedBy: uuid("voided_by"), // \[GAP-12\]
+
+reversalOfId: uuid("reversal_of_id"), // FK circular — ditangani di SQL level
+
+...auditFields,
 
 });
 
-// \[GAP-8\] invoices — tambah idempotency\_key (L-04)
+export const journalLines \= pgTable("journal_lines", {
+
+id: uuid("id").primaryKey().defaultRandom(),
+
+journalEntryId: uuid("journal_entry_id").notNull().references(() \=\> journalEntries.id, { onDelete: "cascade" }),
+
+accountId: uuid("account_id").notNull().references(() \=\> ledgerAccounts.id, { onDelete: "restrict" }),
+
+type: varchar("type", { length: 10 }).notNull(), // 'debit' | 'credit'
+
+amount: numeric("amount", { precision: 16, scale: 4 }).notNull(),
+
+});
+
+// \[GAP-8\] invoices — tambah idempotency_key (L-04)
 
 export const invoices \= pgTable("invoices", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  customerId: uuid("customer\_id").notNull().references(() \=\> customers.id, { onDelete: "restrict" }),
+customerId: uuid("customer_id").notNull().references(() \=\> customers.id, { onDelete: "restrict" }),
 
-  idempotencyKey: varchar("idempotency\_key", { length: 255 }).unique(), // \[GAP-8\]
+idempotencyKey: varchar("idempotency_key", { length: 255 }).unique(), // \[GAP-8\]
 
-  status: invoiceStateEnum("status").default("draft").notNull(),
+status: invoiceStateEnum("status").default("draft").notNull(),
 
-  totalAmount: numeric("total\_amount", { precision: 16, scale: 4 }).notNull(),
+totalAmount: numeric("total_amount", { precision: 16, scale: 4 }).notNull(),
 
-  dueDate: timestamp("due\_date", { withTimezone: true }).notNull(),
+dueDate: timestamp("due_date", { withTimezone: true }).notNull(),
 
-  ...auditFields,
-
-});
-
-export const invoiceLines \= pgTable("invoice\_lines", {
-
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  invoiceId: uuid("invoice\_id").notNull().references(() \=\> invoices.id, { onDelete: "cascade" }),
-
-  description: varchar("description", { length: 255 }).notNull(),
-
-  quantity: integer("quantity").notNull(),
-
-  unitPrice: numeric("unit\_price", { precision: 16, scale: 4 }).notNull(),
-
-  totalAmount: numeric("total\_amount", { precision: 16, scale: 4 }).notNull(),
+...auditFields,
 
 });
 
-// \[GAP-8\] payments — tambah idempotency\_key, gunakan payment\_state enum \[GAP-2\]
+export const invoiceLines \= pgTable("invoice_lines", {
+
+id: uuid("id").primaryKey().defaultRandom(),
+
+invoiceId: uuid("invoice_id").notNull().references(() \=\> invoices.id, { onDelete: "cascade" }),
+
+description: varchar("description", { length: 255 }).notNull(),
+
+quantity: integer("quantity").notNull(),
+
+unitPrice: numeric("unit_price", { precision: 16, scale: 4 }).notNull(),
+
+totalAmount: numeric("total_amount", { precision: 16, scale: 4 }).notNull(),
+
+});
+
+// \[GAP-8\] payments — tambah idempotency_key, gunakan payment_state enum \[GAP-2\]
 
 export const payments \= pgTable("payments", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  invoiceId: uuid("invoice\_id").notNull().references(() \=\> invoices.id, { onDelete: "restrict" }),
+invoiceId: uuid("invoice_id").notNull().references(() \=\> invoices.id, { onDelete: "restrict" }),
 
-  amount: numeric("amount", { precision: 16, scale: 4 }).notNull(),
+amount: numeric("amount", { precision: 16, scale: 4 }).notNull(),
 
-  gatewayReference: varchar("gateway\_reference", { length: 255 }),
+gatewayReference: varchar("gateway_reference", { length: 255 }),
 
-  gatewayProvider: varchar("gateway\_provider", { length: 50 }), // xendit | stripe | midtrans
+gatewayProvider: varchar("gateway_provider", { length: 50 }), // xendit | stripe | midtrans
 
-  idempotencyKey: varchar("idempotency\_key", { length: 255 }).unique(), // \[GAP-8\]
+idempotencyKey: varchar("idempotency_key", { length: 255 }).unique(), // \[GAP-8\]
 
-  status: paymentStateEnum("status").default("initiated").notNull(), // \[GAP-2\]
+status: paymentStateEnum("status").default("initiated").notNull(), // \[GAP-2\]
 
-  capturedAt: timestamp("captured\_at", { withTimezone: true }),
+capturedAt: timestamp("captured_at", { withTimezone: true }),
 
-  settledAt: timestamp("settled\_at", { withTimezone: true }),
+settledAt: timestamp("settled_at", { withTimezone: true }),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const escrows \= pgTable("escrows", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  journalEntryId: uuid("journal\_entry\_id").notNull().references(() \=\> journalEntries.id, { onDelete: "restrict" }),
+journalEntryId: uuid("journal_entry_id").notNull().references(() \=\> journalEntries.id, { onDelete: "restrict" }),
 
-  amount: numeric("amount", { precision: 16, scale: 4 }).notNull(),
+amount: numeric("amount", { precision: 16, scale: 4 }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("locked").notNull(),
+status: varchar("status", { length: 50 }).default("locked").notNull(),
 
-  releaseTrigger: varchar("release\_trigger", { length: 255 }).notNull(),
+releaseTrigger: varchar("release_trigger", { length: 255 }).notNull(),
 
-  releasedAt: timestamp("released\_at", { withTimezone: true }),
+releasedAt: timestamp("released_at", { withTimezone: true }),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const subscriptions \= pgTable("subscriptions", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  customerId: uuid("customer\_id").notNull().references(() \=\> customers.id, { onDelete: "restrict" }),
+customerId: uuid("customer_id").notNull().references(() \=\> customers.id, { onDelete: "restrict" }),
 
-  planId: varchar("plan\_id", { length: 100 }).notNull(),
+planId: varchar("plan_id", { length: 100 }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("active").notNull(),
+status: varchar("status", { length: 50 }).default("active").notNull(),
 
-  nextBillingAt: timestamp("next\_billing\_at", { withTimezone: true }).notNull(),
+nextBillingAt: timestamp("next_billing_at", { withTimezone: true }).notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -1327,101 +1327,101 @@ export const subscriptions \= pgTable("subscriptions", {
 
 export const workflows \= pgTable("workflows", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  workspaceId: uuid("workspace\_id").notNull().references(() \=\> workspaces.id, { onDelete: "cascade" }),
+workspaceId: uuid("workspace_id").notNull().references(() \=\> workspaces.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
-
-});
-
-export const workflowStates \= pgTable("workflow\_states", {
-
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  workflowId: uuid("workflow\_id").notNull().references(() \=\> workflows.id, { onDelete: "cascade" }),
-
-  name: varchar("name", { length: 100 }).notNull(),
-
-  isInitial: boolean("is\_initial").default(false).notNull(),
-
-  isFinal: boolean("is\_final").default(false).notNull(),
-
-  stepOrder: integer("step\_order").notNull(),
+...auditFields,
 
 });
 
-export const workflowTransitions \= pgTable("workflow\_transitions", {
+export const workflowStates \= pgTable("workflow_states", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  workflowId: uuid("workflow\_id").notNull().references(() \=\> workflows.id, { onDelete: "cascade" }),
+workflowId: uuid("workflow_id").notNull().references(() \=\> workflows.id, { onDelete: "cascade" }),
 
-  fromStateId: uuid("from\_state\_id").notNull().references(() \=\> workflowStates.id, { onDelete: "cascade" }),
+name: varchar("name", { length: 100 }).notNull(),
 
-  toStateId: uuid("to\_state\_id").notNull().references(() \=\> workflowStates.id, { onDelete: "cascade" }),
+isInitial: boolean("is_initial").default(false).notNull(),
+
+isFinal: boolean("is_final").default(false).notNull(),
+
+stepOrder: integer("step_order").notNull(),
 
 });
 
-export const workflowInstances \= pgTable("workflow\_instances", {
+export const workflowTransitions \= pgTable("workflow_transitions", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  workflowId: uuid("workflow\_id").notNull().references(() \=\> workflows.id, { onDelete: "cascade" }),
+workflowId: uuid("workflow_id").notNull().references(() \=\> workflows.id, { onDelete: "cascade" }),
 
-  entityType: varchar("entity\_type", { length: 100 }).notNull(),
+fromStateId: uuid("from_state_id").notNull().references(() \=\> workflowStates.id, { onDelete: "cascade" }),
 
-  entityId: uuid("entity\_id").notNull(),
+toStateId: uuid("to_state_id").notNull().references(() \=\> workflowStates.id, { onDelete: "cascade" }),
 
-  currentStateId: uuid("current\_state\_id").references(() \=\> workflowStates.id, { onDelete: "set null" }),
+});
 
-  status: workflowStateEnum("status").default("running").notNull(),
+export const workflowInstances \= pgTable("workflow_instances", {
 
-  ...auditFields,
+id: uuid("id").primaryKey().defaultRandom(),
+
+workflowId: uuid("workflow_id").notNull().references(() \=\> workflows.id, { onDelete: "cascade" }),
+
+entityType: varchar("entity_type", { length: 100 }).notNull(),
+
+entityId: uuid("entity_id").notNull(),
+
+currentStateId: uuid("current_state_id").references(() \=\> workflowStates.id, { onDelete: "set null" }),
+
+status: workflowStateEnum("status").default("running").notNull(),
+
+...auditFields,
 
 });
 
 export const approvals \= pgTable("approvals", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  workflowInstanceId: uuid("workflow\_instance\_id").notNull().references(() \=\> workflowInstances.id, { onDelete: "cascade" }),
+workflowInstanceId: uuid("workflow_instance_id").notNull().references(() \=\> workflowInstances.id, { onDelete: "cascade" }),
 
-  assignedTo: uuid("assigned\_to").notNull(),
+assignedTo: uuid("assigned_to").notNull(),
 
-  status: varchar("status", { length: 50 }).default("pending").notNull(),
+status: varchar("status", { length: 50 }).default("pending").notNull(),
 
-  resolution: varchar("resolution", { length: 50 }),
+resolution: varchar("resolution", { length: 50 }),
 
-  resolvedBy: uuid("resolved\_by"),
+resolvedBy: uuid("resolved_by"),
 
-  resolvedAt: timestamp("resolved\_at", { withTimezone: true }),
+resolvedAt: timestamp("resolved_at", { withTimezone: true }),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const tasks \= pgTable("tasks", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  workflowInstanceId: uuid("workflow\_instance\_id").notNull().references(() \=\> workflowInstances.id, { onDelete: "cascade" }),
+workflowInstanceId: uuid("workflow_instance_id").notNull().references(() \=\> workflowInstances.id, { onDelete: "cascade" }),
 
-  title: varchar("title", { length: 255 }).notNull(),
+title: varchar("title", { length: 255 }).notNull(),
 
-  description: text("description"),
+description: text("description"),
 
-  status: varchar("status", { length: 50 }).default("todo").notNull(),
+status: varchar("status", { length: 50 }).default("todo").notNull(),
 
-  assigneeId: uuid("assignee\_id"),
+assigneeId: uuid("assignee_id"),
 
-  dueAt: timestamp("due\_at", { withTimezone: true }),
+dueAt: timestamp("due_at", { withTimezone: true }),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -1431,125 +1431,125 @@ export const tasks \= pgTable("tasks", {
 
 // \===============================================================================================
 
-export const knowledgeBases \= pgTable("knowledge\_bases", {
+export const knowledgeBases \= pgTable("knowledge_bases", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  workspaceId: uuid("workspace\_id").notNull().references(() \=\> workspaces.id, { onDelete: "cascade" }),
+workspaceId: uuid("workspace_id").notNull().references(() \=\> workspaces.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const documents \= pgTable("documents", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  knowledgeBaseId: uuid("knowledge\_base\_id").notNull().references(() \=\> knowledgeBases.id, { onDelete: "cascade" }),
+knowledgeBaseId: uuid("knowledge_base_id").notNull().references(() \=\> knowledgeBases.id, { onDelete: "cascade" }),
 
-  title: varchar("title", { length: 255 }).notNull(),
+title: varchar("title", { length: 255 }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
-export const documentVersions \= pgTable("document\_versions", {
+export const documentVersions \= pgTable("document_versions", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  documentId: uuid("document\_id").notNull().references(() \=\> documents.id, { onDelete: "cascade" }),
+documentId: uuid("document_id").notNull().references(() \=\> documents.id, { onDelete: "cascade" }),
 
-  version: integer("version").notNull(),
+version: integer("version").notNull(),
 
-  content: text("content").notNull(), // \[GAP-14\] text now properly imported
+content: text("content").notNull(), // \[GAP-14\] text now properly imported
 
-  ...auditFields,
+...auditFields,
 
 });
 
 export const chunks \= pgTable("chunks", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  documentVersionId: uuid("document\_version\_id").notNull().references(() \=\> documentVersions.id, { onDelete: "cascade" }),
+documentVersionId: uuid("document_version_id").notNull().references(() \=\> documentVersions.id, { onDelete: "cascade" }),
 
-  contentPayload: text("content\_payload").notNull(),
+contentPayload: text("content_payload").notNull(),
 
-  chunkIndex: integer("chunk\_index").notNull(),
+chunkIndex: integer("chunk_index").notNull(),
 
-  tokenCount: integer("token\_count"),
+tokenCount: integer("token_count"),
 
 });
 
 export const embeddings \= pgTable("embeddings", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  documentVersionId: uuid("document\_version\_id").notNull().references(() \=\> documentVersions.id, { onDelete: "cascade" }),
+documentVersionId: uuid("document_version_id").notNull().references(() \=\> documentVersions.id, { onDelete: "cascade" }),
 
-  chunkId: uuid("chunk\_id").references(() \=\> chunks.id, { onDelete: "cascade" }),
+chunkId: uuid("chunk_id").references(() \=\> chunks.id, { onDelete: "cascade" }),
 
-  vectorData: vector("vector\_data").notNull(), // \[GAP-15\] konsisten vector(1536)
+vectorData: vector("vector_data").notNull(), // \[GAP-15\] konsisten vector(1536)
 
-  modelUsed: varchar("model\_used", { length: 150 }).notNull(),
+modelUsed: varchar("model_used", { length: 150 }).notNull(),
 
-  status: varchar("status", { length: 50 }).default("generated").notNull(),
+status: varchar("status", { length: 50 }).default("generated").notNull(),
 
 });
 
-// \[GAP-9\] prompts — tambah input\_schema, output\_format, guardrails (Part 16.4)
+// \[GAP-9\] prompts — tambah input_schema, output_format, guardrails (Part 16.4)
 
 export const prompts \= pgTable("prompts", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  routingPreference: varchar("routing\_preference", { length: 50 }).default("openrouter").notNull(),
+routingPreference: varchar("routing_preference", { length: 50 }).default("openrouter").notNull(),
 
-  targetModel: varchar("target\_model", { length: 150 }).notNull(),
+targetModel: varchar("target_model", { length: 150 }).notNull(),
 
-  version: varchar("version", { length: 50 }).notNull(),
+version: varchar("version", { length: 50 }).notNull(),
 
-  template: text("template").notNull(),
+template: text("template").notNull(),
 
-  inputSchema: jsonb("input\_schema").default("{}"),   // \[GAP-9\] Part 16.4
+inputSchema: jsonb("input_schema").default("{}"), // \[GAP-9\] Part 16.4
 
-  outputFormat: jsonb("output\_format").default("{}"), // \[GAP-9\] Part 16.4
+outputFormat: jsonb("output_format").default("{}"), // \[GAP-9\] Part 16.4
 
-  guardrails: jsonb("guardrails").default("\[\]"),      // \[GAP-9\] Part 16.4
+guardrails: jsonb("guardrails").default("\[\]"), // \[GAP-9\] Part 16.4
 
-  status: varchar("status", { length: 50 }).default("draft").notNull(),
+status: varchar("status", { length: 50 }).default("draft").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
-// \[GAP-11\] ai\_agents — tambah tools JSONB (Part 16.3 MCP Tool Registry)
+// \[GAP-11\] ai_agents — tambah tools JSONB (Part 16.3 MCP Tool Registry)
 
-export const aiAgents \= pgTable("ai\_agents", {
+export const aiAgents \= pgTable("ai_agents", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  name: varchar("name", { length: 255 }).notNull(),
+name: varchar("name", { length: 255 }).notNull(),
 
-  promptId: uuid("prompt\_id").notNull().references(() \=\> prompts.id, { onDelete: "restrict" }),
+promptId: uuid("prompt_id").notNull().references(() \=\> prompts.id, { onDelete: "restrict" }),
 
-  tools: jsonb("tools").default("\[\]"),  // \[GAP-11\] MCP tool definitions array
+tools: jsonb("tools").default("\[\]"), // \[GAP-11\] MCP tool definitions array
 
-  maxBudgetPerCall: numeric("max\_budget\_per\_call", { precision: 10, scale: 6 }),
+maxBudgetPerCall: numeric("max_budget_per_call", { precision: 10, scale: 6 }),
 
-  status: varchar("status", { length: 50 }).default("configured").notNull(),
+status: varchar("status", { length: 50 }).default("configured").notNull(),
 
-  ...auditFields,
+...auditFields,
 
 });
 
@@ -1557,117 +1557,117 @@ export const aiAgents \= pgTable("ai\_agents", {
 
 // 9\. OBSERVABILITY, EVENT-DRIVEN OUTBOX & AUDIT ENGINE
 
-//    (Constitution Part 13, 15.5, 18\)
+// (Constitution Part 13, 15.5, 18\)
 
 // \===============================================================================================
 
-export const domainEvents \= pgTable("domain\_events", {
+export const domainEvents \= pgTable("domain_events", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").references(() \=\> tenants.id, { onDelete: "cascade" }),
+tenantId: uuid("tenant_id").references(() \=\> tenants.id, { onDelete: "cascade" }),
 
-  eventType: varchar("event\_type", { length: 150 }).notNull(),
+eventType: varchar("event_type", { length: 150 }).notNull(),
 
-  aggregateType: varchar("aggregate\_type", { length: 100 }),
+aggregateType: varchar("aggregate_type", { length: 100 }),
 
-  aggregateId: uuid("aggregate\_id"),
+aggregateId: uuid("aggregate_id"),
 
-  payload: jsonb("payload").notNull(),
+payload: jsonb("payload").notNull(),
 
-  traceId: uuid("trace\_id").notNull(),
+traceId: uuid("trace_id").notNull(),
 
-  status: varchar("status", { length: 50 }).default("pending").notNull(),
+status: varchar("status", { length: 50 }).default("pending").notNull(),
 
-  processedAt: timestamp("processed\_at", { withTimezone: true }),
+processedAt: timestamp("processed_at", { withTimezone: true }),
 
-  createdAt: timestamp("created\_at", { withTimezone: true }).defaultNow().notNull(),
+createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 
 });
 
 // \[GAP-16\] auditLogs — ipAddress sekarang menggunakan inet type
 
-export const auditLogs \= pgTable("audit\_logs", {
+export const auditLogs \= pgTable("audit_logs", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "cascade" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "cascade" }),
 
-  actorId: uuid("actor\_id").notNull(),
+actorId: uuid("actor_id").notNull(),
 
-  actorType: actorTypeEnum("actor\_type").notNull(),
+actorType: actorTypeEnum("actor_type").notNull(),
 
-  action: varchar("action", { length: 150 }).notNull(),
+action: varchar("action", { length: 150 }).notNull(),
 
-  entityType: varchar("entity\_type", { length: 100 }).notNull(),
+entityType: varchar("entity_type", { length: 100 }).notNull(),
 
-  entityId: uuid("entity\_id").notNull(),
+entityId: uuid("entity_id").notNull(),
 
-  oldState: jsonb("old\_state"),
+oldState: jsonb("old_state"),
 
-  newState: jsonb("new\_state"),
+newState: jsonb("new_state"),
 
-  traceId: uuid("trace\_id").notNull(),
+traceId: uuid("trace_id").notNull(),
 
-  ipAddress: inet("ip\_address"), // \[GAP-16\] inet type — konsisten dengan SQL
+ipAddress: inet("ip_address"), // \[GAP-16\] inet type — konsisten dengan SQL
 
-  createdAt: timestamp("created\_at", { withTimezone: true }).defaultNow().notNull(),
-
-});
-
-export const metricSnapshots \= pgTable("metric\_snapshots", {
-
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "cascade" }),
-
-  metricName: varchar("metric\_name", { length: 150 }).notNull(),
-
-  value: numeric("value", { precision: 16, scale: 4 }).notNull(),
-
-  dimensions: jsonb("dimensions").default("{}").notNull(),
-
-  recordedAt: timestamp("recorded\_at", { withTimezone: true }).defaultNow().notNull(),
+createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 
 });
 
-export const webhookSubscriptions \= pgTable("webhook\_subscriptions", {
+export const metricSnapshots \= pgTable("metric_snapshots", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  tenantId: uuid("tenant\_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "cascade" }),
 
-  targetUrl: varchar("target\_url", { length: 500 }).notNull(),
+metricName: varchar("metric_name", { length: 150 }).notNull(),
 
-  events: jsonb("events").default("\[\]").notNull(),
+value: numeric("value", { precision: 16, scale: 4 }).notNull(),
 
-  secret: varchar("secret", { length: 255 }).notNull(),
+dimensions: jsonb("dimensions").default("{}").notNull(),
 
-  isActive: boolean("is\_active").default(true).notNull(),
-
-  ...auditFields,
+recordedAt: timestamp("recorded_at", { withTimezone: true }).defaultNow().notNull(),
 
 });
 
-export const webhookDeliveries \= pgTable("webhook\_deliveries", {
+export const webhookSubscriptions \= pgTable("webhook_subscriptions", {
 
-  id: uuid("id").primaryKey().defaultRandom(),
+id: uuid("id").primaryKey().defaultRandom(),
 
-  subscriptionId: uuid("subscription\_id").notNull().references(() \=\> webhookSubscriptions.id, { onDelete: "cascade" }),
+tenantId: uuid("tenant_id").notNull().references(() \=\> tenants.id, { onDelete: "restrict" }),
 
-  eventId: uuid("event\_id").notNull().references(() \=\> domainEvents.id, { onDelete: "cascade" }),
+targetUrl: varchar("target_url", { length: 500 }).notNull(),
 
-  status: varchar("status", { length: 50 }).notNull(),
+events: jsonb("events").default("\[\]").notNull(),
 
-  responseCode: integer("response\_code"),
+secret: varchar("secret", { length: 255 }).notNull(),
 
-  responseBody: text("response\_body"),
+isActive: boolean("is_active").default(true).notNull(),
 
-  attemptCount: integer("attempt\_count").default(0).notNull(),
+...auditFields,
 
-  nextRetryAt: timestamp("next\_retry\_at", { withTimezone: true }),
+});
 
-  createdAt: timestamp("created\_at", { withTimezone: true }).defaultNow().notNull(),
+export const webhookDeliveries \= pgTable("webhook_deliveries", {
+
+id: uuid("id").primaryKey().defaultRandom(),
+
+subscriptionId: uuid("subscription_id").notNull().references(() \=\> webhookSubscriptions.id, { onDelete: "cascade" }),
+
+eventId: uuid("event_id").notNull().references(() \=\> domainEvents.id, { onDelete: "cascade" }),
+
+status: varchar("status", { length: 50 }).notNull(),
+
+responseCode: integer("response_code"),
+
+responseBody: text("response_body"),
+
+attemptCount: integer("attempt_count").default(0).notNull(),
+
+nextRetryAt: timestamp("next_retry_at", { withTimezone: true }),
+
+createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 
 });
 
@@ -1689,43 +1689,43 @@ export const webhookDeliveries \= pgTable("webhook\_deliveries", {
 
 \-- PERUBAHAN DARI VERSI SEBELUMNYA (Gap Analysis Resolution):
 
-\--   \[GAP-1\]  Tambah 'rejected','expired' ke enum booking\_state & access\_pass\_state
+\-- \[GAP-1\] Tambah 'rejected','expired' ke enum booking_state & access_pass_state
 
-\--   \[GAP-2\]  Buat enum payment\_state (Constitution Part 12.2)
+\-- \[GAP-2\] Buat enum payment_state (Constitution Part 12.2)
 
-\--   \[GAP-3\]  Buat enum journal\_state (Constitution Part 12.6)
+\-- \[GAP-3\] Buat enum journal_state (Constitution Part 12.6)
 
-\--   \[GAP-4\]  Tambah tabel assets (Constitution Part 3.2)
+\-- \[GAP-4\] Tambah tabel assets (Constitution Part 3.2)
 
-\--   \[GAP-5\]  Tambah tabel campaigns (Constitution Part 3.2)
+\-- \[GAP-5\] Tambah tabel campaigns (Constitution Part 3.2)
 
-\--   \[GAP-6\]  Tambah tabel suppliers (selaraskan Drizzle ↔ SQL)
+\-- \[GAP-6\] Tambah tabel suppliers (selaraskan Drizzle ↔ SQL)
 
-\--   \[GAP-7\]  Tambah tabel booking\_histories (selaraskan Drizzle ↔ SQL)
+\-- \[GAP-7\] Tambah tabel booking_histories (selaraskan Drizzle ↔ SQL)
 
-\--   \[GAP-8\]  Tambah idempotency\_key ke invoices, payments, bookings (L-04)
+\-- \[GAP-8\] Tambah idempotency_key ke invoices, payments, bookings (L-04)
 
-\--   \[GAP-9\]  Tambah input\_schema, output\_format, guardrails ke prompts (Part 16.4)
+\-- \[GAP-9\] Tambah input_schema, output_format, guardrails ke prompts (Part 16.4)
 
-\--   \[GAP-10\] Tambah customer\_id ke access\_passes (Part 3.2)
+\-- \[GAP-10\] Tambah customer_id ke access_passes (Part 3.2)
 
-\--   \[GAP-11\] Tambah tools JSONB ke ai\_agents (Part 16.3)
+\-- \[GAP-11\] Tambah tools JSONB ke ai_agents (Part 16.3)
 
-\--   \[GAP-12\] Tambah voided\_at, voided\_by ke journal\_entries; gunakan journal\_state enum
+\-- \[GAP-12\] Tambah voided_at, voided_by ke journal_entries; gunakan journal_state enum
 
-\--   \[GAP-13\] Perbaiki urutan DDL: projects sebelum bookings
+\-- \[GAP-13\] Perbaiki urutan DDL: projects sebelum bookings
 
-\--   \[GAP-14\] Tambah pgvector extension; selaraskan embeddings ke vector(1536)
+\-- \[GAP-14\] Tambah pgvector extension; selaraskan embeddings ke vector(1536)
 
-\--   \[GAP-15\] Perbaiki RLS access\_passes (hapus referensi event\_id yang tidak ada)
+\-- \[GAP-15\] Perbaiki RLS access_passes (hapus referensi event_id yang tidak ada)
 
-\--   \[GAP-16\] Extend RLS ke seluruh tabel bisnis (Constitution Part 15.2)
+\-- \[GAP-16\] Extend RLS ke seluruh tabel bisnis (Constitution Part 15.2)
 
-\--   \[GAP-17\] Tambah post\_ledger\_transaction stored procedure (L-07)
+\-- \[GAP-17\] Tambah post_ledger_transaction stored procedure (L-07)
 
-\--   \[GAP-18\] Perbaiki index bug: createdAt → created\_at di idx\_outbox\_pending
+\-- \[GAP-18\] Perbaiki index bug: createdAt → created_at di idx_outbox_pending
 
-\--   \[GAP-19\] Tambah CQRS views: mv\_workflow\_status\_view, mv\_customer\_invoice\_history\_view
+\-- \[GAP-19\] Tambah CQRS views: mv_workflow_status_view, mv_customer_invoice_history_view
 
 \-- \===============================================================================================
 
@@ -1739,11 +1739,11 @@ BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE EXTENSION IF NOT EXISTS "btree\_gist";
+CREATE EXTENSION IF NOT EXISTS "btree_gist";
 
-CREATE EXTENSION IF NOT EXISTS "pg\_trgm";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
-CREATE EXTENSION IF NOT EXISTS "vector";      \-- \[GAP-14\] pgvector
+CREATE EXTENSION IF NOT EXISTS "vector"; \-- \[GAP-14\] pgvector
 
 \-- Enum types — idempotent wrapper
 
@@ -1751,9 +1751,9 @@ DO $$
 
 BEGIN
 
-  \-- \[GAP-1\] booking\_state: tambah 'rejected'
+\-- \[GAP-1\] booking_state: tambah 'rejected'
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'booking\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'booking_state') THEN
 
     CREATE TYPE public.booking\_state AS ENUM (
 
@@ -1763,9 +1763,9 @@ BEGIN
 
     );
 
-  END IF;
+END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'invoice\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'invoice_state') THEN
 
     CREATE TYPE public.invoice\_state AS ENUM (
 
@@ -1773,11 +1773,11 @@ BEGIN
 
     );
 
-  END IF;
+END IF;
 
-  \-- \[GAP-1\] access\_pass\_state: tambah 'expired'
+\-- \[GAP-1\] access_pass_state: tambah 'expired'
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'access\_pass\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'access_pass_state') THEN
 
     CREATE TYPE public.access\_pass\_state AS ENUM (
 
@@ -1785,9 +1785,9 @@ BEGIN
 
     );
 
-  END IF;
+END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'workflow\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'workflow_state') THEN
 
     CREATE TYPE public.workflow\_state AS ENUM (
 
@@ -1795,9 +1795,9 @@ BEGIN
 
     );
 
-  END IF;
+END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'account\_classification') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'account_classification') THEN
 
     CREATE TYPE public.account\_classification AS ENUM (
 
@@ -1805,17 +1805,17 @@ BEGIN
 
     );
 
-  END IF;
+END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'actor\_type') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'actor_type') THEN
 
     CREATE TYPE public.actor\_type AS ENUM ('USER', 'AI\_AGENT', 'SYSTEM');
 
-  END IF;
+END IF;
 
-  \-- \[GAP-2\] payment\_state enum — Constitution Part 12.2
+\-- \[GAP-2\] payment_state enum — Constitution Part 12.2
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'payment\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'payment_state') THEN
 
     CREATE TYPE public.payment\_state AS ENUM (
 
@@ -1825,35 +1825,36 @@ BEGIN
 
     );
 
-  END IF;
+END IF;
 
-  \-- \[GAP-3\] journal\_state enum — Constitution Part 12.6
+\-- \[GAP-3\] journal_state enum — Constitution Part 12.6
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'journal\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'journal_state') THEN
 
     CREATE TYPE public.journal\_state AS ENUM ('draft', 'posted', 'voided');
 
-  END IF;
+END IF;
 
-  \-- \[GAP-4\] asset\_state enum — Constitution Part 3.2
+\-- \[GAP-4\] asset_state enum — Constitution Part 3.2
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'asset\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'asset_state') THEN
 
     CREATE TYPE public.asset\_state AS ENUM ('procured', 'active', 'retired');
 
-  END IF;
+END IF;
 
-  \-- \[GAP-5\] campaign\_state enum — Constitution Part 3.2
+\-- \[GAP-5\] campaign_state enum — Constitution Part 3.2
 
-  IF NOT EXISTS (SELECT 1 FROM pg\_type WHERE typname \= 'campaign\_state') THEN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname \= 'campaign_state') THEN
 
     CREATE TYPE public.campaign\_state AS ENUM ('planned', 'active', 'concluded');
 
-  END IF;
+END IF;
 
 END
 
-$$;
+$$
+;
 
 \-- \===============================================================================================
 
@@ -3241,13 +3242,14 @@ CREATE TABLE IF NOT EXISTS public.webhook\_deliveries (
 
 CREATE OR REPLACE FUNCTION public.block\_immutable\_journal\_changes()
 
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER AS
+$$
 
 BEGIN
 
-  \-- Boleh mengubah draft; yang diproteksi hanya posted/voided
+\-- Boleh mengubah draft; yang diproteksi hanya posted/voided
 
-  IF OLD.status IN ('posted', 'voided') THEN
+IF OLD.status IN ('posted', 'voided') THEN
 
     RAISE EXCEPTION
 
@@ -3257,13 +3259,14 @@ BEGIN
 
       current\_setting('app.trace\_id', true);
 
-  END IF;
+END IF;
 
-  RETURN NULL;
+RETURN NULL;
 
 END;
 
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER block\_journal\_entry\_mutations
 
@@ -3275,21 +3278,22 @@ CREATE OR REPLACE TRIGGER block\_journal\_entry\_mutations
 
 CREATE OR REPLACE FUNCTION public.block\_immutable\_journal\_lines()
 
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER AS
+$$
 
 DECLARE
 
-  entry\_status TEXT;
+entry_status TEXT;
 
 BEGIN
 
-  SELECT status INTO entry\_status
+SELECT status INTO entry_status
 
-  FROM public.journal\_entries
+FROM public.journal_entries
 
-  WHERE id \= OLD.journal\_entry\_id;
+WHERE id \= OLD.journal_entry_id;
 
-  IF entry\_status IN ('posted', 'voided') THEN
+IF entry_status IN ('posted', 'voided') THEN
 
     RAISE EXCEPTION
 
@@ -3299,13 +3303,14 @@ BEGIN
 
       entry\_status;
 
-  END IF;
+END IF;
 
-  RETURN NULL;
+RETURN NULL;
 
 END;
 
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER block\_journal\_lines\_mutations
 
@@ -3339,61 +3344,62 @@ RETURNS VOID
 
 LANGUAGE plpgsql
 
-AS $$
+AS
+$$
 
 DECLARE
 
-  v\_total\_debit  NUMERIC(16,4);
+v_total_debit NUMERIC(16,4);
 
-  v\_total\_credit NUMERIC(16,4);
+v_total_credit NUMERIC(16,4);
 
-  v\_balance\_diff NUMERIC(16,4);
+v_balance_diff NUMERIC(16,4);
 
-  v\_entry\_status TEXT;
+v_entry_status TEXT;
 
 BEGIN
 
-  \-- 1\. Lock baris entry untuk mencegah race condition (Constitution Part 10.4)
+\-- 1\. Lock baris entry untuk mencegah race condition (Constitution Part 10.4)
 
-  SELECT status INTO v\_entry\_status
+SELECT status INTO v_entry_status
 
-  FROM public.journal\_entries
+FROM public.journal_entries
 
-  WHERE id \= p\_journal\_entry\_id
+WHERE id \= p_journal_entry_id
 
-  FOR UPDATE;
+FOR UPDATE;
 
-  IF v\_entry\_status IS NULL THEN
+IF v_entry_status IS NULL THEN
 
     RAISE EXCEPTION '\[DOMAIN\_001\] JournalEntry % tidak ditemukan.', p\_journal\_entry\_id;
 
-  END IF;
+END IF;
 
-  IF v\_entry\_status \!= 'draft' THEN
+IF v_entry_status \!= 'draft' THEN
 
     RAISE EXCEPTION '\[DOMAIN\_004\] JournalEntry % sudah dalam status %. Hanya Draft yang dapat di-post.',
 
       p\_journal\_entry\_id, v\_entry\_status;
 
-  END IF;
+END IF;
 
-  \-- 2\. Validasi keseimbangan Swiss-Standard (∑ Debit \== ∑ Kredit)
+\-- 2\. Validasi keseimbangan Swiss-Standard (∑ Debit \== ∑ Kredit)
 
-  SELECT
+SELECT
 
     SUM(CASE WHEN type \= 'debit'  THEN amount ELSE 0 END),
 
     SUM(CASE WHEN type \= 'credit' THEN amount ELSE 0 END)
 
-  INTO v\_total\_debit, v\_total\_credit
+INTO v_total_debit, v_total_credit
 
-  FROM public.journal\_lines
+FROM public.journal_lines
 
-  WHERE journal\_entry\_id \= p\_journal\_entry\_id;
+WHERE journal_entry_id \= p_journal_entry_id;
 
-  v\_balance\_diff := COALESCE(v\_total\_debit, 0\) \- COALESCE(v\_total\_credit, 0);
+v_balance_diff := COALESCE(v_total_debit, 0\) \- COALESCE(v_total_credit, 0);
 
-  IF v\_balance\_diff \!= 0 THEN
+IF v_balance_diff \!= 0 THEN
 
     RAISE EXCEPTION
 
@@ -3403,19 +3409,19 @@ BEGIN
 
       v\_total\_debit, v\_total\_credit, v\_balance\_diff;
 
-  END IF;
+END IF;
 
-  IF COALESCE(v\_total\_debit, 0\) \= 0 THEN
+IF COALESCE(v_total_debit, 0\) \= 0 THEN
 
     RAISE EXCEPTION '\[DOMAIN\_001\] JournalEntry % tidak memiliki JournalLine.', p\_journal\_entry\_id;
 
-  END IF;
+END IF;
 
-  \-- 3\. Post entry
+\-- 3\. Post entry
 
-  UPDATE public.journal\_entries
+UPDATE public.journal_entries
 
-  SET
+SET
 
     status     \= 'posted',
 
@@ -3425,13 +3431,13 @@ BEGIN
 
     updated\_by \= p\_actor\_id
 
-  WHERE id \= p\_journal\_entry\_id;
+WHERE id \= p_journal_entry_id;
 
-  \-- 4\. Emit domain event ke outbox (Outbox Pattern)
+\-- 4\. Emit domain event ke outbox (Outbox Pattern)
 
-  INSERT INTO public.domain\_events (tenant\_id, event\_type, aggregate\_type, aggregate\_id, payload, trace\_id, status)
+INSERT INTO public.domain_events (tenant_id, event_type, aggregate_type, aggregate_id, payload, trace_id, status)
 
-  SELECT
+SELECT
 
     l.tenant\_id,
 
@@ -3459,15 +3465,16 @@ BEGIN
 
     'pending'
 
-  FROM public.journal\_entries je
+FROM public.journal_entries je
 
-  JOIN public.ledgers l ON l.id \= je.ledger\_id
+JOIN public.ledgers l ON l.id \= je.ledger_id
 
-  WHERE je.id \= p\_journal\_entry\_id;
+WHERE je.id \= p_journal_entry_id;
 
 END;
 
-$$;
+$$
+;
 
 \-- \===============================================================================================
 
@@ -3563,13 +3570,14 @@ ALTER TABLE public.webhook\_subscriptions  ENABLE ROW LEVEL SECURITY;
 
 \-- Direct tenant\_id isolation (tabel dengan tenant\_id langsung)
 
-DO $$
+DO
+$$
 
 DECLARE
 
-  tbl TEXT;
+tbl TEXT;
 
-  tables TEXT\[\] := ARRAY\[
+tables TEXT\[\] := ARRAY\[
 
     'organizations', 'memberships', 'customers', 'suppliers', 'assets', 'projects',
 
@@ -3579,11 +3587,11 @@ DECLARE
 
     'domain\_events', 'audit\_logs', 'metric\_snapshots', 'webhook\_subscriptions'
 
-  \];
+\];
 
 BEGIN
 
-  FOREACH tbl IN ARRAY tables LOOP
+FOREACH tbl IN ARRAY tables LOOP
 
     EXECUTE format(
 
@@ -3599,11 +3607,12 @@ BEGIN
 
     );
 
-  END LOOP;
+END LOOP;
 
 END
 
-$$;
+$$
+;
 
 \-- Tabel dengan relasi indirect ke tenant melalui parent
 
@@ -4217,3 +4226,5 @@ COMMIT;
 
 © Sovereign OS — Dokumen ini merupakan turunan dari *Platform Constitution v5.0.1*. Perubahan hanya sah melalui RFC yang disetujui Lead Architect.
 
+
+$$

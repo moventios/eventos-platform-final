@@ -1,10 +1,11 @@
 # Website Information Architecture
+
 ## Moventios
 
 **Version:** 1.0  
 **Date:** June 2026  
 **Authority:** product-experience-research.md Part 3 | docs/strategy/information-architecture.md  
-**Owner:** Product + Content  
+**Owner:** Product + Content
 
 > **Principle:** Pages exist because users need them — not because competitors have them.  
 > Every page must answer: Why does this exist? Who needs it? When? What decision follows?
@@ -25,6 +26,7 @@
 ## 2. Complete Site IA Tree
 
 ### Navigation Tier 1 (Primary Nav)
+
 ```
 Platform | Solutions | Pricing | Resources | Docs | [Sign in] | [Start Free]
 ```
@@ -32,11 +34,13 @@ Platform | Solutions | Pricing | Resources | Docs | [Sign in] | [Start Free]
 ---
 
 ### `/` — Home
+
 **Audience:** All (unknown → problem-aware)  
 **Journey stage:** Awareness  
-**Decision:** "Is this for me? Do I want to learn more?"  
+**Decision:** "Is this for me? Do I want to learn more?"
 
 Sections:
+
 1. Hero — Problem → Platform → Proof + CTA pair
 2. Social proof bar (customer logos / metrics)
 3. Platform overview (3 pillars: Plan / Execute / Prove)
@@ -48,11 +52,13 @@ Sections:
 ---
 
 ### `/platform` — Platform Overview
+
 **Audience:** Evaluator (solution-aware)  
 **Journey stage:** Solution aware → Product aware  
-**Decision:** "Does this platform cover everything I need?"  
+**Decision:** "Does this platform cover everything I need?"
 
 Sub-pages:
+
 - `/platform/overview` — What the platform is and how it works
 - `/platform/architecture` — Technical overview (for IT/CTO evaluators)
 - `/platform/ai` — AI capabilities + L-06 governance
@@ -62,11 +68,13 @@ Sub-pages:
 ---
 
 ### `/features` — Feature Directory
+
 **Audience:** Deep evaluator, power user  
 **Journey stage:** Product aware  
-**Decision:** "Does it have the specific feature I need?"  
+**Decision:** "Does it have the specific feature I need?"
 
 Sub-pages (one per major capability):
+
 - `/features/event-operations` — Event creation, publishing, AccessPass management
 - `/features/project-management` — Tasks, milestones, Gantt, boards
 - `/features/resource-scheduling` — Conflict-free venue/room/resource booking (GiST)
@@ -79,11 +87,13 @@ Sub-pages (one per major capability):
 ---
 
 ### `/solutions` — Solutions by Role & Industry
+
 **Audience:** Problem-aware buyer (specific role/industry)  
 **Journey stage:** Problem aware → Solution aware  
-**Decision:** "Does this solve *my specific* problem?"  
+**Decision:** "Does this solve _my specific_ problem?"
 
 By Role:
+
 - `/solutions/event-organizers`
 - `/solutions/project-management-offices`
 - `/solutions/venue-facility-managers`
@@ -92,6 +102,7 @@ By Role:
 - `/solutions/developers-integrators`
 
 By Industry (cross-linked from role pages):
+
 - `/solutions/corporate-events`
 - `/solutions/universities-campuses`
 - `/solutions/sports-entertainment`
@@ -101,9 +112,10 @@ By Industry (cross-linked from role pages):
 ---
 
 ### `/industries` — Industry Pages
+
 **Audience:** Vertical buyer  
 **Journey stage:** Problem aware (industry-specific pain)  
-**Decision:** "Does this platform understand my industry?"  
+**Decision:** "Does this platform understand my industry?"
 
 - `/industries/corporate-events`
 - `/industries/universities-campuses`
@@ -115,9 +127,10 @@ By Industry (cross-linked from role pages):
 ---
 
 ### `/use-cases` — Specific Scenarios
+
 **Audience:** Operational buyer with a specific workflow need  
 **Journey stage:** Solution aware → Product aware  
-**Decision:** "Can it handle my specific use case?"  
+**Decision:** "Can it handle my specific use case?"
 
 - `/use-cases/conference-management`
 - `/use-cases/venue-booking-management`
@@ -130,11 +143,13 @@ By Industry (cross-linked from role pages):
 ---
 
 ### `/pricing` — Pricing & Plans
+
 **Audience:** Decision-maker (economic buyer)  
 **Journey stage:** Product aware → Trial  
-**Decision:** "What does it cost? Is it worth it? Which plan?"  
+**Decision:** "What does it cost? Is it worth it? Which plan?"
 
 Sections:
+
 1. Pricing headline (honest, simple)
 2. Tier cards (Free / Pro / Enterprise)
 3. Feature comparison table (full matrix)
@@ -146,11 +161,13 @@ Sections:
 ---
 
 ### `/resources` — Resource Hub
+
 **Audience:** Research phase (problem → solution aware)  
 **Journey stage:** Awareness → Consideration  
-**Decision:** "Should I learn more about this space / product?"  
+**Decision:** "Should I learn more about this space / product?"
 
 Sub-sections:
+
 - `/resources/blog` — Thought leadership + problem-aware articles
 - `/resources/guides` — Long-form gated guides
 - `/resources/playbooks` — Operational best practices
@@ -164,11 +181,13 @@ Sub-sections:
 ---
 
 ### `/docs` — Product Documentation
+
 **Audience:** Developer, power user, new user  
 **Journey stage:** Trial → Activation → Daily use  
-**Decision:** "How do I do [specific thing]? Does the API support [X]?"  
+**Decision:** "How do I do [specific thing]? Does the API support [X]?"
 
 Full IA:
+
 ```
 /docs
 ├── Getting Started
@@ -225,9 +244,10 @@ Full IA:
 ---
 
 ### `/developer` — Developer Portal
+
 **Audience:** Developer, system integrator  
 **Journey stage:** Activation → Expansion  
-**Decision:** "Can I build what I need on top of this platform?"  
+**Decision:** "Can I build what I need on top of this platform?"
 
 - API Reference (full OpenAPI)
 - SDKs & Libraries (TypeScript, Python)
@@ -241,11 +261,13 @@ Full IA:
 ---
 
 ### `/security` — Security Overview
+
 **Audience:** IT Admin, CISO, security evaluator  
 **Journey stage:** Late evaluation (approval gate)  
-**Decision:** "Is this secure enough to pass our internal security review?"  
+**Decision:** "Is this secure enough to pass our internal security review?"
 
 Sections:
+
 1. Security headline ("Security built into every layer")
 2. Data encryption (at rest + in transit)
 3. Access control (RLS, RBAC, tenant isolation)
@@ -258,11 +280,13 @@ Sections:
 ---
 
 ### `/trust` — Trust Center
+
 **Audience:** Procurement, legal, enterprise decision-maker  
 **Journey stage:** Late evaluation (contract gate)  
-**Decision:** "Do I trust this vendor enough to sign a contract?"  
+**Decision:** "Do I trust this vendor enough to sign a contract?"
 
 Sections:
+
 1. Trust headline
 2. Compliance badges (SOC 2, GDPR, ISO)
 3. Data residency options
@@ -276,9 +300,10 @@ Sections:
 ---
 
 ### `/compliance` — Compliance Details
+
 **Audience:** Legal, compliance officer  
 **Journey stage:** Contract/procurement stage  
-**Decision:** "Does this meet our regulatory requirements?"  
+**Decision:** "Does this meet our regulatory requirements?"
 
 - GDPR compliance
 - ISO 27001 (roadmap)
@@ -289,9 +314,10 @@ Sections:
 ---
 
 ### `/customers` — Customer Stories
+
 **Audience:** Late-stage evaluator  
 **Journey stage:** Product aware → Trial  
-**Decision:** "Do companies like mine use this? What were their results?"  
+**Decision:** "Do companies like mine use this? What were their results?"
 
 - Customer story index (filterable by industry, use case, company size)
 - Individual story pages (Problem → Solution → Results format)
@@ -301,9 +327,10 @@ Sections:
 ---
 
 ### `/partners` — Partner Program
+
 **Audience:** Implementation partners, consultants, technology partners  
 **Journey stage:** Business development  
-**Decision:** "Should I become a partner? How does the program work?"  
+**Decision:** "Should I become a partner? How does the program work?"
 
 - Partner overview
 - Partner benefits
@@ -314,9 +341,10 @@ Sections:
 ---
 
 ### `/marketplace` — Marketplace
+
 **Audience:** Existing users looking for extensions  
 **Journey stage:** Expansion  
-**Decision:** "What integrations/apps can I add?"  
+**Decision:** "What integrations/apps can I add?"
 
 - Integration directory (filterable by category)
 - Template marketplace
@@ -326,9 +354,10 @@ Sections:
 ---
 
 ### `/learning` — Learning Center
+
 **Audience:** New users, power users seeking depth  
 **Journey stage:** Activation → Daily use → Expansion  
-**Decision:** "How do I get better at using the platform?"  
+**Decision:** "How do I get better at using the platform?"
 
 - Learning paths (by role: Ops, Finance, Developer, Admin)
 - Quick-start video library
@@ -340,9 +369,10 @@ Sections:
 ---
 
 ### `/help` — Help Center
+
 **Audience:** Existing users with a specific problem  
 **Journey stage:** Daily use  
-**Decision:** "How do I solve this specific issue right now?"  
+**Decision:** "How do I solve this specific issue right now?"
 
 - Prominent search bar (above fold)
 - Getting Started section
@@ -355,9 +385,10 @@ Sections:
 ---
 
 ### `/status` — System Status
+
 **Audience:** Operations team, IT Admin  
 **Journey stage:** Daily use / incident response  
-**Decision:** "Is the platform down? When will it be restored?"  
+**Decision:** "Is the platform down? When will it be restored?"
 
 - Live system status (green/amber/red per component)
 - Active incident details
@@ -367,9 +398,10 @@ Sections:
 ---
 
 ### `/about` — Company
+
 **Audience:** Enterprise buyer due diligence, recruits, press  
 **Journey stage:** Any  
-**Decision:** "Is this a legitimate, stable company?"  
+**Decision:** "Is this a legitimate, stable company?"
 
 - Company overview + mission
 - Team (optional early stage)
@@ -380,7 +412,9 @@ Sections:
 ---
 
 ### `/blog` — Blog
+
 **IA by content pillar:**
+
 1. `Operations Intelligence` — event coordination best practices
 2. `Finance & Compliance` — audit, reconciliation, financial accuracy
 3. `AI in Operations` — safe AI, practical applications
@@ -399,12 +433,14 @@ Sections:
 ```
 
 **Rules:**
+
 - Max 5–6 items before "more" overflow
 - `[Start Free]` = primary CTA button (high contrast, accent color)
 - `[Sign in]` = ghost/text button
 - Mobile: hamburger with full-screen overlay
 
 ### Mega Menu — Platform
+
 ```
 ┌────────────────────────────────────────────────────────┐
 │  FEATURES                    PLATFORM                  │
@@ -420,6 +456,7 @@ Sections:
 ```
 
 ### Mega Menu — Solutions
+
 ```
 ┌────────────────────────────────────────────────────────┐
 │  BY ROLE                    BY INDUSTRY                │
@@ -435,6 +472,7 @@ Sections:
 ```
 
 ### Footer Structure
+
 ```
 Product         Solutions        Resources       Company
 Platform        Event Organizers Blog            About
@@ -457,18 +495,23 @@ Community       Compliance       DPA
 ## 4. User-Type Navigation Paths
 
 ### First-time visitor (problem-aware)
+
 `Home → Solutions (by role) → Feature page → Customer story → Pricing → Start Free Trial`
 
 ### Enterprise evaluator (multi-stakeholder)
+
 `Home → Security → Trust Center → Customer stories → Pricing (Enterprise) → Request Demo`
 
 ### Developer evaluator
+
 `Home → Developer portal → API docs → Sandbox → Pricing → Start Trial`
 
 ### Existing user (looking for help)
+
 `Direct link / search → Docs → Help Center → Support`
 
 ### Finance team evaluator
+
 `Solutions/Finance → Features/Financial Management → Trust Center → Pricing → Demo`
 
 ---
@@ -476,29 +519,33 @@ Community       Compliance       DPA
 ## 5. SEO & GEO URL Structure
 
 ### URL Convention Rules
+
 - Lowercase, hyphenated
 - No `_` underscores
 - Descriptive, no internal codes
 - Consistent depth (max 3 levels: `/category/subcategory/page`)
 
 ### Structured Data (Schema.org)
-| Page type | Schema |
-|-----------|--------|
-| Homepage | `Organization` + `SoftwareApplication` |
-| Feature pages | `SoftwareApplication` + `FAQPage` |
-| Blog articles | `Article` + `BreadcrumbList` |
-| Help articles | `HowTo` or `FAQPage` |
-| Pricing | `Product` + `AggregateOffer` |
-| Customer stories | `Article` + `Review` |
+
+| Page type        | Schema                                 |
+| ---------------- | -------------------------------------- |
+| Homepage         | `Organization` + `SoftwareApplication` |
+| Feature pages    | `SoftwareApplication` + `FAQPage`      |
+| Blog articles    | `Article` + `BreadcrumbList`           |
+| Help articles    | `HowTo` or `FAQPage`                   |
+| Pricing          | `Product` + `AggregateOffer`           |
+| Customer stories | `Article` + `Review`                   |
 
 ### `llms.txt` (GEO)
+
 Create `/llms.txt` at domain root with structured platform summary:
+
 ```
 # Moventios
 
 ## What it is
-[Platform name] is an AI-native Moventios that helps 
-organizations coordinate, execute, and audit events, projects, venues, teams, 
+[Platform name] is an AI-native Moventios that helps
+organizations coordinate, execute, and audit events, projects, venues, teams,
 and finances in one place.
 
 ## Key capabilities
@@ -509,11 +556,11 @@ and finances in one place.
 - Open source core with self-hosting option
 
 ## Best for
-Operations teams, event organizers, project management offices, finance teams, 
+Operations teams, event organizers, project management offices, finance teams,
 venue managers, and developers building on top of the platform.
 
 ## Not for
-Pure consumer events (Eventbrite use case), generic ERP needs, 
+Pure consumer events (Eventbrite use case), generic ERP needs,
 or teams without any physical/spatial operational component.
 
 ## Documentation
@@ -526,10 +573,10 @@ Developer portal: [domain]/developer
 
 ## Internal Reference
 
-| Document | Role |
-|----------|------|
-| `docs/strategy/product-experience-research.md` | Full IA + navigation source |
-| `docs/strategy/information-architecture.md` | Internal EKB IA (separate from website IA) |
-| `docs/strategy/messaging-framework.md` | Audience-specific messaging |
-| `docs/strategy/04-ideal-customer-profile.md` | ICP that drives solution page structure |
-| `docs/volumes/08-product.md` | In-product navigation standards |
+| Document                                       | Role                                       |
+| ---------------------------------------------- | ------------------------------------------ |
+| `docs/strategy/product-experience-research.md` | Full IA + navigation source                |
+| `docs/strategy/information-architecture.md`    | Internal EKB IA (separate from website IA) |
+| `docs/strategy/messaging-framework.md`         | Audience-specific messaging                |
+| `docs/strategy/04-ideal-customer-profile.md`   | ICP that drives solution page structure    |
+| `docs/volumes/08-product.md`                   | In-product navigation standards            |

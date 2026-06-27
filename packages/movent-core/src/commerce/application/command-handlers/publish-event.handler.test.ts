@@ -13,7 +13,9 @@ describe('PublishEventHandler', () => {
 
     const saved: any[] = [];
     const repo: IEventRepository = {
-      save: vi.fn(async (e) => { saved.push(e); }),
+      save: vi.fn(async (e) => {
+        saved.push(e);
+      }),
       findById: vi.fn(),
     };
     const published: any[] = [];

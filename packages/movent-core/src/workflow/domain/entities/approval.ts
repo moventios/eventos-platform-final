@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 
 /**
  * Movent Infrastructure - Governance Engine
- * 
+ *
  * Approval = Governance / Trust mechanism.
  * Controls Participation and maintains reputation in the Network.
  * User-facing: Governance.
@@ -43,15 +43,24 @@ export class Approval {
       tenantId: this.props.tenantId,
       actorId,
       occurredAt: new Date().toISOString(),
-      payload: note !== undefined
-        ? { approvalId: this.props.id, resolution, note }
-        : { approvalId: this.props.id, resolution },
+      payload:
+        note !== undefined
+          ? { approvalId: this.props.id, resolution, note }
+          : { approvalId: this.props.id, resolution },
     };
   }
 
-  get id() { return this.props.id; }
-  get status() { return this.props.status; }
-  get requestContext() { return this.props.requestContext; }
+  get id() {
+    return this.props.id;
+  }
+  get status() {
+    return this.props.status;
+  }
+  get requestContext() {
+    return this.props.requestContext;
+  }
 
-  static reconstitute(props: ApprovalProps): Approval { return new Approval(props); }
+  static reconstitute(props: ApprovalProps): Approval {
+    return new Approval(props);
+  }
 }

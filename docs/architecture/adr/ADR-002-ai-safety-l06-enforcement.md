@@ -26,11 +26,11 @@ Without a precise enforcement mechanism, L-06 becomes an honor system — AI age
 
 ## Considered Options
 
-| Option | Description | Pros | Cons |
-|--------|-------------|------|------|
-| **A: Application-level trust** | AI agent code checks role before writing | Simple to implement | Bypassable; no database-level enforcement |
-| **B: RLS-only enforcement** | Database RLS blocks AI agent user from mutating sensitive tables | Database-native | Too coarse; can't distinguish AI from human intent dynamically |
-| **C: MCP Tool Levels (Chosen)** | Three access tiers enforced in MCP tool handler code + Approval stored procedure | Explicit, auditable, deterministic, cannot be bypassed from LLM context | Requires careful tool implementation |
+| Option                          | Description                                                                      | Pros                                                                    | Cons                                                           |
+| ------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------- |
+| **A: Application-level trust**  | AI agent code checks role before writing                                         | Simple to implement                                                     | Bypassable; no database-level enforcement                      |
+| **B: RLS-only enforcement**     | Database RLS blocks AI agent user from mutating sensitive tables                 | Database-native                                                         | Too coarse; can't distinguish AI from human intent dynamically |
+| **C: MCP Tool Levels (Chosen)** | Three access tiers enforced in MCP tool handler code + Approval stored procedure | Explicit, auditable, deterministic, cannot be bypassed from LLM context | Requires careful tool implementation                           |
 
 ## Decision
 
@@ -39,34 +39,37 @@ Without a precise enforcement mechanism, L-06 becomes an honor system — AI age
 ### The Three Levels
 
 #### Level 0 — FORBIDDEN (Never callable by AI agents)
+
 Direct financial mutations, ownership transfers, and permanent data destruction.
 
-| Tool / Action | Reason |
-|--------------|--------|
-| `PostJournalEntry` (direct) | Financial state is immutable L-02; AI must never post directly |
-| `CapturePayment` (direct) | Fund capture has irreversible financial consequences |
-| `IssueInvoice` (direct) | Creates financial obligation; requires human intent |
-| `TransferAssetOwnership` | Ownership change is a legal act |
-| `DeleteRecord` (hard delete) | Violates L-03 (Soft Delete Everywhere) |
-| `PurgeData` | Data destruction; GDPR compliance requires human sign-off |
+| Tool / Action                | Reason                                                         |
+| ---------------------------- | -------------------------------------------------------------- |
+| `PostJournalEntry` (direct)  | Financial state is immutable L-02; AI must never post directly |
+| `CapturePayment` (direct)    | Fund capture has irreversible financial consequences           |
+| `IssueInvoice` (direct)      | Creates financial obligation; requires human intent            |
+| `TransferAssetOwnership`     | Ownership change is a legal act                                |
+| `DeleteRecord` (hard delete) | Violates L-03 (Soft Delete Everywhere)                         |
+| `PurgeData`                  | Data destruction; GDPR compliance requires human sign-off      |
 
 **Enforcement**: MCP tool registry does not expose these as callable tools. They exist only as internal Command Handlers accessible to authenticated human actors.
 
 ---
 
 #### Level 1 — WRITE→PENDING (AI callable; automatically creates Approval)
+
 Material writes that are permitted to be proposed by AI, but require explicit human confirmation before state transition occurs.
 
-| Tool | Effect | Approval Assignee |
-|------|--------|------------------|
-| `draft_journal_entry` | Creates JournalEntry with status=`draft` (not posted) | `finance:auditor` |
-| `issue_access_pass` (AI actor) | Creates AccessPass with status=`pending` (Approval blocks issuance) | `commerce:manager` |
-| `cancel_booking` (AI actor) | Creates cancellation Approval; booking remains active until approved | `tenant:admin` |
-| `revoke_access_pass` (AI actor) | Creates revocation Approval | `commerce:manager` |
-| `create_approval_request` | Creates any custom Approval record | `tenant:admin` |
-| `initiate_refund` (AI actor) | Creates refund Approval; payment not touched until approved | `finance:auditor` |
+| Tool                            | Effect                                                               | Approval Assignee  |
+| ------------------------------- | -------------------------------------------------------------------- | ------------------ |
+| `draft_journal_entry`           | Creates JournalEntry with status=`draft` (not posted)                | `finance:auditor`  |
+| `issue_access_pass` (AI actor)  | Creates AccessPass with status=`pending` (Approval blocks issuance)  | `commerce:manager` |
+| `cancel_booking` (AI actor)     | Creates cancellation Approval; booking remains active until approved | `tenant:admin`     |
+| `revoke_access_pass` (AI actor) | Creates revocation Approval                                          | `commerce:manager` |
+| `create_approval_request`       | Creates any custom Approval record                                   | `tenant:admin`     |
+| `initiate_refund` (AI actor)    | Creates refund Approval; payment not touched until approved          | `finance:auditor`  |
 
 **Enforcement**: MCP tool handler calls `create_ai_approval_pending()` stored procedure:
+
 ```sql
 -- Called automatically by Level 1 MCP tool handlers
 CREATE OR REPLACE FUNCTION create_ai_approval_pending(
@@ -104,21 +107,22 @@ The MCP tool handler returns the `approval_id` to the LLM context. The LLM infor
 ---
 
 #### Level 2 — ALLOWED (AI callable; no approval required)
+
 Read-only operations and status queries.
 
-| Tool | Effect |
-|------|--------|
-| `search_knowledge_base` | Returns document chunks from KnowledgeBase |
-| `get_ledger_balance` | Returns Account balances (read-only) |
-| `get_booking_status` | Returns Booking current state |
+| Tool                     | Effect                                      |
+| ------------------------ | ------------------------------------------- |
+| `search_knowledge_base`  | Returns document chunks from KnowledgeBase  |
+| `get_ledger_balance`     | Returns Account balances (read-only)        |
+| `get_booking_status`     | Returns Booking current state               |
 | `get_event_availability` | Returns pass tier capacity and availability |
-| `get_invoice_summary` | Returns Invoice + Payment status |
-| `get_workflow_instance` | Returns WorkflowInstance state |
-| `get_payment_status` | Returns Payment current state |
-| `list_pending_approvals` | Returns pending Approvals for a user |
-| `get_tenant_summary` | Returns tenant metadata |
-| `get_event_sales` | Returns sales analytics |
-| `get_access_pass` | Returns AccessPass state + QR validity |
+| `get_invoice_summary`    | Returns Invoice + Payment status            |
+| `get_workflow_instance`  | Returns WorkflowInstance state              |
+| `get_payment_status`     | Returns Payment current state               |
+| `list_pending_approvals` | Returns pending Approvals for a user        |
+| `get_tenant_summary`     | Returns tenant metadata                     |
+| `get_event_sales`        | Returns sales analytics                     |
+| `get_access_pass`        | Returns AccessPass state + QR validity      |
 
 **Enforcement**: MCP tool handler executes read-only SQL with RLS in force (tenant_id from AI agent's JWT claim). No INSERT/UPDATE/DELETE permitted.
 
@@ -156,26 +160,29 @@ Human Actor (web UI / admin console)
 ## Consequences
 
 ### Positive
+
 - **Mathematically non-bypassable**: The LLM never receives a tool that can mutate material state directly. The tool level is enforced in server-side tool handler code, not in the prompt.
 - **Complete audit trail**: Every AI proposal creates a row in `approvals` with `agent_id`, `tool`, `proposed_action`, and `trace_id`.
 - **Human sovereignty preserved**: No AI action takes effect without explicit human resolution.
 - **Confidence-score-independent**: Even a 99.9% confident recommendation still goes through Approval.
 
 ### Negative / Trade-offs
-- **Latency for Level 1 actions**: Human approval introduces asynchronous delay. *Mitigation: Approval dashboard with real-time notifications; SLA targets for approval response time defined in Volume 05.*
-- **Implementation burden**: Every MCP tool handler must correctly enforce the level. *Mitigation: Shared MCP tool middleware that reads level from `mcp_tool_registry` table; Level enforcement is not hand-coded per tool.*
+
+- **Latency for Level 1 actions**: Human approval introduces asynchronous delay. _Mitigation: Approval dashboard with real-time notifications; SLA targets for approval response time defined in Volume 05._
+- **Implementation burden**: Every MCP tool handler must correctly enforce the level. _Mitigation: Shared MCP tool middleware that reads level from `mcp_tool_registry` table; Level enforcement is not hand-coded per tool._
 
 ### Neutral
+
 - AI agents operating at Level 2 (read-only) experience no additional friction. The majority of AI agent interactions are read-only.
 
 ## Enterprise Laws Impacted
 
-| Law | Impact | Enforcement |
-|-----|--------|-------------|
-| L-06: AI Write Interception | This ADR defines the implementation | MCP tool handler code + `create_ai_approval_pending()` stored procedure |
-| L-02: Immutable Financial History | Level 0 prevents AI from ever touching financial mutation commands | Tool not in AI-callable registry |
-| L-04: Idempotency Mandate | Level 1 approval proposals carry `trace_id`; same proposal idempotent if same `trace_id` | Unique constraint on `(agent_id, tool_name, trace_id)` in approvals |
-| L-07: Command Handler Mandate | Level 1 tools create Approvals; actual Command execution only happens post-approval | No DML from LLM context; Command Handler executes after ApprovalResolved |
+| Law                               | Impact                                                                                   | Enforcement                                                              |
+| --------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| L-06: AI Write Interception       | This ADR defines the implementation                                                      | MCP tool handler code + `create_ai_approval_pending()` stored procedure  |
+| L-02: Immutable Financial History | Level 0 prevents AI from ever touching financial mutation commands                       | Tool not in AI-callable registry                                         |
+| L-04: Idempotency Mandate         | Level 1 approval proposals carry `trace_id`; same proposal idempotent if same `trace_id` | Unique constraint on `(agent_id, tool_name, trace_id)` in approvals      |
+| L-07: Command Handler Mandate     | Level 1 tools create Approvals; actual Command execution only happens post-approval      | No DML from LLM context; Command Handler executes after ApprovalResolved |
 
 ## Cross-References
 
@@ -187,10 +194,10 @@ Human Actor (web UI / admin console)
 
 ## Changelog
 
-| Date | Author | Change |
-|------|--------|--------|
+| Date       | Author                               | Change                               |
+| ---------- | ------------------------------------ | ------------------------------------ |
 | 2026-06-25 | AI Engineering Lead + Lead Architect | Initial draft — accepted unanimously |
 
 ---
 
-*This ADR is immutable. Any change to MCP Tool Level boundaries requires a new RFC → EAB vote → ADR.*
+_This ADR is immutable. Any change to MCP Tool Level boundaries requires a new RFC → EAB vote → ADR._

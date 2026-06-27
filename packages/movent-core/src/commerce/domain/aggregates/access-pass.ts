@@ -1,16 +1,27 @@
-import type { AccessPassIssuedEvent, AccessPassScannedEvent, AccessPassExpiredEvent, AccessPassRevokedEvent } from '@movent/contracts';
+import type {
+  AccessPassIssuedEvent,
+  AccessPassScannedEvent,
+  AccessPassExpiredEvent,
+  AccessPassRevokedEvent,
+} from '@movent/contracts';
 import { InvalidStateTransitionError, CapacityExceededError } from '../../../shared/errors.js';
 import { randomUUID } from 'crypto';
 
 /**
  * Movent Infrastructure - Activation Engine
- * 
+ *
  * AccessPass = Participation Credential.
  * Proves Participation and builds Trust in the Network.
  * User-facing: Participation Credential. Complements Booking.
  */
 
-export type AccessPassState = 'pending' | 'issued' | 'checked_in' | 'consumed' | 'revoked' | 'expired';
+export type AccessPassState =
+  | 'pending'
+  | 'issued'
+  | 'checked_in'
+  | 'consumed'
+  | 'revoked'
+  | 'expired';
 
 export interface AccessPassProps {
   id: string;
@@ -85,9 +96,13 @@ export class AccessPass {
     this.transition('checked_in');
     this.props.checkedInAt = new Date();
     return {
-      eventId: randomUUID(), eventType: 'AccessPassScanned', eventVersion: 'v1',
-      aggregateId: this.props.id, aggregateType: 'AccessPass',
-      tenantId: this.props.tenantId, actorId,
+      eventId: randomUUID(),
+      eventType: 'AccessPassScanned',
+      eventVersion: 'v1',
+      aggregateId: this.props.id,
+      aggregateType: 'AccessPass',
+      tenantId: this.props.tenantId,
+      actorId,
       occurredAt: new Date().toISOString(),
       payload: { accessPassId: this.props.id },
     };
@@ -96,9 +111,13 @@ export class AccessPass {
   expire(actorId: string): AccessPassExpiredEvent {
     this.transition('expired');
     return {
-      eventId: randomUUID(), eventType: 'AccessPassExpired', eventVersion: 'v1',
-      aggregateId: this.props.id, aggregateType: 'AccessPass',
-      tenantId: this.props.tenantId, actorId,
+      eventId: randomUUID(),
+      eventType: 'AccessPassExpired',
+      eventVersion: 'v1',
+      aggregateId: this.props.id,
+      aggregateType: 'AccessPass',
+      tenantId: this.props.tenantId,
+      actorId,
       occurredAt: new Date().toISOString(),
       payload: { accessPassId: this.props.id },
     };
@@ -107,13 +126,18 @@ export class AccessPass {
   revoke(actorId: string, reason?: string): AccessPassRevokedEvent {
     this.transition('revoked');
     return {
-      eventId: randomUUID(), eventType: 'AccessPassRevoked', eventVersion: 'v1',
-      aggregateId: this.props.id, aggregateType: 'AccessPass',
-      tenantId: this.props.tenantId, actorId,
+      eventId: randomUUID(),
+      eventType: 'AccessPassRevoked',
+      eventVersion: 'v1',
+      aggregateId: this.props.id,
+      aggregateType: 'AccessPass',
+      tenantId: this.props.tenantId,
+      actorId,
       occurredAt: new Date().toISOString(),
-      payload: reason !== undefined
-        ? { accessPassId: this.props.id, reason }
-        : { accessPassId: this.props.id },
+      payload:
+        reason !== undefined
+          ? { accessPassId: this.props.id, reason }
+          : { accessPassId: this.props.id },
     };
   }
 
@@ -125,13 +149,27 @@ export class AccessPass {
     this.props.status = to;
   }
 
-  get id() { return this.props.id; }
-  get status() { return this.props.status; }
-  get holdsUntil() { return this.props.holdsUntil; }
-  get issuedAt() { return this.props.issuedAt; }
-  get checkedInAt() { return this.props.checkedInAt; }
+  get id() {
+    return this.props.id;
+  }
+  get status() {
+    return this.props.status;
+  }
+  get holdsUntil() {
+    return this.props.holdsUntil;
+  }
+  get issuedAt() {
+    return this.props.issuedAt;
+  }
+  get checkedInAt() {
+    return this.props.checkedInAt;
+  }
 
-  toRecord(): AccessPassProps { return { ...this.props }; }
+  toRecord(): AccessPassProps {
+    return { ...this.props };
+  }
 
-  static reconstitute(props: AccessPassProps): AccessPass { return new AccessPass(props); }
+  static reconstitute(props: AccessPassProps): AccessPass {
+    return new AccessPass(props);
+  }
 }

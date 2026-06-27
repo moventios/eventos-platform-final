@@ -1,4 +1,5 @@
 # Volume 09: Reserved
+
 ## Sovereign OS Enterprise Knowledge Base
 
 **Placeholder for Future Domain-Specific Knowledge Volume**
@@ -21,13 +22,13 @@ Volume 09 is intentionally reserved in the SEKB v5.1 taxonomy. It will be assign
 
 The following topics are under consideration for assignment to Volume 09. The final decision will be made via RFC at the Q2 2027 Architecture Review:
 
-| Candidate | Rationale | Prerequisites |
-|-----------|-----------|--------------|
-| **Multi-Region Architecture** | Active-active multi-region for Finance/IAM domains; complex enough to warrant its own volume | Scale threshold in Volume 10 triggered |
-| **Integrations & Partner API Catalog** | Deep specification of all external integration adapters (PSP, notifications, HRIS) | External partner count > 5 production integrations |
-| **Testing & Quality Engineering** | Full testing strategy: unit, contract (Pact), E2E (Playwright), chaos (Litmus), AI evaluation | Testing infrastructure mature enough to warrant SSOT |
-| **Data Analytics & BI** | Read-model strategy, analytics event schemas, BI tool integration (Metabase/Grafana) | Analytics capability promoted from experimental |
-| **Mobile & Offline-Native** | Native mobile strategy, PWA manifest specs, offline sync protocol | Platform adopts native mobile roadmap |
+| Candidate                              | Rationale                                                                                     | Prerequisites                                        |
+| -------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| **Multi-Region Architecture**          | Active-active multi-region for Finance/IAM domains; complex enough to warrant its own volume  | Scale threshold in Volume 10 triggered               |
+| **Integrations & Partner API Catalog** | Deep specification of all external integration adapters (PSP, notifications, HRIS)            | External partner count > 5 production integrations   |
+| **Testing & Quality Engineering**      | Full testing strategy: unit, contract (Pact), E2E (Playwright), chaos (Litmus), AI evaluation | Testing infrastructure mature enough to warrant SSOT |
+| **Data Analytics & BI**                | Read-model strategy, analytics event schemas, BI tool integration (Metabase/Grafana)          | Analytics capability promoted from experimental      |
+| **Mobile & Offline-Native**            | Native mobile strategy, PWA manifest specs, offline sync protocol                             | Platform adopts native mobile roadmap                |
 
 ---
 
@@ -46,6 +47,7 @@ To assign Volume 09:
 ## Reserved Volume Policy
 
 Reserved volumes in SEKB:
+
 - **Must not** contain real content until formally assigned
 - **Must not** be deleted (preserves taxonomy integrity)
 - **May** have candidate topics listed (as above — informational only)
@@ -53,4 +55,4 @@ Reserved volumes in SEKB:
 
 ---
 
-*[ADR-001: SEKB Foundation] [Volume 10, Part 7.1: v6.0 Roadmap item]*
+_[ADR-001: SEKB Foundation] [Volume 10, Part 7.1: v6.0 Roadmap item]_

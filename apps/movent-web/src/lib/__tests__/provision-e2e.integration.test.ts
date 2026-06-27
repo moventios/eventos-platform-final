@@ -7,7 +7,10 @@ import { createIamTestDb } from '../../../../../packages/movent-infrastructure/s
 
 describe('provision e2e (real route + shipped createServiceDb)', () => {
   vi.setConfig({ hookTimeout: 60_000 });
-  let POST: (req: NextRequest, ctx: { params: Promise<Record<string, string>> }) => Promise<Response>;
+  let POST: (
+    req: NextRequest,
+    ctx: { params: Promise<Record<string, string>> },
+  ) => Promise<Response>;
   let db: Awaited<ReturnType<typeof createIamTestDb>>['db'];
   const actorId = '33333333-3333-3333-3333-333333333333';
 

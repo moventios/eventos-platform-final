@@ -3,6 +3,7 @@
 **Platform**: AI-Native Project & Event Operations Platform
 
 ## Core Stack (Build on Current EKB Layers)
+
 - **Backend**: PostgreSQL + pgvector (for RAG/AI), Supabase or custom (auth, realtime, storage). Inspired by Supabase, Pretix (Postgres-heavy).
 - **Frontend**: Next.js/React, shadcn/ui or similar (dense enterprise tables, calendars from FullCalendar patterns, Kanban from Plane).
 - **Workflow/Orchestration**: Trigger.dev or n8n (visual + code workflows for approvals, scheduling). Temporal for complex durable execution.
@@ -12,11 +13,13 @@
 - **Extensibility**: API-first + plugin system (like Strapi/Directus or ERPNext modules).
 
 ## Why This
+
 - Matches OSS successes: Postgres for reliability (ERPNext, Supabase), modern React for UX (Plane, Cal.com), workflow tools for ops (n8n, Trigger).
 - AI-native: pgvector + agent frameworks directly support RAG and agents.
 - Scalable, self-host friendly, audit-grade.
 
 ## Build vs Buy
+
 - Build: Core event/project model, AI agents, unified audit.
 - Buy/Integrate: Auth (if not Supabase), payments (Stripe adapters), basic calendar libs.
 

@@ -48,6 +48,6 @@ Before publishing or expanding any brand, product, or marketing document, ask:
 
 If the answer is primarily about internal architecture or philosophy, move it to the appropriate internal section.
 
-This correction supersedes prior "Enterprise OS" explorations for public positioning. 
+This correction supersedes prior "Enterprise OS" explorations for public positioning.
 
 Internal engineering work (Layers, volumes focused on implementation) continues unchanged.

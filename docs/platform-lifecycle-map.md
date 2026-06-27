@@ -1,4 +1,5 @@
 # Peta Siklus Hidup Platform — Moventios (Movent)
+
 **Planning → Development → Production → Operations → Maintenance**
 
 > Dokumen ini adalah **peta sintetis** dari seluruh SEKB (Volume 00–10 + Layer 1–3).  
@@ -26,11 +27,11 @@ Principles      Lifecycle      Gates       Canary         Runbooks        Review
 
 ### 1.1 Visi & Misi Platform
 
-| Dimensi | Definisi | Dokumen |
-|---------|----------|---------|
+| Dimensi     | Definisi                                                                                                                                        | Dokumen     |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | **Mission** | Membantu organisasi menjalankan event, proyek, dan operasi dengan koordinasi, visibilitas, akuntabilitas, dan catatan yang andal di skala besar | Vol 07 §1.1 |
-| **Vision** | Organisasi semua ukuran dapat menjalankan event dan proyek kompleks tanpa fragmentasi atau kehilangan kontrol | Vol 07 §1.2 |
-| **Ethos** | Sovereignty First · Deterministic over Clever · Financial Integrity · AI Under Control · Open Standards | Vol 07 §1.3 |
+| **Vision**  | Organisasi semua ukuran dapat menjalankan event dan proyek kompleks tanpa fragmentasi atau kehilangan kontrol                                   | Vol 07 §1.2 |
+| **Ethos**   | Sovereignty First · Deterministic over Clever · Financial Integrity · AI Under Control · Open Standards                                         | Vol 07 §1.3 |
 
 ### 1.2 Prinsip Arsitektur (Tidak Dapat Dikompromikan)
 
@@ -84,12 +85,12 @@ LANGKAH 4: Architecture Owner Sign-off
 
 **Kategori fitur & jalur approval:**
 
-| Kategori | Definisi | Approval |
-|----------|----------|----------|
-| Tier 1 — Core | Financial integrity, tenant isolation, security | RFC → Lead Architect + EAB |
-| Tier 2 — Competitive | Diferensiasi baru vs kompetitor | FJD + Volume Owner + Product Lead |
-| Tier 3 — Enhancement | Perbaikan kapabilitas yang ada | FJD + Volume Owner |
-| Tier 4 — UX/DX | Developer/user experience improvements | PR review saja |
+| Kategori             | Definisi                                        | Approval                          |
+| -------------------- | ----------------------------------------------- | --------------------------------- |
+| Tier 1 — Core        | Financial integrity, tenant isolation, security | RFC → Lead Architect + EAB        |
+| Tier 2 — Competitive | Diferensiasi baru vs kompetitor                 | FJD + Volume Owner + Product Lead |
+| Tier 3 — Enhancement | Perbaikan kapabilitas yang ada                  | FJD + Volume Owner                |
+| Tier 4 — UX/DX       | Developer/user experience improvements          | PR review saja                    |
 
 ### 1.4 Decision Records (ADR & RFC)
 
@@ -274,20 +275,23 @@ L-10  No secrets in code             → HashiCorp Vault SAJA
 
 export const POST = withTracing(
   withTenantContext(
-    withIdempotency(
-      async (req, { tenantId, actorId, traceId }) => {
-        // 1. Parse + validate (Zod dari packages/movent-contracts)
-        const body = CommandSchema.parse(await req.json());
-        // 2. Build command (dengan tenantId, actorId, traceId)
-        const command = { ...body, tenantId, actorId, traceId,
-                          idempotencyKey: req.headers.get('X-Idempotency-Key') };
-        // 3. Execute via Command Handler (packages/movent-core)
-        const result = await handler.execute(command);
-        // 4. Return
-        return NextResponse.json(result, { status: 201 });
-      }
-    )
-  )
+    withIdempotency(async (req, { tenantId, actorId, traceId }) => {
+      // 1. Parse + validate (Zod dari packages/movent-contracts)
+      const body = CommandSchema.parse(await req.json());
+      // 2. Build command (dengan tenantId, actorId, traceId)
+      const command = {
+        ...body,
+        tenantId,
+        actorId,
+        traceId,
+        idempotencyKey: req.headers.get('X-Idempotency-Key'),
+      };
+      // 3. Execute via Command Handler (packages/movent-core)
+      const result = await handler.execute(command);
+      // 4. Return
+      return NextResponse.json(result, { status: 201 });
+    }),
+  ),
 );
 
 // Required headers:
@@ -478,16 +482,16 @@ WAJIB untuk perubahan yang menyentuh financial atau booking domain:
 
 ### 4.4 SLA Targets (Production)
 
-| Operasi | p50 | p95 | p99 | Error Budget |
-|---------|-----|-----|-----|-------------|
-| Booking submit | 80ms | 200ms | 500ms | 0.1%/bulan |
-| Payment capture (webhook) | 150ms | 400ms | 1000ms | 0.01%/bulan |
-| Journal post | 100ms | 250ms | 600ms | 0.01%/bulan |
-| Access pass issuance | 120ms | 300ms | 700ms | 0.1%/bulan |
-| API read | 50ms | 150ms | 400ms | 0.5%/bulan |
-| RAG search | 80ms | 200ms | 400ms | 1%/bulan |
-| LLM inference | 800ms | 2500ms | 5000ms | 2%/bulan |
-| **Platform uptime** | — | — | — | **99.9% (8.77 jam/tahun)** |
+| Operasi                   | p50   | p95    | p99    | Error Budget               |
+| ------------------------- | ----- | ------ | ------ | -------------------------- |
+| Booking submit            | 80ms  | 200ms  | 500ms  | 0.1%/bulan                 |
+| Payment capture (webhook) | 150ms | 400ms  | 1000ms | 0.01%/bulan                |
+| Journal post              | 100ms | 250ms  | 600ms  | 0.01%/bulan                |
+| Access pass issuance      | 120ms | 300ms  | 700ms  | 0.1%/bulan                 |
+| API read                  | 50ms  | 150ms  | 400ms  | 0.5%/bulan                 |
+| RAG search                | 80ms  | 200ms  | 400ms  | 1%/bulan                   |
+| LLM inference             | 800ms | 2500ms | 5000ms | 2%/bulan                   |
+| **Platform uptime**       | —     | —      | —      | **99.9% (8.77 jam/tahun)** |
 
 ---
 
@@ -527,20 +531,20 @@ TRACE PROPAGATION CHAIN (setiap user action menghasilkan jejak lengkap):
 
 **Golden Signals (RED Method):**
 
-| Signal | Metric | Alert |
-|--------|--------|-------|
-| **Rate** | Requests per second | > 200% dari 7-day p95 baseline |
-| **Errors** | Error rate (4xx+5xx/total) | > 0.5% financial; > 2% read |
-| **Duration** | Latency p50/p95/p99 | p95 > 2x SLA target |
+| Signal       | Metric                     | Alert                          |
+| ------------ | -------------------------- | ------------------------------ |
+| **Rate**     | Requests per second        | > 200% dari 7-day p95 baseline |
+| **Errors**   | Error rate (4xx+5xx/total) | > 0.5% financial; > 2% read    |
+| **Duration** | Latency p50/p95/p99        | p95 > 2x SLA target            |
 
 ### 5.2 Alert Severity Levels
 
-| Severity | Waktu Respons | Contoh | Paged? |
-|---------|--------------|--------|--------|
-| **P1 — Critical** | 5 menit | Data loss, financial corruption, cross-tenant leak, L-02 violation | Ya (PagerDuty) |
-| **P2 — High** | 15 menit | Payment gateway circuit open, DLQ > 50, p99 > 3x SLA | Ya (PagerDuty) |
-| **P3 — Medium** | 1 jam | DLQ > 10, p95 > 2x SLA, AI budget 80% | Ya (Slack #alerts-ops) |
-| **P4 — Low** | Business hours | p95 trending up, cert expiring 30 hari | Tidak (Slack #alerts-low) |
+| Severity          | Waktu Respons  | Contoh                                                             | Paged?                    |
+| ----------------- | -------------- | ------------------------------------------------------------------ | ------------------------- |
+| **P1 — Critical** | 5 menit        | Data loss, financial corruption, cross-tenant leak, L-02 violation | Ya (PagerDuty)            |
+| **P2 — High**     | 15 menit       | Payment gateway circuit open, DLQ > 50, p99 > 3x SLA               | Ya (PagerDuty)            |
+| **P3 — Medium**   | 1 jam          | DLQ > 10, p95 > 2x SLA, AI budget 80%                              | Ya (Slack #alerts-ops)    |
+| **P4 — Low**      | Business hours | p95 trending up, cert expiring 30 hari                             | Tidak (Slack #alerts-low) |
 
 ### 5.3 Circuit Breakers (Semua External Integration)
 
@@ -631,12 +635,12 @@ SKENARIO KEGAGALAN:
 
 ### 6.1 Severity Matrix
 
-| Severity | Definisi | Waktu | War Room? | Post-Mortem? |
-|---------|---------|-------|-----------|-------------|
-| **P1** | Revenue loss, data loss, security breach, cross-tenant leak | 5 mnt | Ya (immediate) | Ya (48 jam) |
-| **P2** | Service degraded, payment down, > 5 mnt downtime | 15 mnt | Ya (jika > 30 mnt) | Ya (72 jam) |
-| **P3** | Non-critical degraded, high error rate (non-financial) | 1 jam | Tidak | Ya (mingguan) |
-| **P4** | Performance degradation, non-urgent anomaly | Business hours | Tidak | Tidak |
+| Severity | Definisi                                                    | Waktu          | War Room?          | Post-Mortem?  |
+| -------- | ----------------------------------------------------------- | -------------- | ------------------ | ------------- |
+| **P1**   | Revenue loss, data loss, security breach, cross-tenant leak | 5 mnt          | Ya (immediate)     | Ya (48 jam)   |
+| **P2**   | Service degraded, payment down, > 5 mnt downtime            | 15 mnt         | Ya (jika > 30 mnt) | Ya (72 jam)   |
+| **P3**   | Non-critical degraded, high error rate (non-financial)      | 1 jam          | Tidak              | Ya (mingguan) |
+| **P4**   | Performance degradation, non-urgent anomaly                 | Business hours | Tidak              | Tidak         |
 
 ### 6.2 Incident Protocol
 
@@ -674,16 +678,16 @@ POST-MORTEM
 
 ### 6.3 Active Risk Register
 
-| ID | Risiko | Severity | Mitigasi |
-|----|--------|----------|----------|
-| R-001 | Server Actions error leakage | HIGH | `safeAction` HOC + sanitize errors |
-| R-002 | pgvector HNSW blocks concurrent writes | MEDIUM | Async batch ingestion 02:00–06:00 UTC |
-| R-003 | Webhook delivery failure (payment) | HIGH | HTTP 200 ACK immediate + pg-boss retry + DLQ |
-| R-004 | AI prompt injection/jailbreak | HIGH | Constitutional system prompt + jailbreak guardrail |
-| R-005 | Cross-tenant RLS misconfiguration | **CRITICAL** | Two-tenant test di CI; quarterly RLS audit |
-| R-006 | Trigger.dev scale limit | MEDIUM | Monitor; plan Temporal migration at 500K/day |
-| R-007 | Supabase JWT token size | LOW | Minimal claims; Cerbos untuk complex permissions |
-| R-008 | OpenRouter rate limiting | MEDIUM | Multi-model fallback; semantic cache |
+| ID    | Risiko                                 | Severity     | Mitigasi                                           |
+| ----- | -------------------------------------- | ------------ | -------------------------------------------------- |
+| R-001 | Server Actions error leakage           | HIGH         | `safeAction` HOC + sanitize errors                 |
+| R-002 | pgvector HNSW blocks concurrent writes | MEDIUM       | Async batch ingestion 02:00–06:00 UTC              |
+| R-003 | Webhook delivery failure (payment)     | HIGH         | HTTP 200 ACK immediate + pg-boss retry + DLQ       |
+| R-004 | AI prompt injection/jailbreak          | HIGH         | Constitutional system prompt + jailbreak guardrail |
+| R-005 | Cross-tenant RLS misconfiguration      | **CRITICAL** | Two-tenant test di CI; quarterly RLS audit         |
+| R-006 | Trigger.dev scale limit                | MEDIUM       | Monitor; plan Temporal migration at 500K/day       |
+| R-007 | Supabase JWT token size                | LOW          | Minimal claims; Cerbos untuk complex permissions   |
+| R-008 | OpenRouter rate limiting               | MEDIUM       | Multi-model fallback; semantic cache               |
 
 ---
 
@@ -731,16 +735,16 @@ Roadmap:
 
 ### 7.2 Technical Debt Backlog (Aktif)
 
-| ID | Item | Impact | Effort | Prioritas | Target |
-|----|------|--------|--------|-----------|--------|
-| TD-002 | Traceability chains: 5 dari 6 full-stack chains belum didokumentasi | H | M | **P1** | v5.2 |
-| TD-003 | EventCatalog integration (auto-generate dari code) belum diimplementasi | H | H | **P2** | v5.2 |
-| TD-004 | OpenAPI specs untuk 6 BC APIs belum generated | H | M | **P2** | v5.2 |
-| TD-005 | Cerbos ABAC policies hanya partial; RLS-only untuk simple flows | M | M | **P2** | v5.2 |
-| TD-006 | `semantic_cache` table schema belum di Layer 2 SSOT | M | L | **P3** | v5.1.2 |
-| TD-007 | `mcp_tool_registry` table schema belum di Layer 2 SSOT | M | L | **P3** | v5.1.2 |
-| TD-008 | `ai_usage_records` table schema belum di Layer 2 SSOT | M | L | **P3** | v5.1.2 |
-| TD-009 | Runbook catalog (Vol 05 §6) merujuk runbook yang belum ada | H | M | **P1** | v5.1.1 |
+| ID     | Item                                                                    | Impact | Effort | Prioritas | Target |
+| ------ | ----------------------------------------------------------------------- | ------ | ------ | --------- | ------ |
+| TD-002 | Traceability chains: 5 dari 6 full-stack chains belum didokumentasi     | H      | M      | **P1**    | v5.2   |
+| TD-003 | EventCatalog integration (auto-generate dari code) belum diimplementasi | H      | H      | **P2**    | v5.2   |
+| TD-004 | OpenAPI specs untuk 6 BC APIs belum generated                           | H      | M      | **P2**    | v5.2   |
+| TD-005 | Cerbos ABAC policies hanya partial; RLS-only untuk simple flows         | M      | M      | **P2**    | v5.2   |
+| TD-006 | `semantic_cache` table schema belum di Layer 2 SSOT                     | M      | L      | **P3**    | v5.1.2 |
+| TD-007 | `mcp_tool_registry` table schema belum di Layer 2 SSOT                  | M      | L      | **P3**    | v5.1.2 |
+| TD-008 | `ai_usage_records` table schema belum di Layer 2 SSOT                   | M      | L      | **P3**    | v5.1.2 |
+| TD-009 | Runbook catalog (Vol 05 §6) merujuk runbook yang belum ada              | H      | M      | **P1**    | v5.1.1 |
 
 ### 7.3 Dependency Management
 
@@ -786,14 +790,14 @@ PROSES PENGGANTIAN:
 
 ### 7.5 Performance Optimization Backlog
 
-| Optimisasi | State Sekarang | Target | Expected Gain | Prioritas |
-|------------|---------------|--------|---------------|-----------|
-| pgBouncer transaction mode | Session mode | Transaction mode | 3x connection efficiency | **P1** |
-| Materialized view debounce | 5s | 2s | 60% latency reduction | P2 |
-| HNSW ef_search tuning | 40 (default) | 80 | 15% recall, +20% latency | P2 |
-| Valkey semantic cache warm-up | Cold on deploy | Pre-loaded | 30% cache hit rate | P2 |
-| Embedding batch size | 100 chunks/call | 500 chunks/call | 5x ingestion throughput | P3 |
-| Go microservice (Finance) | Next.js edge | Go service | Sub-ms validation | P2 (post-scale) |
+| Optimisasi                    | State Sekarang  | Target           | Expected Gain            | Prioritas       |
+| ----------------------------- | --------------- | ---------------- | ------------------------ | --------------- |
+| pgBouncer transaction mode    | Session mode    | Transaction mode | 3x connection efficiency | **P1**          |
+| Materialized view debounce    | 5s              | 2s               | 60% latency reduction    | P2              |
+| HNSW ef_search tuning         | 40 (default)    | 80               | 15% recall, +20% latency | P2              |
+| Valkey semantic cache warm-up | Cold on deploy  | Pre-loaded       | 30% cache hit rate       | P2              |
+| Embedding batch size          | 100 chunks/call | 500 chunks/call  | 5x ingestion throughput  | P3              |
+| Go microservice (Finance)     | Next.js edge    | Go service       | Sub-ms validation        | P2 (post-scale) |
 
 ---
 
@@ -844,25 +848,25 @@ Q2 2027 (April–Juni) — SEKB v6.0: Autonomous Agent Ready
 
 ## Referensi Cepat — Mana Dokumen untuk Apa?
 
-| Kebutuhan | Dokumen |
-|-----------|---------|
-| Prinsip arsitektur, laws L-01–L-10, ubiquitous language | `docs/layers/Layer-1-Constitution-v5.0.2.md` |
-| Schema DB, RLS, enums, stored procedures | `docs/layers/Layer-2-Database-SSOT-v5.0.2.md` |
-| Tech stack, monorepo, traceability, DX | `docs/layers/Layer-3-EPXA-v5.1.md` |
-| Meta-struktur SEKB, volume index | `docs/volumes/00-knowledge-architecture.md` |
-| Entity, state machine, domain events | `docs/volumes/01-foundations.md` |
-| Bounded contexts, context map, repositories | `docs/volumes/02-enterprise-architecture.md` |
-| Technology stack, BFF pattern, cursorrules | `docs/volumes/03-engineering.md` |
-| AI safety, MCP tools, RAG, prompt management | `docs/volumes/04-ai-architecture.md` |
-| SRE, SLA, deployment, disaster recovery | `docs/volumes/05-operations.md` |
-| Governance, compliance, ADR/RFC process | `docs/volumes/06-governance.md` |
-| Business capabilities, feature evaluation, use cases | `docs/volumes/07-business.md` |
-| UX, design tokens, component standards | `docs/volumes/08-product.md` |
-| AI IDE skills, tooling ecosystem, skill selection | `docs/volumes/09-skills-tooling.md` |
-| Tech debt, risks, OSS horizon, 12-month roadmap | `docs/volumes/10-remediation-roadmap.md` |
-| Agent operating instructions | `docs/ai-ide/SEKB-AI-Agent-Instructions.md` |
-| IDE-level rules (baca setiap sesi) | `.cursorrules` |
+| Kebutuhan                                               | Dokumen                                       |
+| ------------------------------------------------------- | --------------------------------------------- |
+| Prinsip arsitektur, laws L-01–L-10, ubiquitous language | `docs/layers/Layer-1-Constitution-v5.0.2.md`  |
+| Schema DB, RLS, enums, stored procedures                | `docs/layers/Layer-2-Database-SSOT-v5.0.2.md` |
+| Tech stack, monorepo, traceability, DX                  | `docs/layers/Layer-3-EPXA-v5.1.md`            |
+| Meta-struktur SEKB, volume index                        | `docs/volumes/00-knowledge-architecture.md`   |
+| Entity, state machine, domain events                    | `docs/volumes/01-foundations.md`              |
+| Bounded contexts, context map, repositories             | `docs/volumes/02-enterprise-architecture.md`  |
+| Technology stack, BFF pattern, cursorrules              | `docs/volumes/03-engineering.md`              |
+| AI safety, MCP tools, RAG, prompt management            | `docs/volumes/04-ai-architecture.md`          |
+| SRE, SLA, deployment, disaster recovery                 | `docs/volumes/05-operations.md`               |
+| Governance, compliance, ADR/RFC process                 | `docs/volumes/06-governance.md`               |
+| Business capabilities, feature evaluation, use cases    | `docs/volumes/07-business.md`                 |
+| UX, design tokens, component standards                  | `docs/volumes/08-product.md`                  |
+| AI IDE skills, tooling ecosystem, skill selection       | `docs/volumes/09-skills-tooling.md`           |
+| Tech debt, risks, OSS horizon, 12-month roadmap         | `docs/volumes/10-remediation-roadmap.md`      |
+| Agent operating instructions                            | `docs/ai-ide/SEKB-AI-Agent-Instructions.md`   |
+| IDE-level rules (baca setiap sesi)                      | `.cursorrules`                                |
 
 ---
 
-*Dokumen ini adalah sintesis dari seluruh SEKB v5.1. Untuk detail implementasi, selalu merujuk ke dokumen sumber yang tercantum. Jika ada konflik: Layer-1 > Layer-2 > Layer-3 > Volumes.*
+_Dokumen ini adalah sintesis dari seluruh SEKB v5.1. Untuk detail implementasi, selalu merujuk ke dokumen sumber yang tercantum. Jika ada konflik: Layer-1 > Layer-2 > Layer-3 > Volumes._

@@ -38,7 +38,9 @@ export class DrizzleRoomRepository implements IRoomRepository {
   }
 
   async findByFacility(facilityId: string, tenantId: string) {
-    return this.db.select().from(rooms)
+    return this.db
+      .select()
+      .from(rooms)
       .where(and(eq(rooms.facilityId, facilityId), eq(rooms.tenantId, tenantId)));
   }
 }

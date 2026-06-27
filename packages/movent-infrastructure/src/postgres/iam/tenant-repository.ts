@@ -15,8 +15,12 @@ export class DrizzleTenantRepository implements ITenantRepository {
     const row = await this.db.query.tenants.findFirst({ where: eq(tenants.id, id) });
     if (!row) return null;
     return Tenant.reconstitute({
-      id: row.id, name: row.name, slug: row.slug,
-      isActive: row.isActive, tenantId: row.id, metadata: (row.metadata ?? {}) as Record<string, unknown>,
+      id: row.id,
+      name: row.name,
+      slug: row.slug,
+      isActive: row.isActive,
+      tenantId: row.id,
+      metadata: (row.metadata ?? {}) as Record<string, unknown>,
     });
   }
 
@@ -24,22 +28,29 @@ export class DrizzleTenantRepository implements ITenantRepository {
     const row = await this.db.query.tenants.findFirst({ where: eq(tenants.slug, slug) });
     if (!row) return null;
     return Tenant.reconstitute({
-      id: row.id, name: row.name, slug: row.slug,
-      isActive: row.isActive, tenantId: row.id, metadata: (row.metadata ?? {}) as Record<string, unknown>,
+      id: row.id,
+      name: row.name,
+      slug: row.slug,
+      isActive: row.isActive,
+      tenantId: row.id,
+      metadata: (row.metadata ?? {}) as Record<string, unknown>,
     });
   }
 
   async save(tenant: Tenant): Promise<void> {
     const r = tenant.toRecord();
-    await this.db.insert(tenants).values({
-      id: r.id,
-      name: r.name,
-      slug: r.slug,
-      isActive: r.isActive,
-      metadata: r.metadata,
-    }).onConflictDoUpdate({
-      target: tenants.id,
-      set: { isActive: r.isActive },
-    });
+    await this.db
+      .insert(tenants)
+      .values({
+        id: r.id,
+        name: r.name,
+        slug: r.slug,
+        isActive: r.isActive,
+        metadata: r.metadata,
+      })
+      .onConflictDoUpdate({
+        target: tenants.id,
+        set: { isActive: r.isActive },
+      });
   }
 }

@@ -6,7 +6,11 @@ const getSessionImpl = vi.fn();
 
 vi.mock('@supabase/ssr', () => ({
   createServerClient: vi.fn(
-    (_url: string, _key: string, options: { cookies: { setAll: (cookies: Array<{ name: string; value: string }>) => void } }) => ({
+    (
+      _url: string,
+      _key: string,
+      options: { cookies: { setAll: (cookies: Array<{ name: string; value: string }>) => void } },
+    ) => ({
       auth: {
         getSession: async () => {
           options.cookies.setAll([{ name: 'sb-refresh-token', value: 'refreshed-session' }]);
@@ -40,7 +44,7 @@ describe('middleware()', () => {
     getSessionImpl.mockResolvedValue({ data: { session: null } });
     const { middleware } = await loadMiddleware();
 
-    const req = new NextRequest('http://localhost/events');
+    const req = new NextRequest('http://localhost/bookings');
     const res = await middleware(req);
 
     expect(res.status).toBe(307);
@@ -52,7 +56,7 @@ describe('middleware()', () => {
     getSessionImpl.mockResolvedValue({ data: { session: null } });
     const { middleware } = await loadMiddleware();
 
-    const req = new NextRequest('http://localhost/api/v1/commerce/events');
+    const req = new NextRequest('http://localhost/api/v1/spatial/bookings');
     const res = await middleware(req);
 
     expect(res.status).toBe(401);
@@ -83,7 +87,7 @@ describe('middleware()', () => {
     const signed = await signTenantCookie('tenant-from-cookie', 'actor-uuid-1');
     const { middleware } = await loadMiddleware();
 
-    const req = new NextRequest('http://localhost/', {
+    const req = new NextRequest('http://localhost/bookings', {
       headers: { cookie: `movent_tenant_id=${signed}` },
     });
     const res = await middleware(req);
@@ -99,7 +103,7 @@ describe('middleware()', () => {
     });
     const { middleware } = await loadMiddleware();
 
-    const req = new NextRequest('http://localhost/', {
+    const req = new NextRequest('http://localhost/bookings', {
       headers: { cookie: 'movent_tenant_id=foreign-tenant-id' },
     });
     const res = await middleware(req);
@@ -115,7 +119,7 @@ describe('middleware()', () => {
     });
     const { middleware } = await loadMiddleware();
 
-    const req = new NextRequest('http://localhost/events');
+    const req = new NextRequest('http://localhost/bookings');
     const res = await middleware(req);
 
     expect(res.status).toBe(307);
@@ -130,7 +134,7 @@ describe('middleware()', () => {
     const signed = await signTenantCookie('cookie-tenant', 'actor-uuid-1');
     const { middleware } = await loadMiddleware();
 
-    const req = new NextRequest('http://localhost/', {
+    const req = new NextRequest('http://localhost/bookings', {
       headers: { cookie: `movent_tenant_id=${signed}` },
     });
     const res = await middleware(req);

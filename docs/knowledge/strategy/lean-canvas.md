@@ -12,6 +12,7 @@ Organizations running events and projects suffer from:
 - Weak or expensive auditability for operations and finance
 
 **Existing Alternatives:**
+
 - General ERPs (too generic, high ambiguity)
 - Point solutions for booking/ticketing (no financial integrity or AI)
 - Custom builds (high debt, slow)

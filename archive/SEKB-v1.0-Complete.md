@@ -1,4 +1,5 @@
 # SOVEREIGN OS ENTERPRISE KNOWLEDGE BASE (SEKB)
+
 **Version:** 1.0.0  
 **Status:** PRODUCTION READY  
 **Date:** June 25, 2026  
@@ -12,6 +13,7 @@
 Sovereign OS is an **AI-Native, Zero-Trust Enterprise Operating System** for B2B SaaS. It unifies physical logistics, multi-tenant digital commerce, spatial resource management, and Swiss-standard financial ledger integrity into a deterministic ecosystem.
 
 **This SEKB is the authoritative, unified repository** of all architectural knowledge, operationalized for:
+
 - **Autonomous AI agents** (Google Antigravity, Cursor, Claude)
 - **500+ person engineering teams** needing clear ownership & governance
 - **Regulated enterprises** (HIPAA, SOX, GDPR) requiring audit & compliance
@@ -126,38 +128,38 @@ This SEKB consolidates three previously separate SSOTs into one coherent, machin
 
 All code, documentation, databases, and conversations MUST use ONLY these canonical terms.
 
-| Term | Definition | Usage | Forbidden | Reason |
-|---|---|---|---|---|
-| **Tenant** | Top-level SaaS isolation boundary (one per customer). | "This Tenant has 5 invoices." | Account, Customer, Workspace (wrong level) | Tenants are org-level; Customers are personas. |
-| **Organization** | Legal entity / business unit under Tenant. | "Register new Org under Tenant ABC." | Company, Department | DDD aggregate root. |
-| **Workspace** | Collaborative area / project boundary. | "Assign user to Workspace Marketing." | Space, Team, Channel | Specific DDD aggregate. |
-| **Facility** | Physical/virtual asset container (building, venue). | "Facility 'Downtown Office' has 10 rooms." | Venue, Location, Site | Domain-specific to Spatial context. |
-| **Room** | Discrete, bookable unit within Facility. | "Room 'Conference A' available 9am-5pm." | Space, Unit | Enforces single identity. |
-| **Booking** | Claim (spatio-temporal) on Room during TimeRange. | "Booking #123 reserves Conference A." | Reservation, Appointment, Rent | Distinct from AccessPass. |
-| **Event** | Aktualisasi Project; spatio-temporal gathering. | "Event 'Tech Summit' starts 2026-09-15." | Konferensi, Meeting, Program | DDD aggregate; orchestrates Commerce. |
-| **TicketType** | Tier/category of AccessPass for Event. | "TicketType 'VIP' costs $500." | Tier, Pass Tier | Aggregate child; Ticket is overloaded. |
-| **AccessPass** | Cryptographically verified right-of-entry. | "AccessPass #456 grants entry to Tech Summit." | Ticket, Wristband, Pass | Distinct from Booking. |
-| **Campaign** | Structured marketing initiative to drive conversions. | "Campaign 'Early Bird' offers 20% discount." | Promotion, Drive, Blast | DDD aggregate. |
-| **Product** | Saleable good or service (SKU). | "Product 'Merchandise' has 100 units." | Item, SKU | DDD aggregate. |
-| **Supplier** | Third-party B2B vendor providing goods/services. | "Supplier 'Acme Logistics' approved." | Vendor, Provider, Partner | DDD aggregate; distinct from Customer. |
-| **Customer** | External buyer / consumer. | "Customer 'Alice' purchased 2 AccessPasses." | Client, Attendee, Buyer | CRM aggregate; lifecycle: Lead→Active→Churned. |
-| **Asset** | Trackable physical/digital property. | "Asset 'Projector #42' assigned to Conference Room A." | Equipment, Gear | Spatial domain. |
-| **Ledger** | Double-entry accounting ledger (one per Tenant). | "Ledger for Tenant ABC is balanced." | General Ledger | Finance aggregate root. |
-| **Account** | Chart of Accounts node (Asset, Liability, etc.). | "Account 1000 (Cash) has balance $50,000." | GL Account, CoA Node | Finance; nested hierarchy. |
-| **JournalEntry** | Single balanced transaction (∑ debit = ∑ credit). | "JournalEntry #789 posts $1,000 revenue." | Transaction (overloaded), Mutation | Finance; immutable after Posted. |
-| **JournalLine** | Single debit or credit within JournalEntry. | "JournalLine: Debit Account 4000 (Revenue) $1,000." | Posting, Line Item | Finance; child of JournalEntry. |
-| **Invoice** | Commercial billing document. | "Invoice #INV-001 for $10,000 due 2026-08-15." | Bill, Statement | Finance; triggers payments. |
-| **Payment** | Transfer of funds. | "Payment #PAY-123 captured $5,000 via Stripe." | Transaction (overloaded), Transfer | Finance; state-machine (8 states). |
-| **Escrow** | Funds held in suspension until release trigger. | "Escrow $2,000 locked until Event completion." | Hold, Reservation | Finance; immutable until released. |
-| **Workflow** | State machine template for business process. | "Workflow 'Approval' defines transitions." | Process, Pipeline, Engine | Aggregate root (template); immutable after Published. |
-| **WorkflowInstance** | Single execution of Workflow. | "WorkflowInstance for Booking #123 in PendingApproval." | Job, Run, Execution | Aggregate root (instantiation). |
-| **Task** | Atomic work unit within WorkflowInstance. | "Task 'Verify Contact Info' assigned to user@example.com." | Todo, Action Item, Subtask | Workflow child. |
-| **Approval** | Human-in-the-loop gate within WorkflowInstance. | "Approval gate: $50k payment requires CFO sign-off." | Gate, Checkpoint, Decision | Workflow child; blocks progression. |
-| **DomainEvent** | Immutable fact: past-tense statement of what happened. | "DomainEvent: AccessPassIssued(passId=123)." | Event (overloaded), Notification, Message | Event-Driven architecture. |
-| **Command** | Imperative request to change state. | "Command: IssueAccessPassCommand(eventId=X)." | Request, Action, Operation | CQRS pattern. |
-| **ReadModel** | Denormalized view optimized for queries. | "ReadModel: EventSalesView (updated every 5 sec)." | Projection, Snapshot, Cache | CQRS pattern. |
-| **Aggregate** | Consistency boundary; root + children. | "Aggregate: Event (root) → TicketType → AccessPass." | Entity Cluster, Domain Model | DDD; transaction boundary. |
-| **BoundedContext** | Explicit linguistic/organizational boundary. | "Bounded Context 'Commerce' owns Events, AccessPasses." | Domain, Module, Namespace | DDD; prevents terminology collision. |
+| Term                 | Definition                                             | Usage                                                      | Forbidden                                  | Reason                                                |
+| -------------------- | ------------------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------- |
+| **Tenant**           | Top-level SaaS isolation boundary (one per customer).  | "This Tenant has 5 invoices."                              | Account, Customer, Workspace (wrong level) | Tenants are org-level; Customers are personas.        |
+| **Organization**     | Legal entity / business unit under Tenant.             | "Register new Org under Tenant ABC."                       | Company, Department                        | DDD aggregate root.                                   |
+| **Workspace**        | Collaborative area / project boundary.                 | "Assign user to Workspace Marketing."                      | Space, Team, Channel                       | Specific DDD aggregate.                               |
+| **Facility**         | Physical/virtual asset container (building, venue).    | "Facility 'Downtown Office' has 10 rooms."                 | Venue, Location, Site                      | Domain-specific to Spatial context.                   |
+| **Room**             | Discrete, bookable unit within Facility.               | "Room 'Conference A' available 9am-5pm."                   | Space, Unit                                | Enforces single identity.                             |
+| **Booking**          | Claim (spatio-temporal) on Room during TimeRange.      | "Booking #123 reserves Conference A."                      | Reservation, Appointment, Rent             | Distinct from AccessPass.                             |
+| **Event**            | Aktualisasi Project; spatio-temporal gathering.        | "Event 'Tech Summit' starts 2026-09-15."                   | Konferensi, Meeting, Program               | DDD aggregate; orchestrates Commerce.                 |
+| **TicketType**       | Tier/category of AccessPass for Event.                 | "TicketType 'VIP' costs $500."                             | Tier, Pass Tier                            | Aggregate child; Ticket is overloaded.                |
+| **AccessPass**       | Cryptographically verified right-of-entry.             | "AccessPass #456 grants entry to Tech Summit."             | Ticket, Wristband, Pass                    | Distinct from Booking.                                |
+| **Campaign**         | Structured marketing initiative to drive conversions.  | "Campaign 'Early Bird' offers 20% discount."               | Promotion, Drive, Blast                    | DDD aggregate.                                        |
+| **Product**          | Saleable good or service (SKU).                        | "Product 'Merchandise' has 100 units."                     | Item, SKU                                  | DDD aggregate.                                        |
+| **Supplier**         | Third-party B2B vendor providing goods/services.       | "Supplier 'Acme Logistics' approved."                      | Vendor, Provider, Partner                  | DDD aggregate; distinct from Customer.                |
+| **Customer**         | External buyer / consumer.                             | "Customer 'Alice' purchased 2 AccessPasses."               | Client, Attendee, Buyer                    | CRM aggregate; lifecycle: Lead→Active→Churned.        |
+| **Asset**            | Trackable physical/digital property.                   | "Asset 'Projector #42' assigned to Conference Room A."     | Equipment, Gear                            | Spatial domain.                                       |
+| **Ledger**           | Double-entry accounting ledger (one per Tenant).       | "Ledger for Tenant ABC is balanced."                       | General Ledger                             | Finance aggregate root.                               |
+| **Account**          | Chart of Accounts node (Asset, Liability, etc.).       | "Account 1000 (Cash) has balance $50,000."                 | GL Account, CoA Node                       | Finance; nested hierarchy.                            |
+| **JournalEntry**     | Single balanced transaction (∑ debit = ∑ credit).      | "JournalEntry #789 posts $1,000 revenue."                  | Transaction (overloaded), Mutation         | Finance; immutable after Posted.                      |
+| **JournalLine**      | Single debit or credit within JournalEntry.            | "JournalLine: Debit Account 4000 (Revenue) $1,000."        | Posting, Line Item                         | Finance; child of JournalEntry.                       |
+| **Invoice**          | Commercial billing document.                           | "Invoice #INV-001 for $10,000 due 2026-08-15."             | Bill, Statement                            | Finance; triggers payments.                           |
+| **Payment**          | Transfer of funds.                                     | "Payment #PAY-123 captured $5,000 via Stripe."             | Transaction (overloaded), Transfer         | Finance; state-machine (8 states).                    |
+| **Escrow**           | Funds held in suspension until release trigger.        | "Escrow $2,000 locked until Event completion."             | Hold, Reservation                          | Finance; immutable until released.                    |
+| **Workflow**         | State machine template for business process.           | "Workflow 'Approval' defines transitions."                 | Process, Pipeline, Engine                  | Aggregate root (template); immutable after Published. |
+| **WorkflowInstance** | Single execution of Workflow.                          | "WorkflowInstance for Booking #123 in PendingApproval."    | Job, Run, Execution                        | Aggregate root (instantiation).                       |
+| **Task**             | Atomic work unit within WorkflowInstance.              | "Task 'Verify Contact Info' assigned to user@example.com." | Todo, Action Item, Subtask                 | Workflow child.                                       |
+| **Approval**         | Human-in-the-loop gate within WorkflowInstance.        | "Approval gate: $50k payment requires CFO sign-off."       | Gate, Checkpoint, Decision                 | Workflow child; blocks progression.                   |
+| **DomainEvent**      | Immutable fact: past-tense statement of what happened. | "DomainEvent: AccessPassIssued(passId=123)."               | Event (overloaded), Notification, Message  | Event-Driven architecture.                            |
+| **Command**          | Imperative request to change state.                    | "Command: IssueAccessPassCommand(eventId=X)."              | Request, Action, Operation                 | CQRS pattern.                                         |
+| **ReadModel**        | Denormalized view optimized for queries.               | "ReadModel: EventSalesView (updated every 5 sec)."         | Projection, Snapshot, Cache                | CQRS pattern.                                         |
+| **Aggregate**        | Consistency boundary; root + children.                 | "Aggregate: Event (root) → TicketType → AccessPass."       | Entity Cluster, Domain Model               | DDD; transaction boundary.                            |
+| **BoundedContext**   | Explicit linguistic/organizational boundary.           | "Bounded Context 'Commerce' owns Events, AccessPasses."    | Domain, Module, Namespace                  | DDD; prevents terminology collision.                  |
 
 ---
 
@@ -167,95 +169,95 @@ All code, documentation, databases, and conversations MUST use ONLY these canoni
 
 ### 1. IAM & Governance (Supporting)
 
-| Property | Value |
-|---|---|
-| **Owner** | Identity Lead (2 FTE) |
-| **Responsibility** | Tenant lifecycle, user identity, RBAC/ABAC, audit trail. |
-| **Aggregate Roots** | `Tenant`, `Organization`, `Workspace` |
-| **Key Entities** | `Department`, `Membership`, `Profile`, `LegalHold` |
-| **Commands** | `ProvisionTenant`, `InviteUser`, `AssignRole`, `FreezeTenant`, `RevokeAccess` |
-| **Domain Events** | `TenantProvisioned`, `TenantFrozen`, `MembershipGranted`, `RoleAssigned`, `UserRegistered` |
-| **API Routes** | `POST /api/v1/iam/tenants`, `GET /api/v1/iam/tenants/{id}`, `POST /api/v1/iam/memberships` |
+| Property            | Value                                                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------- |
+| **Owner**           | Identity Lead (2 FTE)                                                                             |
+| **Responsibility**  | Tenant lifecycle, user identity, RBAC/ABAC, audit trail.                                          |
+| **Aggregate Roots** | `Tenant`, `Organization`, `Workspace`                                                             |
+| **Key Entities**    | `Department`, `Membership`, `Profile`, `LegalHold`                                                |
+| **Commands**        | `ProvisionTenant`, `InviteUser`, `AssignRole`, `FreezeTenant`, `RevokeAccess`                     |
+| **Domain Events**   | `TenantProvisioned`, `TenantFrozen`, `MembershipGranted`, `RoleAssigned`, `UserRegistered`        |
+| **API Routes**      | `POST /api/v1/iam/tenants`, `GET /api/v1/iam/tenants/{id}`, `POST /api/v1/iam/memberships`        |
 | **Database Tables** | `tenants`, `organizations`, `workspaces`, `departments`, `profiles`, `memberships`, `legal_holds` |
-| **RLS Policy** | Direct: `tenant_id = auth.jwt()->'tenant_id'` on all tables. |
-| **External Ports** | **Driving:** REST API, MCP tools (read-only). **Driven:** Supabase Auth (OIDC), Cerbos (ABAC). |
+| **RLS Policy**      | Direct: `tenant_id = auth.jwt()->'tenant_id'` on all tables.                                      |
+| **External Ports**  | **Driving:** REST API, MCP tools (read-only). **Driven:** Supabase Auth (OIDC), Cerbos (ABAC).    |
 
 ### 2. Spatial & Facility (Core — Competitive)
 
-| Property | Value |
-|---|---|
-| **Owner** | Spatial Lead (3 FTE) |
-| **Responsibility** | Facility registration, room inventory, collision-free booking (GiST constraint), occupancy tracking. |
-| **Aggregate Roots** | `Facility` |
-| **Key Entities** | `Room`, `Asset` (orphan), `Booking` |
-| **Commands** | `RegisterFacility`, `CreateRoom`, `SubmitBooking`, `ApproveBooking`, `CancelBooking` |
-| **Domain Events** | `FacilityRegistered`, `BookingSubmitted`, `BookingApproved`, `BookingConflictDetected`, `BookingCanceled` |
-| **API Routes** | `POST /api/v1/spatial/facilities`, `GET /api/v1/spatial/bookings/{id}/calendar` |
-| **Database Tables** | `facilities`, `rooms`, `assets`, `bookings`, `booking_histories` |
-| **RLS Policy** | Indirect: `facility.organization_id → organization.tenant_id`. |
-| **State Machines** | Booking (Pending→UnderReview→Approved→Active→Completed; OR Rejected/Canceled). Room (Available, Occupied, Maintenance). |
-| **Invariants** | **CRITICAL:** No two Bookings overlap on same Room. Enforced by GiST EXCLUSION. |
+| Property            | Value                                                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Owner**           | Spatial Lead (3 FTE)                                                                                                    |
+| **Responsibility**  | Facility registration, room inventory, collision-free booking (GiST constraint), occupancy tracking.                    |
+| **Aggregate Roots** | `Facility`                                                                                                              |
+| **Key Entities**    | `Room`, `Asset` (orphan), `Booking`                                                                                     |
+| **Commands**        | `RegisterFacility`, `CreateRoom`, `SubmitBooking`, `ApproveBooking`, `CancelBooking`                                    |
+| **Domain Events**   | `FacilityRegistered`, `BookingSubmitted`, `BookingApproved`, `BookingConflictDetected`, `BookingCanceled`               |
+| **API Routes**      | `POST /api/v1/spatial/facilities`, `GET /api/v1/spatial/bookings/{id}/calendar`                                         |
+| **Database Tables** | `facilities`, `rooms`, `assets`, `bookings`, `booking_histories`                                                        |
+| **RLS Policy**      | Indirect: `facility.organization_id → organization.tenant_id`.                                                          |
+| **State Machines**  | Booking (Pending→UnderReview→Approved→Active→Completed; OR Rejected/Canceled). Room (Available, Occupied, Maintenance). |
+| **Invariants**      | **CRITICAL:** No two Bookings overlap on same Room. Enforced by GiST EXCLUSION.                                         |
 
 ### 3. Commerce & Event (Core — Competitive)
 
-| Property | Value |
-|---|---|
-| **Owner** | Commerce Lead (4 FTE) |
-| **Responsibility** | Event lifecycle, ticket issuance, inventory depletion tracking. |
-| **Aggregate Roots** | `Event` |
-| **Key Entities** | `TicketType`, `AccessPass`, `Campaign` (orphan) |
-| **Commands** | `CreateEvent`, `PublishEvent`, `IssueAccessPass`, `ScanAccessPass`, `RevokeAccessPass` |
-| **Domain Events** | `EventPublished`, `AccessPassIssued`, `AccessPassScanned`, `AccessPassExpired`, `AccessPassRevoked` |
-| **API Routes** | `POST /api/v1/commerce/events`, `POST /api/v1/commerce/access-passes` |
-| **Database Tables** | `events`, `pass_tiers`, `access_passes`, `products`, `campaigns` |
-| **RLS Policy** | Indirect: `event.project_id → project.tenant_id`. |
-| **Invariants** | **CRITICAL:** Issued AccessPass count ≤ Capacity per TicketType. |
+| Property            | Value                                                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------- |
+| **Owner**           | Commerce Lead (4 FTE)                                                                               |
+| **Responsibility**  | Event lifecycle, ticket issuance, inventory depletion tracking.                                     |
+| **Aggregate Roots** | `Event`                                                                                             |
+| **Key Entities**    | `TicketType`, `AccessPass`, `Campaign` (orphan)                                                     |
+| **Commands**        | `CreateEvent`, `PublishEvent`, `IssueAccessPass`, `ScanAccessPass`, `RevokeAccessPass`              |
+| **Domain Events**   | `EventPublished`, `AccessPassIssued`, `AccessPassScanned`, `AccessPassExpired`, `AccessPassRevoked` |
+| **API Routes**      | `POST /api/v1/commerce/events`, `POST /api/v1/commerce/access-passes`                               |
+| **Database Tables** | `events`, `pass_tiers`, `access_passes`, `products`, `campaigns`                                    |
+| **RLS Policy**      | Indirect: `event.project_id → project.tenant_id`.                                                   |
+| **Invariants**      | **CRITICAL:** Issued AccessPass count ≤ Capacity per TicketType.                                    |
 
 ### 4. Finance & Ledger (Core — Competitive) ⭐ **CRITICAL**
 
-| Property | Value |
-|---|---|
-| **Owner** | Finance Lead (5 FTE) |
-| **Responsibility** | Double-entry accounting, invoice lifecycle, payment processing, reconciliation, escrow management. |
-| **Aggregate Roots** | `Ledger`, `Invoice`, `Payment`, `Escrow` |
-| **Key Entities** | `Account`, `JournalEntry`, `JournalLine` |
-| **Commands** | `PostJournalEntry`, `IssueInvoice`, `InitiatePayment`, `CapturePayment`, `SettlePayment`, `ReconcilePayment`, `RefundPayment`, `ReleaseEscrow` |
-| **Domain Events** | `InvoiceIssued`, `PaymentInitiated`, `PaymentCaptured`, `PaymentSettled`, `PaymentFailed`, `RefundInitiated`, `RefundSettled`, `JournalPosted`, `EscrowReleased` |
-| **API Routes** | `POST /api/v1/finance/invoices`, `POST /api/v1/finance/payments`, `PATCH /api/v1/finance/payments/{id}/capture` |
-| **Database Tables** | `ledgers`, `ledger_accounts`, `journal_entries`, `journal_lines`, `invoices`, `payments`, `escrows`, `subscriptions` |
-| **RLS Policy** | Direct: `ledger.tenant_id = auth.jwt()->'tenant_id'`. Indirect: `payment.invoice_id → invoice.tenant_id`. |
-| **Invariants** | **CRITICAL:** ∑ debit = ∑ credit for all JournalEntries. Enforced via `post_ledger_transaction()` stored procedure. |
-| **Immutability** | JournalEntry, JournalLine immutable after Posted. Cancellation only via Reversal (new entry with inverted debits/credits). |
-| **Status** | 🔴 **CRITICAL:** Payment state machine incomplete (Processing→Captured event missing). **Requires G004 (ARB).** |
+| Property            | Value                                                                                                                                                            |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Owner**           | Finance Lead (5 FTE)                                                                                                                                             |
+| **Responsibility**  | Double-entry accounting, invoice lifecycle, payment processing, reconciliation, escrow management.                                                               |
+| **Aggregate Roots** | `Ledger`, `Invoice`, `Payment`, `Escrow`                                                                                                                         |
+| **Key Entities**    | `Account`, `JournalEntry`, `JournalLine`                                                                                                                         |
+| **Commands**        | `PostJournalEntry`, `IssueInvoice`, `InitiatePayment`, `CapturePayment`, `SettlePayment`, `ReconcilePayment`, `RefundPayment`, `ReleaseEscrow`                   |
+| **Domain Events**   | `InvoiceIssued`, `PaymentInitiated`, `PaymentCaptured`, `PaymentSettled`, `PaymentFailed`, `RefundInitiated`, `RefundSettled`, `JournalPosted`, `EscrowReleased` |
+| **API Routes**      | `POST /api/v1/finance/invoices`, `POST /api/v1/finance/payments`, `PATCH /api/v1/finance/payments/{id}/capture`                                                  |
+| **Database Tables** | `ledgers`, `ledger_accounts`, `journal_entries`, `journal_lines`, `invoices`, `payments`, `escrows`, `subscriptions`                                             |
+| **RLS Policy**      | Direct: `ledger.tenant_id = auth.jwt()->'tenant_id'`. Indirect: `payment.invoice_id → invoice.tenant_id`.                                                        |
+| **Invariants**      | **CRITICAL:** ∑ debit = ∑ credit for all JournalEntries. Enforced via `post_ledger_transaction()` stored procedure.                                              |
+| **Immutability**    | JournalEntry, JournalLine immutable after Posted. Cancellation only via Reversal (new entry with inverted debits/credits).                                       |
+| **Status**          | 🔴 **CRITICAL:** Payment state machine incomplete (Processing→Captured event missing). **Requires G004 (ARB).**                                                  |
 
 ### 5. Workflow & Operations (Supporting)
 
-| Property | Value |
-|---|---|
-| **Owner** | Workflow Lead (2 FTE) |
-| **Responsibility** | State machine orchestration, approval gates, task assignment. |
-| **Aggregate Roots** | `Workflow` (template), `WorkflowInstance` (execution) |
-| **Key Entities** | `Task`, `Approval`, `StateTransitionLog` |
-| **Commands** | `PublishWorkflow`, `StartWorkflow`, `CompleteTask`, `ResolveApproval` |
-| **Domain Events** | `WorkflowPublished`, `WorkflowStarted`, `TaskCreated`, `ApprovalRequested`, `ApprovalResolved` |
-| **API Routes** | `POST /api/v1/workflow/workflows`, `POST /api/v1/workflow/instances` |
-| **Database Tables** | `workflows`, `workflow_instances`, `tasks`, `approvals` |
-| **Invariants** | **CRITICAL L-06:** Approval cannot auto-resolve for material changes. Human sign-off required. |
+| Property            | Value                                                                                          |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| **Owner**           | Workflow Lead (2 FTE)                                                                          |
+| **Responsibility**  | State machine orchestration, approval gates, task assignment.                                  |
+| **Aggregate Roots** | `Workflow` (template), `WorkflowInstance` (execution)                                          |
+| **Key Entities**    | `Task`, `Approval`, `StateTransitionLog`                                                       |
+| **Commands**        | `PublishWorkflow`, `StartWorkflow`, `CompleteTask`, `ResolveApproval`                          |
+| **Domain Events**   | `WorkflowPublished`, `WorkflowStarted`, `TaskCreated`, `ApprovalRequested`, `ApprovalResolved` |
+| **API Routes**      | `POST /api/v1/workflow/workflows`, `POST /api/v1/workflow/instances`                           |
+| **Database Tables** | `workflows`, `workflow_instances`, `tasks`, `approvals`                                        |
+| **Invariants**      | **CRITICAL L-06:** Approval cannot auto-resolve for material changes. Human sign-off required. |
 
 ### 6. AI & Knowledge (Core — Competitive)
 
-| Property | Value |
-|---|---|
-| **Owner** | AI Lead (3 FTE) |
-| **Responsibility** | RAG-indexed document repository, semantic search, LLM agent orchestration, safe AI augmentation (L-06). |
-| **Aggregate Roots** | `KnowledgeBase`, `Prompt`, `AIAgent` |
-| **Key Entities** | `Document`, `Chunk`, `Embedding` |
-| **Commands** | `IndexDocument`, `UpdatePrompt`, `ConfigureAgent` |
-| **Domain Events** | `KnowledgeIndexed`, `EmbeddingGenerated`, `AIRecommendationGenerated` |
-| **API Routes** | `POST /api/v1/ai/knowledge-bases/{id}/documents`, `GET /api/v1/ai/search` |
-| **Database Tables** | `knowledge_bases`, `documents`, `chunks`, `embeddings` (pgvector), `prompts`, `ai_agents` |
-| **Invariants** | **CRITICAL L-06:** AI agents CANNOT directly WRITE to material state. All WRITE proposals → Approval pending human sign-off. |
-| **Status** | ⚠️ **BETA:** MCP framework defined. L-06 enforcement incomplete. **Requires G011 + ADR-007 (ARB).** |
+| Property            | Value                                                                                                                        |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Owner**           | AI Lead (3 FTE)                                                                                                              |
+| **Responsibility**  | RAG-indexed document repository, semantic search, LLM agent orchestration, safe AI augmentation (L-06).                      |
+| **Aggregate Roots** | `KnowledgeBase`, `Prompt`, `AIAgent`                                                                                         |
+| **Key Entities**    | `Document`, `Chunk`, `Embedding`                                                                                             |
+| **Commands**        | `IndexDocument`, `UpdatePrompt`, `ConfigureAgent`                                                                            |
+| **Domain Events**   | `KnowledgeIndexed`, `EmbeddingGenerated`, `AIRecommendationGenerated`                                                        |
+| **API Routes**      | `POST /api/v1/ai/knowledge-bases/{id}/documents`, `GET /api/v1/ai/search`                                                    |
+| **Database Tables** | `knowledge_bases`, `documents`, `chunks`, `embeddings` (pgvector), `prompts`, `ai_agents`                                    |
+| **Invariants**      | **CRITICAL L-06:** AI agents CANNOT directly WRITE to material state. All WRITE proposals → Approval pending human sign-off. |
+| **Status**          | ⚠️ **BETA:** MCP framework defined. L-06 enforcement incomplete. **Requires G011 + ADR-007 (ARB).**                          |
 
 ---
 
@@ -282,7 +284,10 @@ export class IssueAccessPassCommand implements Command {
 // 2. COMMAND HANDLER (orchestrates aggregate + emits event)
 @CommandHandler(IssueAccessPassCommand)
 export class IssueAccessPassHandler {
-  constructor(private eventRepo, private accessPassRepo) {}
+  constructor(
+    private eventRepo,
+    private accessPassRepo,
+  ) {}
 
   async execute(cmd: IssueAccessPassCommand) {
     // Step 1: Load aggregate + invariant checks
@@ -349,7 +354,13 @@ export class AccessPassIssued implements DomainEvent {
   ) {}
 
   toJSON() {
-    return { eventType: this.eventType, passId: this.passId, passTierId: this.passTierId, customerId: this.customerId, expiresAt: this.expiresAt.toISOString() };
+    return {
+      eventType: this.eventType,
+      passId: this.passId,
+      passTierId: this.passTierId,
+      customerId: this.customerId,
+      expiresAt: this.expiresAt.toISOString(),
+    };
   }
 }
 ```
@@ -480,16 +491,19 @@ FOR EACH ROW EXECUTE FUNCTION public.trigger_ai_write_safety();
 # Runbook: {Title}
 
 ## Severity Level
+
 - **SEV-1 (Critical):** Service down, data loss imminent. < 15 min MTTR.
 - **SEV-2 (High):** Partial outage, feature broken. < 1 hour MTTR.
 - **SEV-3 (Medium):** Non-critical functionality broken. < 4 hours MTTR.
 
 ## This Runbook
+
 **Severity:** {SEV-1/2/3}  
 **Owner:** {Team}  
 **Detection Signal:** {Metric/Alert that triggers this}
 
 ## Diagnosis
+
 1. Check alert in Datadog/Grafana. Record: timestamp, affected service, metric value.
 2. Correlate logs: `trace_id` from alert → search in ELK.
 3. Check service status page.
@@ -498,31 +512,37 @@ FOR EACH ROW EXECUTE FUNCTION public.trigger_ai_write_safety();
 ## Recovery (Escalating)
 
 ### Attempt 1: Graceful Mitigation (5 min)
+
 - Increase timeouts
 - Scale up replicas
 - Drain connection pool
 
 ### Attempt 2: Controlled Restart (10 min)
+
 - Restart service gracefully
 - Monitor logs
 - Verify health
 
 ### Attempt 3: Rollback (20 min)
+
 - Identify last good deployment
 - Rollback: `git revert {commit}` → `git push`
 - Verify
 
 ### Attempt 4: Escalate (30+ min)
+
 - Call on-call database engineer
 - Prepare snapshot
 - Consider: manual failover, PITR restore
 
 ## Testing
+
 - **Weekly:** Simulate SEV-3 incident
 - **Monthly:** Simulate SEV-2
 - **Quarterly:** SEV-1 fire drill (full recovery)
 
 ## Post-Mortem
+
 1. Record: timeline, root cause
 2. Create Jira ticket with incident details
 3. Schedule post-mortem: engineering + on-call + customer
@@ -547,28 +567,34 @@ FOR EACH ROW EXECUTE FUNCTION public.trigger_ai_write_safety();
 **Decision Owner:** {CTO / Tech Lead}
 
 ## Problem Statement
+
 What problem are we solving? Why now?
 
 ## Proposed Solution
+
 Technical approach + affected systems + data model changes + API contract changes.
 
 ## Alternatives Considered
+
 1. Alternative A (pros / cons)
 2. Alternative B (pros / cons)
 3. Decision: Why chosen?
 
 ## Impact Analysis
+
 - **Effort:** {1 week | 4 weeks | 12 weeks}
 - **Risk:** {Low | Medium | High} + mitigation
 - **Compliance:** {HIPAA | SOX | GDPR impact?}
 - **Breaking Changes:** {Yes → API version bump | No}
 
 ## Timeline
+
 - Week 1: EAB review
 - Week 2-3: Implementation
 - Week 4: Testing + merge
 
 ## Success Criteria
+
 - [ ] EAB approval
 - [ ] All tests pass
 - [ ] Documentation updated
@@ -585,19 +611,24 @@ Technical approach + affected systems + data model changes + API contract change
 **Decision Maker:** {EAB consensus}
 
 ## Context
+
 What was the situation?
 
 ## Decision
+
 We decided to {action}.
 
 ## Rationale
+
 Why? Problem solved? Constraints?
 
 ## Consequences
+
 - ✅ **Positive:** {benefit}
 - ⚠️ **Negative:** {tradeoff}
 
 ## Alternatives Rejected
+
 - **Alternative A:** {Why not?}
 ```
 
@@ -607,18 +638,18 @@ Why? Problem solved? Constraints?
 
 ## 7.1 Capability Map & Status
 
-| Capability | Context | Team | Status | Roadmap | Risk |
-|---|---|---|---|---|---|
-| **Tenant Provisioning** | IAM | Identity (2) | ✅ **GA** | Maintenance | None |
-| **Facility + Booking (GiST)** | Spatial | Spatial (3) | ✅ **GA** | Stress testing | None |
-| **Event + AccessPass** | Commerce | Commerce (4) | ✅ **GA** | Maintenance | None |
-| **Double-Entry Ledger** | Finance | Finance (5) | ✅ **GA** | Maintenance | None |
-| **Payment Processing** | Finance | Finance (5) | 🔴 **CRITICAL** | **G004:** Complete state machine (R01) | **R01 + R14:** State machine incomplete; webhook ACL missing. Phase 1 priority. |
-| **Workflow Orchestration** | Workflow | Workflow (2) | ✅ **GA** | SLA tracking | **R11:** Transition guards undefined. |
-| **AI RAG + Agents** | AI | AI (3) | ⚠️ **BETA** | L-06 enforcement | **R04:** L-06 SQL not implemented (G011, ADR-007). Phase 1 priority. |
-| **Supplier Management** | CRM | CRM (2) | 🔴 **DEFERRED** | **R10:** Operationalize or remove? | Schema exists; no commands/events/workflows. |
-| **Campaign Management** | Commerce | Commerce (4) | 🔴 **DEFERRED** | **R10:** Operationalize or remove? | Schema exists; no operations. |
-| **Inventory Management** | Inventory | Commerce (4) | 🔴 **DEFERRED** | Workflows undefined | Tables exist; no commands. |
+| Capability                    | Context   | Team         | Status          | Roadmap                                | Risk                                                                            |
+| ----------------------------- | --------- | ------------ | --------------- | -------------------------------------- | ------------------------------------------------------------------------------- |
+| **Tenant Provisioning**       | IAM       | Identity (2) | ✅ **GA**       | Maintenance                            | None                                                                            |
+| **Facility + Booking (GiST)** | Spatial   | Spatial (3)  | ✅ **GA**       | Stress testing                         | None                                                                            |
+| **Event + AccessPass**        | Commerce  | Commerce (4) | ✅ **GA**       | Maintenance                            | None                                                                            |
+| **Double-Entry Ledger**       | Finance   | Finance (5)  | ✅ **GA**       | Maintenance                            | None                                                                            |
+| **Payment Processing**        | Finance   | Finance (5)  | 🔴 **CRITICAL** | **G004:** Complete state machine (R01) | **R01 + R14:** State machine incomplete; webhook ACL missing. Phase 1 priority. |
+| **Workflow Orchestration**    | Workflow  | Workflow (2) | ✅ **GA**       | SLA tracking                           | **R11:** Transition guards undefined.                                           |
+| **AI RAG + Agents**           | AI        | AI (3)       | ⚠️ **BETA**     | L-06 enforcement                       | **R04:** L-06 SQL not implemented (G011, ADR-007). Phase 1 priority.            |
+| **Supplier Management**       | CRM       | CRM (2)      | 🔴 **DEFERRED** | **R10:** Operationalize or remove?     | Schema exists; no commands/events/workflows.                                    |
+| **Campaign Management**       | Commerce  | Commerce (4) | 🔴 **DEFERRED** | **R10:** Operationalize or remove?     | Schema exists; no operations.                                                   |
+| **Inventory Management**      | Inventory | Commerce (4) | 🔴 **DEFERRED** | Workflows undefined                    | Tables exist; no commands.                                                      |
 
 ---
 
@@ -667,34 +698,34 @@ Why? Problem solved? Constraints?
 
 ## 9.1 Canonical Naming Standards
 
-| Category | Rule | Example ✅ | Counterexample ❌ |
-|---|---|---|---|
-| **Aggregates** | PascalCase, singular | `Event`, `AccessPass` | `EventAggregate`, `events` |
-| **Commands** | PascalCase, imperative, no suffix | `IssueAccessPass` | `IssueAccessPassCommand` |
-| **Events** | PascalCase, past-tense, no suffix | `AccessPassIssued` | `IssueAccessPass` |
-| **Repositories** | Interface: `I{Aggregate}Repository` | `IEventRepository` | `EventDao` |
-| **Database Tables** | snake_case, plural | `events`, `access_passes` | `tbl_events`, `Event` |
-| **Database Columns** | snake_case, singular | `created_by`, `expires_at` | `CreatedBy`, `created_by_id` |
-| **Foreign Keys** | `fk_{child}_{parent}` | `fk_access_passes_pass_tiers` | `FK_AP` |
-| **Indexes** | `idx_{table}_{columns}` | `idx_bookings_room_id_status` | `index_booking` |
-| **Enum Types** | snake_case, no prefix | `booking_state`, `payment_state` | `BookingState` |
-| **Enum Values** | snake_case, lowercase | `pending`, `under_review` | `Pending`, `PENDING` |
-| **Zod Schemas** | PascalCase, "Schema" suffix | `EventSchema` | `event_schema` |
-| **API Routes** | kebab-case, plural, RESTful | `/api/v1/commerce/access-passes` | `/api/v1/getAccessPass` |
-| **Test Files** | `{unit}.test.ts`, co-located | `event.aggregate.test.ts` | `test_event.ts` |
+| Category             | Rule                                | Example ✅                       | Counterexample ❌            |
+| -------------------- | ----------------------------------- | -------------------------------- | ---------------------------- |
+| **Aggregates**       | PascalCase, singular                | `Event`, `AccessPass`            | `EventAggregate`, `events`   |
+| **Commands**         | PascalCase, imperative, no suffix   | `IssueAccessPass`                | `IssueAccessPassCommand`     |
+| **Events**           | PascalCase, past-tense, no suffix   | `AccessPassIssued`               | `IssueAccessPass`            |
+| **Repositories**     | Interface: `I{Aggregate}Repository` | `IEventRepository`               | `EventDao`                   |
+| **Database Tables**  | snake_case, plural                  | `events`, `access_passes`        | `tbl_events`, `Event`        |
+| **Database Columns** | snake_case, singular                | `created_by`, `expires_at`       | `CreatedBy`, `created_by_id` |
+| **Foreign Keys**     | `fk_{child}_{parent}`               | `fk_access_passes_pass_tiers`    | `FK_AP`                      |
+| **Indexes**          | `idx_{table}_{columns}`             | `idx_bookings_room_id_status`    | `index_booking`              |
+| **Enum Types**       | snake_case, no prefix               | `booking_state`, `payment_state` | `BookingState`               |
+| **Enum Values**      | snake_case, lowercase               | `pending`, `under_review`        | `Pending`, `PENDING`         |
+| **Zod Schemas**      | PascalCase, "Schema" suffix         | `EventSchema`                    | `event_schema`               |
+| **API Routes**       | kebab-case, plural, RESTful         | `/api/v1/commerce/access-passes` | `/api/v1/getAccessPass`      |
+| **Test Files**       | `{unit}.test.ts`, co-located        | `event.aggregate.test.ts`        | `test_event.ts`              |
 
 ## 9.2 Testing Architecture
 
-| Test Type | Target | Tool | Failure = Block |
-|---|---|---|---|
-| **Unit** | 80% of core/domain | Jest + fast-check | ✅ Yes |
-| **Contract** | OpenAPI conformance | Pact + Spectral | ✅ Yes |
-| **E2E** | Happy + failure paths | Playwright | ✅ Yes |
-| **Property-Based** | Ledger invariant (∑ debit = ∑ credit) | fast-check | ✅ Yes |
-| **Performance** | p50 < 200ms, p95 < 800ms, p99 < 2s | k6 | ✅ Yes |
-| **Chaos** | Pod failures, packet loss, latency | Chaos Toolkit | N (non-blocking) |
-| **Security** | OWASP Top 10, PCI DSS | SonarQube, Trivy | ✅ Yes |
-| **Accessibility** | WCAG 2.2 AA | axe DevTools + Playwright | ✅ Yes (in CI) |
+| Test Type          | Target                                | Tool                      | Failure = Block  |
+| ------------------ | ------------------------------------- | ------------------------- | ---------------- |
+| **Unit**           | 80% of core/domain                    | Jest + fast-check         | ✅ Yes           |
+| **Contract**       | OpenAPI conformance                   | Pact + Spectral           | ✅ Yes           |
+| **E2E**            | Happy + failure paths                 | Playwright                | ✅ Yes           |
+| **Property-Based** | Ledger invariant (∑ debit = ∑ credit) | fast-check                | ✅ Yes           |
+| **Performance**    | p50 < 200ms, p95 < 800ms, p99 < 2s    | k6                        | ✅ Yes           |
+| **Chaos**          | Pod failures, packet loss, latency    | Chaos Toolkit             | N (non-blocking) |
+| **Security**       | OWASP Top 10, PCI DSS                 | SonarQube, Trivy          | ✅ Yes           |
+| **Accessibility**  | WCAG 2.2 AA                           | axe DevTools + Playwright | ✅ Yes (in CI)   |
 
 ---
 
@@ -705,6 +736,7 @@ Why? Problem solved? Constraints?
 **Current Maturity:** 6.5/10 (strong DDD, missing operations/governance/compliance)
 
 **Critical Gaps:**
+
 1. **G003:** No OpenAPI 3.1 contracts (API-first blocked)
 2. **G004:** Payment state machine incomplete (Processing→Captured event missing)
 3. **L-06:** AI Safety Law not implementable (SQL enforcement missing)
@@ -719,29 +751,30 @@ Why? Problem solved? Constraints?
 
 ### PHASE 0: Immediate Corrections (1-2 Weeks)
 
-| Task | Owner | Deliverable | Effort | Block |
-|---|---|---|---|---|
-| **RFC + ADR Templates** | CTO | `docs/RFC/TEMPLATE.md`, `docs/ADR/TEMPLATE.md` + 3 examples | 3d | N |
-| **Error Taxonomy** | API Lead | Layer 1 Appendix B + HTTP status mapping | 2d | ✅ Yes |
-| **RLS Audit** | Security Lead | Verify Layer 2 indirect traversals + test suite | 5d | ✅ Yes |
-| **Database Schema Validation** | Data Architect | Confirm GAP-13 resolved; schema tests pass | 2d | ✅ Yes |
-| **CODEOWNERS** | CTO | `.github/CODEOWNERS` enforcing RFC + ADR | 1d | ✅ Yes |
+| Task                           | Owner          | Deliverable                                                 | Effort | Block  |
+| ------------------------------ | -------------- | ----------------------------------------------------------- | ------ | ------ |
+| **RFC + ADR Templates**        | CTO            | `docs/RFC/TEMPLATE.md`, `docs/ADR/TEMPLATE.md` + 3 examples | 3d     | N      |
+| **Error Taxonomy**             | API Lead       | Layer 1 Appendix B + HTTP status mapping                    | 2d     | ✅ Yes |
+| **RLS Audit**                  | Security Lead  | Verify Layer 2 indirect traversals + test suite             | 5d     | ✅ Yes |
+| **Database Schema Validation** | Data Architect | Confirm GAP-13 resolved; schema tests pass                  | 2d     | ✅ Yes |
+| **CODEOWNERS**                 | CTO            | `.github/CODEOWNERS` enforcing RFC + ADR                    | 1d     | ✅ Yes |
 
 ### PHASE 1: Critical Gaps (6 Weeks)
 
-| Task | Owner | Effort | Block | Dependency |
-|---|---|---|---|---|
-| **G003: OpenAPI 3.1** | API Lead | 4w | ✅ | Error Taxonomy (Phase 0) |
-| **G004: Payment Domain** | Finance Lead | 3w | ✅ | OpenAPI |
-| **G011: MCP Tool Registry** | AI Lead | 2w | ✅ | Payment domain |
-| **ADR-007: L-06 SQL** | AI Lead | 3w | ✅ | MCP registry |
-| **G020: Webhook ACL** | Security Lead | 2w | ✅ | Payment domain |
-| **G014: Idempotency Guide** | Finance Lead | 2w | ✅ | Payment domain |
-| **Implement L-06 SQL** | AI Lead | 2w | ✅ | ADR-007 |
-| **API Client SDKs** | API Lead | 2w | N | OpenAPI |
-| **Contract Testing** | QA Lead | 2w | ✅ | OpenAPI |
+| Task                        | Owner         | Effort | Block | Dependency               |
+| --------------------------- | ------------- | ------ | ----- | ------------------------ |
+| **G003: OpenAPI 3.1**       | API Lead      | 4w     | ✅    | Error Taxonomy (Phase 0) |
+| **G004: Payment Domain**    | Finance Lead  | 3w     | ✅    | OpenAPI                  |
+| **G011: MCP Tool Registry** | AI Lead       | 2w     | ✅    | Payment domain           |
+| **ADR-007: L-06 SQL**       | AI Lead       | 3w     | ✅    | MCP registry             |
+| **G020: Webhook ACL**       | Security Lead | 2w     | ✅    | Payment domain           |
+| **G014: Idempotency Guide** | Finance Lead  | 2w     | ✅    | Payment domain           |
+| **Implement L-06 SQL**      | AI Lead       | 2w     | ✅    | ADR-007                  |
+| **API Client SDKs**         | API Lead      | 2w     | N     | OpenAPI                  |
+| **Contract Testing**        | QA Lead       | 2w     | ✅    | OpenAPI                  |
 
 **Phase 1 Exit Criteria:**
+
 - [ ] OpenAPI 3.1 for all endpoints (breaking-change detection active).
 - [ ] Payment domain complete (8 states, all commands/events, PSP error mapping).
 - [ ] L-06 SQL enforcement deployed + tested.
@@ -752,28 +785,28 @@ Why? Problem solved? Constraints?
 
 ### PHASE 2: Operational Readiness (6 Weeks)
 
-| Task | Owner | Effort | Unlock |
-|---|---|---|---|
-| **G006: SRE Runbook** | SRE Lead | 3w | Incident response |
-| **G007: Disaster Recovery** | SRE Lead | 3w | PITR validation, quarterly fire drills |
-| **G008: Compliance Procedures** | Compliance Lead | 4w | HIPAA/SOX/GDPR checklist |
-| **G009: Testing Strategy** | QA Lead | 3w | CI pipeline complete |
-| **G013: Migration Runbook** | Data Architect | 2w | Safe DB changes |
-| **R06: Read Model SLA** | Data Lead | 1w | Monitoring active |
-| **R15: Doc Governance** | CTO | 1w | Deprecation policy |
+| Task                            | Owner           | Effort | Unlock                                 |
+| ------------------------------- | --------------- | ------ | -------------------------------------- |
+| **G006: SRE Runbook**           | SRE Lead        | 3w     | Incident response                      |
+| **G007: Disaster Recovery**     | SRE Lead        | 3w     | PITR validation, quarterly fire drills |
+| **G008: Compliance Procedures** | Compliance Lead | 4w     | HIPAA/SOX/GDPR checklist               |
+| **G009: Testing Strategy**      | QA Lead         | 3w     | CI pipeline complete                   |
+| **G013: Migration Runbook**     | Data Architect  | 2w     | Safe DB changes                        |
+| **R06: Read Model SLA**         | Data Lead       | 1w     | Monitoring active                      |
+| **R15: Doc Governance**         | CTO             | 1w     | Deprecation policy                     |
 
 **Unlock:** Can sell to regulated enterprises (HIPAA/SOX/GDPR ready).
 
 ### PHASE 3: Knowledge Base Evolution (6 Weeks)
 
-| Task | Owner | Effort | Status |
-|---|---|---|---|
-| **Restructure Docs (Volumes A-G)** | Tech Writers | 4w | Optional for 200-person teams; required for 500+. |
-| **Living Catalogs** | Tech Writers | 3w | Event, API, Prompt, MCP registries. |
-| **AI-Native Platform** | Platform Engineer | 2w | Structured markdown for Claude context. |
-| **Consistency Validation** | Platform Engineer | 3w | Layer 1 ↔ Layer 2 ↔ Layer 3 reconciliation. |
-| **Code Generation Tools** | Platform Engineer | 2w | OpenAPI → SDKs, Event schema → types. |
-| **R10 Decision** | Product Lead | 1w | Supplier/Campaign: operationalize or remove? |
+| Task                               | Owner             | Effort | Status                                            |
+| ---------------------------------- | ----------------- | ------ | ------------------------------------------------- |
+| **Restructure Docs (Volumes A-G)** | Tech Writers      | 4w     | Optional for 200-person teams; required for 500+. |
+| **Living Catalogs**                | Tech Writers      | 3w     | Event, API, Prompt, MCP registries.               |
+| **AI-Native Platform**             | Platform Engineer | 2w     | Structured markdown for Claude context.           |
+| **Consistency Validation**         | Platform Engineer | 3w     | Layer 1 ↔ Layer 2 ↔ Layer 3 reconciliation.       |
+| **Code Generation Tools**          | Platform Engineer | 2w     | OpenAPI → SDKs, Event schema → types.             |
+| **R10 Decision**                   | Product Lead      | 1w     | Supplier/Campaign: operationalize or remove?      |
 
 **Unlock:** Ready for 500+ engineers + open-source.
 
@@ -781,13 +814,13 @@ Why? Problem solved? Constraints?
 
 ## 10.3 Priority Matrix
 
-| Phase | Duration | Critical Blocks | FTE | Go/No-Go | Shipping |
-|---|---|---|---|---|---|
-| **Phase 0** | 1-2w | None | 2 FTE | Governance pass | Not shippable alone |
-| **Phase 1** | 6w | **OpenAPI + Payment + L-06** | 5 FTE | **Can scale to 200** | Production-ready |
-| **Phase 2** | 6w | SRE + Compliance | 4 FTE | **Can sell regulated** | Enterprise-ready |
-| **Phase 3** | 6w | None | 3 FTE | Can scale 500+ | True enterprise |
-| **TOTAL** | 27w (~6.5m) | **Phase 0-1 critical** | **14-15 FTE avg** | **Phase 1 = safety** | **Phase 3 = scale** |
+| Phase       | Duration    | Critical Blocks              | FTE               | Go/No-Go               | Shipping            |
+| ----------- | ----------- | ---------------------------- | ----------------- | ---------------------- | ------------------- |
+| **Phase 0** | 1-2w        | None                         | 2 FTE             | Governance pass        | Not shippable alone |
+| **Phase 1** | 6w          | **OpenAPI + Payment + L-06** | 5 FTE             | **Can scale to 200**   | Production-ready    |
+| **Phase 2** | 6w          | SRE + Compliance             | 4 FTE             | **Can sell regulated** | Enterprise-ready    |
+| **Phase 3** | 6w          | None                         | 3 FTE             | Can scale 500+         | True enterprise     |
+| **TOTAL**   | 27w (~6.5m) | **Phase 0-1 critical**       | **14-15 FTE avg** | **Phase 1 = safety**   | **Phase 3 = scale** |
 
 ---
 

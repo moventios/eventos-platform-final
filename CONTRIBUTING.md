@@ -47,11 +47,11 @@ pnpm turbo test
 
 ## Branches
 
-| Prefix | Use |
-|--------|-----|
+| Prefix     | Use          |
+| ---------- | ------------ |
 | `feature/` | New features |
-| `fix/` | Bug fixes |
-| `chore/` | Maintenance |
+| `fix/`     | Bug fixes    |
+| `chore/`   | Maintenance  |
 
 ## Pull Requests
 

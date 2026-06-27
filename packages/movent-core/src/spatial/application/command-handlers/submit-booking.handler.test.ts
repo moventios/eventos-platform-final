@@ -12,9 +12,14 @@ class FakeBookingRepo {
     for (const [, existing] of this.records) {
       if (existing.roomId === rec.roomId && existing.id !== rec.id) {
         // naive overlap check for test
-        const overlap = !(new Date(rec.endsAt) <= new Date(existing.startsAt) || new Date(rec.startsAt) >= new Date(existing.endsAt));
+        const overlap = !(
+          new Date(rec.endsAt) <= new Date(existing.startsAt) ||
+          new Date(rec.startsAt) >= new Date(existing.endsAt)
+        );
         if (overlap) {
-          const err: any = new Error('new row for relation "bookings" violates exclusion constraint "bookings_no_overlap"');
+          const err: any = new Error(
+            'new row for relation "bookings" violates exclusion constraint "bookings_no_overlap"',
+          );
           err.code = '23P01';
           throw err;
         }
@@ -30,7 +35,9 @@ class FakeBookingRepo {
 
 class FakeEventBus implements IEventBus {
   published: any[] = [];
-  async publish(event: any) { this.published.push(event); }
+  async publish(event: any) {
+    this.published.push(event);
+  }
 }
 
 describe('SubmitBookingHandler (handler-driven)', () => {
@@ -48,13 +55,17 @@ describe('SubmitBookingHandler (handler-driven)', () => {
   });
 
   it('submits booking successfully via handler (first no conflict)', async () => {
-    const result = await handler.handle({
-      roomId,
-      startsAt: '2026-07-01T10:00:00.000Z',
-      endsAt: '2026-07-01T11:00:00.000Z',
-      title: 'Test Meeting',
-      idempotencyKey: 'bk-1',
-    }, tenantId, actorId);
+    const result = await handler.handle(
+      {
+        roomId,
+        startsAt: '2026-07-01T10:00:00.000Z',
+        endsAt: '2026-07-01T11:00:00.000Z',
+        title: 'Test Meeting',
+        idempotencyKey: 'bk-1',
+      },
+      tenantId,
+      actorId,
+    );
 
     expect(result.bookingId).toBeTruthy();
     expect(bus.published.length).toBe(1);
@@ -63,19 +74,29 @@ describe('SubmitBookingHandler (handler-driven)', () => {
 
   it('throws BookingConflictError (409 evidence) on overlapping booking via handler', async () => {
     // seed first booking
-    await handler.handle({
-      roomId,
-      startsAt: '2026-07-01T10:00:00.000Z',
-      endsAt: '2026-07-01T12:00:00.000Z',
-      idempotencyKey: 'bk-seed',
-    }, tenantId, actorId);
+    await handler.handle(
+      {
+        roomId,
+        startsAt: '2026-07-01T10:00:00.000Z',
+        endsAt: '2026-07-01T12:00:00.000Z',
+        idempotencyKey: 'bk-seed',
+      },
+      tenantId,
+      actorId,
+    );
 
     // overlapping
-    await expect(handler.handle({
-      roomId,
-      startsAt: '2026-07-01T11:00:00.000Z',
-      endsAt: '2026-07-01T13:00:00.000Z',
-      idempotencyKey: 'bk-conflict',
-    }, tenantId, actorId)).rejects.toBeInstanceOf(BookingConflictError);
+    await expect(
+      handler.handle(
+        {
+          roomId,
+          startsAt: '2026-07-01T11:00:00.000Z',
+          endsAt: '2026-07-01T13:00:00.000Z',
+          idempotencyKey: 'bk-conflict',
+        },
+        tenantId,
+        actorId,
+      ),
+    ).rejects.toBeInstanceOf(BookingConflictError);
   });
 });

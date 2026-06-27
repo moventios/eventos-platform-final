@@ -1,4 +1,5 @@
 # Volume 05: Operations & Reliability
+
 ## Moventios Enterprise Knowledge Base
 
 **SRE Patterns, Observability, Disaster Recovery & Production Runbooks**
@@ -19,6 +20,7 @@
 Volume 05 defines the **operational and reliability standards** for Moventios. It translates the reliability principles from Layer 1 (Constitution Part 2.5 — Reliability & Scalability Principles) into concrete SRE practices, runbooks, and infrastructure patterns.
 
 This volume governs:
+
 - How the platform maintains SLAs under failure conditions
 - How incidents are detected, escalated, and resolved
 - How deployments are performed without downtime
@@ -35,25 +37,25 @@ This volume governs:
 
 Every service component is monitored against three golden signals:
 
-| Signal | Metric | Alert Threshold | Dashboard |
-|--------|--------|----------------|-----------|
-| **Rate** | Requests per second (RPS) | > 200% of 7-day p95 baseline | ops-rps-dashboard |
-| **Errors** | Error rate (4xx+5xx / total) | > 0.5% for financial routes; > 2% for read routes | ops-error-dashboard |
-| **Duration** | Latency percentiles (p50/p95/p99) | p95 > 2x SLA target | ops-latency-dashboard |
+| Signal       | Metric                            | Alert Threshold                                   | Dashboard             |
+| ------------ | --------------------------------- | ------------------------------------------------- | --------------------- |
+| **Rate**     | Requests per second (RPS)         | > 200% of 7-day p95 baseline                      | ops-rps-dashboard     |
+| **Errors**   | Error rate (4xx+5xx / total)      | > 0.5% for financial routes; > 2% for read routes | ops-error-dashboard   |
+| **Duration** | Latency percentiles (p50/p95/p99) | p95 > 2x SLA target                               | ops-latency-dashboard |
 
 ### 1.2 SLA Targets by Operation
 
 [Authority: Constitution Part 18.1]
 
-| Operation | p50 | p95 | p99 | Error Budget |
-|-----------|-----|-----|-----|-------------|
-| Booking submit | 80ms | 200ms | 500ms | 0.1% errors/month |
-| Payment capture (webhook) | 150ms | 400ms | 1000ms | 0.01% errors/month |
-| Journal post | 100ms | 250ms | 600ms | 0.01% errors/month |
-| Access pass issuance | 120ms | 300ms | 700ms | 0.1% errors/month |
-| API read operations | 50ms | 150ms | 400ms | 0.5% errors/month |
-| RAG search | 80ms | 200ms | 400ms | 1% errors/month |
-| LLM inference | 800ms | 2500ms | 5000ms | 2% errors/month |
+| Operation                 | p50   | p95    | p99    | Error Budget       |
+| ------------------------- | ----- | ------ | ------ | ------------------ |
+| Booking submit            | 80ms  | 200ms  | 500ms  | 0.1% errors/month  |
+| Payment capture (webhook) | 150ms | 400ms  | 1000ms | 0.01% errors/month |
+| Journal post              | 100ms | 250ms  | 600ms  | 0.01% errors/month |
+| Access pass issuance      | 120ms | 300ms  | 700ms  | 0.1% errors/month  |
+| API read operations       | 50ms  | 150ms  | 400ms  | 0.5% errors/month  |
+| RAG search                | 80ms  | 200ms  | 400ms  | 1% errors/month    |
+| LLM inference             | 800ms | 2500ms | 5000ms | 2% errors/month    |
 
 **Overall Platform SLA:** 99.9% uptime (8.77 hours downtime budget per year)
 
@@ -70,11 +72,11 @@ import CircuitBreaker from 'opossum';
 
 // Circuit breaker for Xendit payment adapter
 const xenditCircuitBreaker = new CircuitBreaker(xenditCallFunction, {
-  timeout: 10000,           // 10s timeout per call
-  errorThresholdPercentage: 15,   // Open if 15% errors in window
-  resetTimeout: 30000,      // Try again after 30 seconds
-  volumeThreshold: 10,      // Minimum calls before tracking errors
-  rollingCountTimeout: 30000  // 30-second rolling window
+  timeout: 10000, // 10s timeout per call
+  errorThresholdPercentage: 15, // Open if 15% errors in window
+  resetTimeout: 30000, // Try again after 30 seconds
+  volumeThreshold: 10, // Minimum calls before tracking errors
+  rollingCountTimeout: 30000, // 30-second rolling window
 });
 
 // Events (emit to OpenTelemetry)
@@ -94,15 +96,15 @@ xenditCircuitBreaker.on('close', () => {
 
 **Circuit Breaker Thresholds:**
 
-| Integration | Error Threshold | Reset Timeout | Timeout |
-|------------|----------------|--------------|---------|
-| Xendit (PSP) | 15% | 30s | 10s |
-| Stripe (PSP) | 15% | 30s | 10s |
-| Midtrans (PSP) | 15% | 30s | 10s |
-| OpenRouter (LLM) | 20% | 60s | 30s |
-| Resend (Email) | 25% | 120s | 5s |
-| Fonnte (WhatsApp) | 25% | 120s | 5s |
-| Typesense (Search) | 30% | 30s | 3s |
+| Integration        | Error Threshold | Reset Timeout | Timeout |
+| ------------------ | --------------- | ------------- | ------- |
+| Xendit (PSP)       | 15%             | 30s           | 10s     |
+| Stripe (PSP)       | 15%             | 30s           | 10s     |
+| Midtrans (PSP)     | 15%             | 30s           | 10s     |
+| OpenRouter (LLM)   | 20%             | 60s           | 30s     |
+| Resend (Email)     | 25%             | 120s          | 5s      |
+| Fonnte (WhatsApp)  | 25%             | 120s          | 5s      |
+| Typesense (Search) | 30%             | 30s           | 3s      |
 
 ### 2.2 Dead Letter Queue (DLQ) — Failed pg-boss Jobs
 
@@ -128,6 +130,7 @@ WHERE created_on > NOW() - INTERVAL '1 hour';
 ```
 
 **DLQ Response Protocol:**
+
 1. Alert fires when DLQ depth > 10 (5-minute window)
 2. On-call engineer reviews failed job types
 3. If financial domain (JournalPosted, PaymentCaptured): immediate escalation
@@ -148,19 +151,19 @@ const RETRY_POLICY = {
     maxAttempts: 5,
     backoff: {
       type: 'exponential',
-      delay: 1000,       // Start: 1s
-      factor: 2,         // Doubles each attempt: 1s, 2s, 4s, 8s, 16s
-      maxDelay: 30000    // Cap at 30s
-    }
+      delay: 1000, // Start: 1s
+      factor: 2, // Doubles each attempt: 1s, 2s, 4s, 8s, 16s
+      maxDelay: 30000, // Cap at 30s
+    },
   },
   notification: {
     maxAttempts: 3,
-    backoff: { type: 'linear', delay: 5000 }
+    backoff: { type: 'linear', delay: 5000 },
   },
   analytics: {
     maxAttempts: 2,
-    backoff: { type: 'linear', delay: 10000 }
-  }
+    backoff: { type: 'linear', delay: 10000 },
+  },
 };
 ```
 
@@ -170,22 +173,22 @@ const RETRY_POLICY = {
 
 ```typescript
 // Valkey idempotency key storage
-const IDEMPOTENCY_TTL = 86400;  // 24 hours
+const IDEMPOTENCY_TTL = 86400; // 24 hours
 
 class IdempotencyRegistry {
   async checkAndSet(
     tenantId: UUID,
     key: string,
-    response: object
+    response: object,
   ): Promise<{ isNew: boolean; response: object }> {
     const cacheKey = `idempotency:${tenantId}:${key}`;
-    
+
     // Atomic check-and-set (prevents race condition)
     const existing = await valkey.get(cacheKey);
     if (existing) {
       return { isNew: false, response: JSON.parse(existing) };
     }
-    
+
     // Store response for future duplicate requests
     await valkey.setex(cacheKey, IDEMPOTENCY_TTL, JSON.stringify(response));
     return { isNew: true, response };
@@ -201,20 +204,22 @@ class IdempotencyRegistry {
 
 [Authority: Constitution Part 2.5]
 
-| Objective | Target | Measurement |
-|-----------|--------|-------------|
-| **RTO** (Recovery Time Objective) | < 15 minutes | Time from incident detection to service restoration |
-| **RPO** (Recovery Point Objective) | < 5 minutes | Maximum data loss in the event of a failure |
+| Objective                          | Target       | Measurement                                         |
+| ---------------------------------- | ------------ | --------------------------------------------------- |
+| **RTO** (Recovery Time Objective)  | < 15 minutes | Time from incident detection to service restoration |
+| **RPO** (Recovery Point Objective) | < 5 minutes  | Maximum data loss in the event of a failure         |
 
 ### 3.2 Backup Strategy
 
 **PostgreSQL (Supabase Managed)**
+
 - **WAL Archiving**: Continuous WAL archiving to S3 (enables Point-in-Time Recovery)
 - **Base Backups**: Daily full backup at 03:00 UTC
 - **PITR Window**: 30-day recovery window
 - **Cross-Region**: Backup replicated to secondary region
 
 **Valkey (Cache)**
+
 - **RDB Snapshots**: Every 60 seconds for financial-adjacent data
 - **AOF**: Enabled for idempotency registry (prevents duplicate processing after restart)
 - **Recovery**: Cache misses on restart are acceptable (warm-up from DB within 5 minutes)
@@ -222,6 +227,7 @@ class IdempotencyRegistry {
 ### 3.3 Disaster Recovery Playbook
 
 **Scenario 1: Database Primary Failure**
+
 ```
 T+0:  Alert fires (connection refused to primary)
 T+2:  Supabase auto-promotes read replica to primary
@@ -232,6 +238,7 @@ T+20: Post-incident report opened in Notion; ADR filed if architecture change re
 ```
 
 **Scenario 2: Complete Region Failure**
+
 ```
 T+0:  Alert fires (all health checks fail)
 T+2:  Incident Commander paged (on-call lead)
@@ -243,6 +250,7 @@ T+60: Post-mortem scheduled; root cause analysis
 ```
 
 **Scenario 3: Data Corruption (L-02 Violation Attempt)**
+
 ```
 T+0:  Immutable trigger fires; exception raised; transaction rolled back
 T+0:  Alert fires: "L-02 VIOLATION ATTEMPT on journal_entries"
@@ -264,18 +272,18 @@ T+48: Post-mortem + security review; ADR if pattern change needed
 ```typescript
 // Mandatory span attributes (enforced by code review + linting)
 interface MandatorySpanAttributes {
-  'service.name':    string;   // e.g., 'sovereign-commerce-service'
-  'service.version': string;   // e.g., '5.1.0'
-  'tenant_id':       UUID;     // From JWT context
-  'actor_id':        UUID;     // User or AIAgent ID
-  'actor_type':      'USER' | 'AI_AGENT' | 'SYSTEM';
-  'domain':          string;   // e.g., 'finance', 'spatial', 'commerce'
-  'aggregate':       string;   // e.g., 'JournalEntry', 'Booking'
-  'command':         string;   // e.g., 'PostJournalEntry' (for writes)
-  'event_name':      string;   // e.g., 'JournalPosted' (for events)
-  'trace_id':        UUID;     // End-to-end request trace
-  'status':          'success' | 'error' | 'pending';
-  'duration_ms':     number;
+  'service.name': string; // e.g., 'sovereign-commerce-service'
+  'service.version': string; // e.g., '5.1.0'
+  tenant_id: UUID; // From JWT context
+  actor_id: UUID; // User or AIAgent ID
+  actor_type: 'USER' | 'AI_AGENT' | 'SYSTEM';
+  domain: string; // e.g., 'finance', 'spatial', 'commerce'
+  aggregate: string; // e.g., 'JournalEntry', 'Booking'
+  command: string; // e.g., 'PostJournalEntry' (for writes)
+  event_name: string; // e.g., 'JournalPosted' (for events)
+  trace_id: UUID; // End-to-end request trace
+  status: 'success' | 'error' | 'pending';
+  duration_ms: number;
 }
 ```
 
@@ -352,12 +360,12 @@ interface StructuredLog {
 
 ### 4.4 Alert Severity Levels
 
-| Severity | Response Time | Examples | Page? |
-|---------|--------------|---------|-------|
-| **P1 — Critical** | 5 minutes | Data loss, financial corruption, cross-tenant leak, L-02 violation | Yes (PagerDuty) |
-| **P2 — High** | 15 minutes | Payment gateway circuit open, DLQ > 50 items, p99 > 3x SLA | Yes (PagerDuty) |
-| **P3 — Medium** | 1 hour | DLQ > 10 items, p95 > 2x SLA, AI budget 80% consumed | Yes (Slack #alerts-ops) |
-| **P4 — Low** | Business hours | p95 trending up, dependency version drift, cert expiring in 30 days | No (Slack #alerts-low) |
+| Severity          | Response Time  | Examples                                                            | Page?                   |
+| ----------------- | -------------- | ------------------------------------------------------------------- | ----------------------- |
+| **P1 — Critical** | 5 minutes      | Data loss, financial corruption, cross-tenant leak, L-02 violation  | Yes (PagerDuty)         |
+| **P2 — High**     | 15 minutes     | Payment gateway circuit open, DLQ > 50 items, p99 > 3x SLA          | Yes (PagerDuty)         |
+| **P3 — Medium**   | 1 hour         | DLQ > 10 items, p95 > 2x SLA, AI budget 80% consumed                | Yes (Slack #alerts-ops) |
+| **P4 — Low**      | Business hours | p95 trending up, dependency version drift, cert expiring in 30 days | No (Slack #alerts-low)  |
 
 ---
 
@@ -368,17 +376,20 @@ interface StructuredLog {
 [Authority: L-08 — Zero-Downtime Migration]
 
 **Application Deployments (Vercel/Cloudflare):**
+
 - Stateless edge functions deploy with instant cutover
 - Traffic is shifted gradually via Vercel's rollout feature
 - Rollback: revert to previous deployment in < 2 minutes
 
 **Database Migrations (Expand and Contract):**
+
 - Phase 1 (EXPAND): Deploy migration with new nullable column; deploy app that writes to both old and new
 - Phase 2 (MIGRATE): Backfill; verify 100% migration
 - Phase 3 (CUTOVER): Deploy app reading from new column only
 - Phase 4 (CONTRACT): Drop old column; final migration
 
 **Schema Migration CI Gate:**
+
 ```bash
 # Runs before merge: blocks forbidden DDL
 scripts/validate-migration.sh
@@ -393,13 +404,10 @@ For high-risk features, use feature flags to decouple deployment from release:
 
 ```typescript
 // Feature flag check (reads from remote config or DB table)
-async function isFeatureEnabled(
-  featureName: string,
-  tenantId: UUID
-): Promise<boolean> {
+async function isFeatureEnabled(featureName: string, tenantId: UUID): Promise<boolean> {
   const flag = await valkey.get(`feature:${featureName}:${tenantId}`);
   if (flag !== null) return flag === 'true';
-  
+
   // Fallback to global flag
   const globalFlag = await valkey.get(`feature:${featureName}:global`);
   return globalFlag === 'true';
@@ -416,6 +424,7 @@ if (await isFeatureEnabled('new_checkout_flow', tenantId)) {
 ### 5.3 Canary Rollout Protocol
 
 For major features affecting financial or booking domains:
+
 1. Deploy to 5% of tenants (canary group)
 2. Monitor for 24 hours: error rate, latency, L-02 trigger fires
 3. If clean: expand to 50% for 24 hours
@@ -428,11 +437,11 @@ For major features affecting financial or booking domains:
 
 ### 6.1 On-Call Rotation
 
-| Role | Rotation | Responsibility |
-|------|----------|---------------|
-| **Primary On-Call** | Weekly rotation (Mon–Mon) | First responder; within 5 min for P1/P2 |
-| **Secondary On-Call** | Same week, different engineer | Backup if primary unresponsive > 10 min |
-| **Domain Specialist** | As needed (finance, AI, security) | Paged for domain-specific P1 incidents |
+| Role                  | Rotation                          | Responsibility                          |
+| --------------------- | --------------------------------- | --------------------------------------- |
+| **Primary On-Call**   | Weekly rotation (Mon–Mon)         | First responder; within 5 min for P1/P2 |
+| **Secondary On-Call** | Same week, different engineer     | Backup if primary unresponsive > 10 min |
+| **Domain Specialist** | As needed (finance, AI, security) | Paged for domain-specific P1 incidents  |
 
 ### 6.2 Operational Runbooks
 
@@ -441,6 +450,7 @@ For major features affecting financial or booking domains:
 **Trigger:** Circuit breaker on Xendit/Stripe/Midtrans opens (error rate > 15%)
 
 **Steps:**
+
 ```bash
 # 1. Verify circuit status
 curl https://ops.sovereign-os.internal/health/circuit-breakers
@@ -480,6 +490,7 @@ scripts/send-ops-notification.sh --template=payment_degraded --eta=30min
 **Severity:** P1 — CRITICAL
 
 **Steps:**
+
 ```bash
 # 1. IMMEDIATELY: block new journal postings for affected tenant
 scripts/freeze-ledger.sh --tenant-id=${TENANT_ID}
@@ -520,6 +531,7 @@ scripts/page-on-call.sh --severity=P1 --message="Ledger imbalance detected: ${EN
 **Trigger:** DLQ depth > 50 items in 1-hour window
 
 **Steps:**
+
 ```bash
 # 1. Identify job types in DLQ
 psql $DATABASE_URL -c "
@@ -554,12 +566,12 @@ WHERE name = '${JOB_TYPE}'
 
 ### 7.1 Incident Severity Matrix
 
-| Severity | Definition | Response Time | War Room? | Post-Mortem? |
-|---------|-----------|--------------|-----------|-------------|
-| **P1 — Critical** | Revenue loss, data loss, security breach, cross-tenant leak | 5 min | Yes (immediate) | Yes (48h) |
-| **P2 — High** | Service degraded, payment processing down, > 5 min downtime | 15 min | Yes (if > 30 min) | Yes (72h) |
-| **P3 — Medium** | Non-critical service degraded, high error rates on non-financial routes | 1 hour | No | Yes (weekly) |
-| **P4 — Low** | Performance degradation, non-urgent anomalies | Business hours | No | No (tracking only) |
+| Severity          | Definition                                                              | Response Time  | War Room?         | Post-Mortem?       |
+| ----------------- | ----------------------------------------------------------------------- | -------------- | ----------------- | ------------------ |
+| **P1 — Critical** | Revenue loss, data loss, security breach, cross-tenant leak             | 5 min          | Yes (immediate)   | Yes (48h)          |
+| **P2 — High**     | Service degraded, payment processing down, > 5 min downtime             | 15 min         | Yes (if > 30 min) | Yes (72h)          |
+| **P3 — Medium**   | Non-critical service degraded, high error rates on non-financial routes | 1 hour         | No                | Yes (weekly)       |
+| **P4 — Low**      | Performance degradation, non-urgent anomalies                           | Business hours | No                | No (tracking only) |
 
 ### 7.2 Incident Response Protocol
 
@@ -604,12 +616,14 @@ POST-MORTEM:
 Before any new bounded context or major feature goes to production:
 
 **Security**
+
 - [ ] All secrets in Vault; zero hardcoded in code/env (L-10)
 - [ ] `gitleaks` scan passes (no secrets in git history)
 - [ ] Trivy container scan: no Critical or High CVEs
 - [ ] SonarQube static analysis: no blocking issues
 
 **Database**
+
 - [ ] RLS enabled (`ENABLE ROW LEVEL SECURITY`) on all new tables
 - [ ] `FORCE ROW LEVEL SECURITY` applied (includes table owner)
 - [ ] Two-tenant isolation test written and passing (Volume 06, Part 6.3)
@@ -619,6 +633,7 @@ Before any new bounded context or major feature goes to production:
 - [ ] `idempotency_key` UNIQUE constraint on financial mutation tables (L-04)
 
 **API**
+
 - [ ] OpenAPI spec published (contract-first)
 - [ ] All mutating endpoints accept `X-Idempotency-Key` (L-04)
 - [ ] All endpoints carry `X-Trace-Id` propagation
@@ -626,6 +641,7 @@ Before any new bounded context or major feature goes to production:
 - [ ] Error response follows taxonomy (Appendix B)
 
 **Observability**
+
 - [ ] OpenTelemetry spans on all Command Handlers and Adapters
 - [ ] Mandatory span attributes present (Part 4.1)
 - [ ] Structured logging enabled (Part 4.3)
@@ -633,6 +649,7 @@ Before any new bounded context or major feature goes to production:
 - [ ] Alerts configured (Part 4.4) for new operations
 
 **Domain**
+
 - [ ] All State machines implemented and tested
 - [ ] All Domain Events emitted to `domain_events` outbox table
 - [ ] All Command Handlers flow through domain invariant validation (L-07)
@@ -640,12 +657,14 @@ Before any new bounded context or major feature goes to production:
 - [ ] AI Safety: any new MCP tools registered in `mcp_tool_registry` with correct Level (L-06)
 
 **Performance**
+
 - [ ] Load tested to 2x expected peak load
 - [ ] p95 latency within SLA targets (Part 1.2)
 - [ ] Database indexes verified with EXPLAIN ANALYZE
 - [ ] Connection pool sizing verified
 
 **Deployment**
+
 - [ ] Database migration follows Expand/Contract pattern (L-08)
 - [ ] Migration rollback script prepared and tested
 - [ ] Canary deployment plan ready for high-risk changes (Part 5.3)
@@ -655,21 +674,21 @@ Before any new bounded context or major feature goes to production:
 
 ## Appendix A: Scaling Thresholds & Triggers
 
-| Metric | Current Capacity | Alert Threshold | Action |
-|--------|-----------------|-----------------|--------|
-| API requests/sec | ~500 RPS (Vercel Edge) | 400 RPS sustained > 10 min | Scale horizontally; investigate traffic source |
-| Database connections | 500 (via pgBouncer) | 400 active > 5 min | Increase pgBouncer pool or add read replica |
-| Embedding vectors | 10M per tenant | 8M per tenant | Evaluate Qdrant migration (Volume 10 TD trigger) |
-| Workflow instances/day | 100K/day (Trigger.dev) | 80K/day sustained | Begin Temporal migration planning (Volume 10) |
-| pg-boss job queue | 10K/sec throughput | 8K/sec sustained | Evaluate NATS JetStream migration |
-| AI token usage/tenant/day | 1M tokens/day | 800K/day | Raise budget alert; evaluate optimization |
+| Metric                    | Current Capacity       | Alert Threshold            | Action                                           |
+| ------------------------- | ---------------------- | -------------------------- | ------------------------------------------------ |
+| API requests/sec          | ~500 RPS (Vercel Edge) | 400 RPS sustained > 10 min | Scale horizontally; investigate traffic source   |
+| Database connections      | 500 (via pgBouncer)    | 400 active > 5 min         | Increase pgBouncer pool or add read replica      |
+| Embedding vectors         | 10M per tenant         | 8M per tenant              | Evaluate Qdrant migration (Volume 10 TD trigger) |
+| Workflow instances/day    | 100K/day (Trigger.dev) | 80K/day sustained          | Begin Temporal migration planning (Volume 10)    |
+| pg-boss job queue         | 10K/sec throughput     | 8K/sec sustained           | Evaluate NATS JetStream migration                |
+| AI token usage/tenant/day | 1M tokens/day          | 800K/day                   | Raise budget alert; evaluate optimization        |
 
 ---
 
 **End of Volume 05**
 
-*"Every failure is expected. Every failure must be observable. Every failure must be recoverable deterministically."*
+_"Every failure is expected. Every failure must be observable. Every failure must be recoverable deterministically."_
 
-*Build systems that fail gracefully, not systems that claim they won't fail.*
+_Build systems that fail gracefully, not systems that claim they won't fail._
 
-*[Constitution Parts 2.5, 18] [EPXA Part 6] [Volume 06, L-02, L-03, L-04] [Volume 10, Risk Register]*
+_[Constitution Parts 2.5, 18] [EPXA Part 6] [Volume 06, L-02, L-03, L-04] [Volume 10, Risk Register]_

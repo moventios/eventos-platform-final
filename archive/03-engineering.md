@@ -1,4 +1,5 @@
 # Volume 03: Engineering Blueprint
+
 ## Sovereign OS Enterprise Knowledge Base
 
 **Technology Stack, System Integration Patterns, and Implementation Standards**
@@ -16,44 +17,44 @@ All technologies listed below are **ADOPT** status unless otherwise marked. No s
 
 ### 1.1 Core Infrastructure
 
-| Category | Technology | Version | License | Status | Justification |
-|----------|-----------|---------|---------|--------|---|
-| Edge Compute / BFF | Next.js | 15+ | MIT | ADOPT | React Server Components, edge functions, API routes stateless |
-| Backend Runtime | Go | 1.22+ | BSD | ADOPT | Ledger, payment processing, high-concurrency services |
-| Database | PostgreSQL | 16+ | PostgreSQL | ADOPT | ACID, native RLS, pgvector, GiST exclusion |
-| ORM | Drizzle ORM | Latest | Apache-2.0 | EXTEND | Type-safe SQL generation; direct driver control for complex policies |
-| Caching / Session | Valkey | Latest | BSD-3 | ADOPT | Redis-compatible; semantic cache, idempotency, rate limiting |
-| Workflow Engine | Trigger.dev | Latest | Apache-2.0 | CONFIGURE | Durable execution, long-running tasks, approvals |
-| Message Queue | pg-boss | Latest | MIT | ADOPT | PostgreSQL-backed Outbox pattern; no dual-write |
-| Notifications | Resend + Fonnte | Latest | MIT / SaaS | ADOPT | Email + WhatsApp; template-driven dispatch |
-| Payment ACL | Custom Adapters | Latest | MIT | ADOPT | Wraps Xendit, Stripe, Midtrans; emits standardized events |
-| IaC | OpenTofu | Latest | MPL-2.0 | ADOPT | Terraform-compatible; drift detection in CI |
-| Monorepo | Turborepo | Latest | MIT | ADOPT | Remote caching, dependency graph enforcement |
+| Category           | Technology      | Version | License    | Status    | Justification                                                        |
+| ------------------ | --------------- | ------- | ---------- | --------- | -------------------------------------------------------------------- |
+| Edge Compute / BFF | Next.js         | 15+     | MIT        | ADOPT     | React Server Components, edge functions, API routes stateless        |
+| Backend Runtime    | Go              | 1.22+   | BSD        | ADOPT     | Ledger, payment processing, high-concurrency services                |
+| Database           | PostgreSQL      | 16+     | PostgreSQL | ADOPT     | ACID, native RLS, pgvector, GiST exclusion                           |
+| ORM                | Drizzle ORM     | Latest  | Apache-2.0 | EXTEND    | Type-safe SQL generation; direct driver control for complex policies |
+| Caching / Session  | Valkey          | Latest  | BSD-3      | ADOPT     | Redis-compatible; semantic cache, idempotency, rate limiting         |
+| Workflow Engine    | Trigger.dev     | Latest  | Apache-2.0 | CONFIGURE | Durable execution, long-running tasks, approvals                     |
+| Message Queue      | pg-boss         | Latest  | MIT        | ADOPT     | PostgreSQL-backed Outbox pattern; no dual-write                      |
+| Notifications      | Resend + Fonnte | Latest  | MIT / SaaS | ADOPT     | Email + WhatsApp; template-driven dispatch                           |
+| Payment ACL        | Custom Adapters | Latest  | MIT        | ADOPT     | Wraps Xendit, Stripe, Midtrans; emits standardized events            |
+| IaC                | OpenTofu        | Latest  | MPL-2.0    | ADOPT     | Terraform-compatible; drift detection in CI                          |
+| Monorepo           | Turborepo       | Latest  | MIT        | ADOPT     | Remote caching, dependency graph enforcement                         |
 
 ### 1.2 Auth, Security & Governance
 
-| Category | Technology | Version | License | Status | Notes |
-|----------|-----------|---------|---------|--------|-------|
-| Identity / SSO | Supabase Auth | Latest | MIT | ADOPT | OIDC/OAuth2, JWT RS256, native Postgres integration |
-| Authorization | Cerbos | Latest | Apache-2.0 | EXTEND | ABAC/RBAC sidecar; complex contextual permissions |
-| Secrets Manager | HashiCorp Vault | Latest | BSL/MIT | ADOPT | AES-256 encryption, dynamic secrets, 90-day rotation |
+| Category        | Technology      | Version | License    | Status | Notes                                                |
+| --------------- | --------------- | ------- | ---------- | ------ | ---------------------------------------------------- |
+| Identity / SSO  | Supabase Auth   | Latest  | MIT        | ADOPT  | OIDC/OAuth2, JWT RS256, native Postgres integration  |
+| Authorization   | Cerbos          | Latest  | Apache-2.0 | EXTEND | ABAC/RBAC sidecar; complex contextual permissions    |
+| Secrets Manager | HashiCorp Vault | Latest  | BSL/MIT    | ADOPT  | AES-256 encryption, dynamic secrets, 90-day rotation |
 
 ### 1.3 AI, Search & Cognitive
 
-| Category | Technology | Version | License | Status | Notes |
-|----------|-----------|---------|---------|--------|-------|
-| Vector DB | pgvector | 0.5+ | PostgreSQL | ADOPT | 1536-dim embeddings, HNSW index, tenant-isolated RLS |
-| Lexical Search | Typesense | 0.25+ | GPL-3 (isolated) | ADOPT | Ultra-fast typo-tolerant search; isolated via API only |
-| LLM Gateway | OpenRouter | Latest | SaaS | CONFIGURE | Claude 3.5, GPT-4o, DeepSeek; fallbacks, cost attribution |
-| Agent Protocol | MCP (Anthropic) | Latest | MIT | ADOPT | Standardized JSON-RPC tool exposure; WRITE→PENDING enforcement |
+| Category       | Technology      | Version | License          | Status    | Notes                                                          |
+| -------------- | --------------- | ------- | ---------------- | --------- | -------------------------------------------------------------- |
+| Vector DB      | pgvector        | 0.5+    | PostgreSQL       | ADOPT     | 1536-dim embeddings, HNSW index, tenant-isolated RLS           |
+| Lexical Search | Typesense       | 0.25+   | GPL-3 (isolated) | ADOPT     | Ultra-fast typo-tolerant search; isolated via API only         |
+| LLM Gateway    | OpenRouter      | Latest  | SaaS             | CONFIGURE | Claude 3.5, GPT-4o, DeepSeek; fallbacks, cost attribution      |
+| Agent Protocol | MCP (Anthropic) | Latest  | MIT              | ADOPT     | Standardized JSON-RPC tool exposure; WRITE→PENDING enforcement |
 
 ### 1.4 Observability & DevOps
 
-| Category | Technology | Version | License | Status | Notes |
-|----------|-----------|---------|---------|--------|-------|
-| Telemetry | OpenTelemetry | Latest | Apache-2.0 | ADOPT | Distributed tracing, metrics, logs; Trace-ID end-to-end |
-| IaC | OpenTofu | Latest | MPL-2.0 | ADOPT | Declarative infrastructure; drift detection mandatory |
-| Monorepo | Turborepo | Latest | MIT | ADOPT | Remote caching, strict package boundaries |
+| Category  | Technology    | Version | License    | Status | Notes                                                   |
+| --------- | ------------- | ------- | ---------- | ------ | ------------------------------------------------------- |
+| Telemetry | OpenTelemetry | Latest  | Apache-2.0 | ADOPT  | Distributed tracing, metrics, logs; Trace-ID end-to-end |
+| IaC       | OpenTofu      | Latest  | MPL-2.0    | ADOPT  | Declarative infrastructure; drift detection mandatory   |
+| Monorepo  | Turborepo     | Latest  | MIT        | ADOPT  | Remote caching, strict package boundaries               |
 
 **License Policy:** GPL/AGPL prohibited in core execution paths. Typesense accepted only because isolated via API.
 
@@ -68,70 +69,70 @@ Every new feature MUST produce a traceability record following this chain. Use t
 ```
 1. BUSINESS CAPABILITY
    ↓ (From Constitution Part 6)
-   
+
 2. USER GOAL
    ↓ (What user wants to achieve)
-   
+
 3. JOURNEY / WORKFLOW
    ↓ (Steps in happy path)
-   
+
 4. INFORMATION ARCHITECTURE (IA)
    ↓ (Pages/screens, information structure)
-   
+
 5. SCREEN / LAYOUT
    ↓ (SCR_* ID, Figma design token)
-   
+
 6. COMPONENT
    ↓ (COMP_* ID, shadcn/ui base)
-   
+
 7. CLIENT INTERACTION
    ↓ (onClick, onChange, form submission)
-   
+
 8. API CONTRACT
    ↓ (OpenAPI definition, request/response schema)
-   
+
 9. COMMAND PAYLOAD
    ↓ (Domain-driven input, validated by Zod)
-   
+
 10. APPLICATION SERVICE
     ↓ (Domain service executing the command)
-    
+
 11. AGGREGATE INVARIANTS
     ↓ (Guard conditions before mutation)
-    
+
 12. PERSISTENCE
     ↓ (SQL INSERT/UPDATE with RLS)
-    
+
 13. RLS POLICY ENFORCEMENT
     ↓ (Verify JWT tenant_id match)
-    
+
 14. OUTBOX EVENT
     ↓ (Emit domain event to Outbox)
-    
+
 15. WORKFLOW ORCHESTRATION
     ↓ (Trigger.dev timer, approval gate, etc.)
-    
+
 16. AI CONTEXT INGESTION
     ↓ (Feed to knowledge graph if applicable)
-    
+
 17. ANALYTICS EVENT
     ↓ (Track KPI)
-    
+
 18. OBSERVABILITY SPAN
     ↓ (OpenTelemetry trace, duration target)
-    
+
 19. TESTING REQUIREMENTS
     ↓ (Unit, contract, E2E)
-    
+
 20. PERFORMANCE BUDGET
     ↓ (LCP, INP, CLS targets)
-    
+
 21. ACCESSIBILITY
     ↓ (WCAG 2.2 AA compliance)
-    
+
 22. OFFLINE BEHAVIOR
     ↓ (IndexedDB mutation buffer, deterministic reconciliation)
-    
+
 23. RECOVERY / ROLLBACK
     ↓ (Idempotency key, reversal workflow)
 ```
@@ -159,7 +160,8 @@ Event Detail Page → Pass Tiers List (3-column grid) → Checkout Modal → Suc
 **7. Client Interaction:**  
 `onClick(Confirm)` → Validate Zod schema locally → Generate UUID idempotency_key → POST
 
-**8. API Contract:**  
+**8. API Contract:**
+
 ```
 POST /api/v1/commerce/access-passes
 Headers:
@@ -179,7 +181,8 @@ Response: {
 }
 ```
 
-**9. Command Payload:**  
+**9. Command Payload:**
+
 ```typescript
 class IssueAccessPassCommand {
   constructor(
@@ -191,7 +194,8 @@ class IssueAccessPassCommand {
 }
 ```
 
-**10. Application Service:**  
+**10. Application Service:**
+
 ```typescript
 class CheckoutService {
   async issueAccessPass(cmd: IssueAccessPassCommand): Promise<AccessPass> {
@@ -206,13 +210,15 @@ class CheckoutService {
 }
 ```
 
-**11. Aggregate Invariants:**  
+**11. Aggregate Invariants:**
+
 - Event.status must be 'live' or 'published'
 - PassTier.quantity_issued < PassTier.capacity
 - AccessPass.status == 'pending' initially
 - SecureQRCode.payload is AES-256 encrypted
 
-**12. Persistence:**  
+**12. Persistence:**
+
 ```sql
 INSERT INTO access_passes (
   id, pass_tier_id, customer_id, holder_name,
@@ -223,7 +229,8 @@ VALUES (
 );
 ```
 
-**13. RLS Policy:**  
+**13. RLS Policy:**
+
 ```sql
 CREATE POLICY "tenant_isolation_access_passes" ON access_passes
   FOR ALL USING (
@@ -237,7 +244,8 @@ CREATE POLICY "tenant_isolation_access_passes" ON access_passes
   );
 ```
 
-**14. Outbox Event:**  
+**14. Outbox Event:**
+
 ```json
 {
   "event_type": "AccessPassIssued",
@@ -262,7 +270,8 @@ Event ingested into Knowledge Graph: "User X reserved Pass Y at time Z for Event
 **17. Analytics Event:**  
 `access_pass.issued { event_id, tier_id, customer_id, timestamp }`
 
-**18. Observability Span:**  
+**18. Observability Span:**
+
 ```
 commerce.issueAccessPass {
   duration: < 800ms (p95 target)
@@ -274,6 +283,7 @@ commerce.issueAccessPass {
 ```
 
 **19. Testing Requirements:**
+
 - Unit: Capacity invariant validation
 - Contract: API schema validation
 - E2E: Checkout happy path + conflict handling
@@ -326,18 +336,21 @@ Rules:
 ### 3.2 CQRS (Command Query Responsibility Segregation)
 
 **Command Side (Write):**
+
 - Command → Validate → Aggregate → Domain Event → Outbox
 - Normalized tables (one table per aggregate root)
 - Transactional consistency (ACID)
 - Slow writes; fast, safe mutations
 
 **Query Side (Read):**
-- Materialized Views (mv_*) denormalized
+
+- Materialized Views (mv\_\*) denormalized
 - Event-driven refresh (async via pg-boss)
 - No JOINs across Bounded Contexts
 - Fast reads; eventual consistency acceptable
 
 **Example Flow:**
+
 ```
 POST /api/v1/finance/invoices (command)
   ↓
@@ -350,6 +363,7 @@ SELECT * FROM mv_ledger_summary_view (materialized)
 ### 3.3 Event-Driven Architecture (EDA)
 
 **Rules:**
+
 - ✓ Commands trigger events
 - ✓ Events are immutable facts
 - ✓ Subscribers are independent (no RPC chain)
@@ -357,6 +371,7 @@ SELECT * FROM mv_ledger_summary_view (materialized)
 - ✗ Never: Circular event chains
 
 **Outbox Pattern** (prevents dual-write):
+
 ```sql
 -- Atomic: both INSERT together or neither
 BEGIN;
@@ -377,13 +392,13 @@ One BFF per client type (web, mobile, partner API):
 export async function POST(req: Request) {
   const authenticated = await auth.requireUser(req);
   const command = await req.json();
-  
+
   // Validate against Zod
   const payload = checkoutPayloadSchema.parse(command);
-  
+
   // Call domain service
   const accessPass = await checkoutService.issueAccessPass(payload);
-  
+
   // Format response for web client
   return {
     status: 200,
@@ -397,6 +412,7 @@ export async function POST(req: Request) {
 ```
 
 **BFF Responsibilities:**
+
 - Input validation (Zod)
 - Authentication & authorization
 - Data aggregation (no cross-context JOINs; fetch separately)
@@ -465,7 +481,7 @@ const idempotencyKey = req.headers['x-idempotency-key'];
 
 // 2. Check Valkey cache
 const cached = await cache.get(`idempotency:${idempotencyKey}`);
-if (cached) return cached;  // Return same response
+if (cached) return cached; // Return same response
 
 // 3. Execute command
 const result = await checkoutService.execute(command);
@@ -477,6 +493,7 @@ return result;
 ```
 
 **Database Enforcement:**
+
 ```sql
 -- Unique constraint prevents duplicates
 ALTER TABLE invoices ADD CONSTRAINT uq_invoices_idempotency_key
@@ -490,12 +507,14 @@ ALTER TABLE invoices ADD CONSTRAINT uq_invoices_idempotency_key
 **Coverage: 100% of business tables (38 tables)**
 
 **Direct Isolation (tenant_id column):**
+
 ```sql
 CREATE POLICY "tenant_isolation_invoices" ON invoices
   FOR ALL USING (tenant_id = auth.jwt()->>'tenant_id'::uuid);
 ```
 
 **Transitive Isolation (FK chain):**
+
 ```sql
 -- access_passes → pass_tiers → events → projects → tenant_id
 CREATE POLICY "tenant_isolation_access_passes" ON access_passes
@@ -511,6 +530,7 @@ CREATE POLICY "tenant_isolation_access_passes" ON access_passes
 ```
 
 **Service Role Bypass** (background workers only):
+
 ```sql
 SET ROLE service_role;  -- Bypasses RLS; only for internal workers
 SELECT * FROM sensitive_table;
@@ -551,20 +571,20 @@ async function handleMCPToolCall(tool: MCPTool, params: any) {
   if (tool.access_type === 'BLOCKED') {
     throw new Error(`Tool ${tool.name} is not available to agents`);
   }
-  
+
   if (tool.access_type === 'READ') {
-    return await executeToolDirectly(tool, params);  // Direct execution
+    return await executeToolDirectly(tool, params); // Direct execution
   }
-  
+
   if (tool.access_type === 'WRITE→PENDING') {
     // Create approval workflow instead
     const approval = await workflowService.createApproval({
       tool_name: tool.name,
       parameters: params,
       pending_agent_id: currentAgent.id,
-      required_approval_role: 'tenant:admin',  // Must be human
+      required_approval_role: 'tenant:admin', // Must be human
     });
-    
+
     return {
       status: 'pending_approval',
       approval_id: approval.id,
@@ -601,21 +621,21 @@ class LedgerService {
     // 1. Fetch original entry
     const original = await journalRepo.getById(entryId);
     if (!original) throw new Error('Entry not found');
-    
+
     // 2. Create new REVERSAL entry with opposite lines
     const reversal = new JournalEntry({
       reference_type: 'REVERSAL',
       reference_id: entryId,
       narration: `Reversal: ${original.narration}`,
-      lines: original.lines.map(line => ({
+      lines: original.lines.map((line) => ({
         ...line,
-        type: line.type === 'debit' ? 'credit' : 'debit',  // Flip
+        type: line.type === 'debit' ? 'credit' : 'debit', // Flip
       })),
     });
-    
+
     // 3. Post reversal
     await this.postJournalEntry(reversal);
-    
+
     // 4. Mark original as voided (soft flag)
     original.status = 'voided';
     original.voided_at = new Date();
@@ -742,16 +762,16 @@ These rules govern AI IDE agent behavior (Cursor, Claude, Copilot, etc.) when wo
 
 ## Part 6: Performance & Reliability Targets
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| API Latency (p95) | < 500ms | Excludes external integrations |
-| Database Query (p99) | < 100ms | With proper indexes |
-| LCP (Largest Contentful Paint) | < 2.0s | First paint visible |
-| INP (Interaction to Next Paint) | < 150ms | Responsiveness |
-| CLS (Cumulative Layout Shift) | < 0.1 | Visual stability |
-| Error Rate | < 0.1% | Financial transactions |
-| Availability (SLA) | 99.5% | Excludes planned maintenance |
-| MTTR (Mean Time to Recover) | < 15 min | From incident detection |
+| Metric                          | Target   | Notes                          |
+| ------------------------------- | -------- | ------------------------------ |
+| API Latency (p95)               | < 500ms  | Excludes external integrations |
+| Database Query (p99)            | < 100ms  | With proper indexes            |
+| LCP (Largest Contentful Paint)  | < 2.0s   | First paint visible            |
+| INP (Interaction to Next Paint) | < 150ms  | Responsiveness                 |
+| CLS (Cumulative Layout Shift)   | < 0.1    | Visual stability               |
+| Error Rate                      | < 0.1%   | Financial transactions         |
+| Availability (SLA)              | 99.5%    | Excludes planned maintenance   |
+| MTTR (Mean Time to Recover)     | < 15 min | From incident detection        |
 
 ---
 

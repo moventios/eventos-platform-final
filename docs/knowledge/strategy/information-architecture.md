@@ -22,44 +22,44 @@
 To support full enterprise (Product, Brand, Business, Marketing, Engineering, AI, Governance):
 
 docs/
-├── layers/                    # SSOT (unchanged)
-├── volumes/                   # Existing + new
-│   ├── 00-knowledge-architecture.md
-│   ├── ... (existing)
-│   ├── 11-brand.md (new)
-│   ├── 12-marketing.md (new)
-│   └── ...
-├── brand/                     # Brand specific
-│   ├── brand-canvas.md
-│   ├── brand-strategy.md
-│   ├── brand-voice.md
-│   └── brand.md (AI context file inspired by references)
-├── business/                  # Business strategy
-│   ├── business-model-canvas.md
-│   ├── lean-canvas.md
-│   ├── go-to-market.md
-│   └── ...
-├── product/                   # Product
-│   ├── positioning-statement.md
-│   ├── product-narrative.md
-│   ├── messaging-framework.md
-│   └── ...
-├── marketing/                 # Marketing
-│   ├── content-strategy.md
-│   ├── developer-marketing.md
-│   └── ...
-├── engineering/               # Engineering specifics (from Layer 3 + more)
-├── ai/                        # AI specific (expand Volume 04)
-├── governance/                # Governance (expand Volume 06)
+├── layers/ # SSOT (unchanged)
+├── volumes/ # Existing + new
+│ ├── 00-knowledge-architecture.md
+│ ├── ... (existing)
+│ ├── 11-brand.md (new)
+│ ├── 12-marketing.md (new)
+│ └── ...
+├── brand/ # Brand specific
+│ ├── brand-canvas.md
+│ ├── brand-strategy.md
+│ ├── brand-voice.md
+│ └── brand.md (AI context file inspired by references)
+├── business/ # Business strategy
+│ ├── business-model-canvas.md
+│ ├── lean-canvas.md
+│ ├── go-to-market.md
+│ └── ...
+├── product/ # Product
+│ ├── positioning-statement.md
+│ ├── product-narrative.md
+│ ├── messaging-framework.md
+│ └── ...
+├── marketing/ # Marketing
+│ ├── content-strategy.md
+│ ├── developer-marketing.md
+│ └── ...
+├── engineering/ # Engineering specifics (from Layer 3 + more)
+├── ai/ # AI specific (expand Volume 04)
+├── governance/ # Governance (expand Volume 06)
 ├── operations/
-├── developer/                 # Developer portal content
+├── developer/ # Developer portal content
 ├── customer/
 ├── security/
 ├── compliance/
 ├── roadmap.md
 ├── glossary.md
-├── architecture/              # ADRs etc.
-├── ai-ide/                    # AI agent instructions (this file + .cursorrules)
+├── architecture/ # ADRs etc.
+├── ai-ide/ # AI agent instructions (this file + .cursorrules)
 └── meta/ or archive/ for historical
 
 ## Cross-Reference System

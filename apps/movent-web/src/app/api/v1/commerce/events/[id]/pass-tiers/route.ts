@@ -26,7 +26,11 @@ export const GET = withTenantContext(async (req: NextRequest, { tenantId }) => {
   const eventId = searchParams.get('eventId');
   const { db } = createDbWithTenant(tenantId);
   let q = db.select().from(passTiers).where(eq(passTiers.tenantId, tenantId));
-  if (eventId) q = db.select().from(passTiers).where(and(eq(passTiers.tenantId, tenantId), eq(passTiers.eventId, eventId)));
+  if (eventId)
+    q = db
+      .select()
+      .from(passTiers)
+      .where(and(eq(passTiers.tenantId, tenantId), eq(passTiers.eventId, eventId)));
   const rows = await q;
   return NextResponse.json(rows);
 });

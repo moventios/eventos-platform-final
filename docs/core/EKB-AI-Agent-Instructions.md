@@ -32,6 +32,7 @@ You are helping build a product that teams use to coordinate real-world operatio
 4. **Knowledge**: Research, history, benchmarks (only on explicit request).
 
 **AI Context Policy (80%+ reduction)**:
+
 - Start with Core only.
 - Detect task.
 - Load Build files **only** when directly relevant to implementation.
@@ -49,6 +50,7 @@ When starting any significant task, load context in this **exact sequence**:
 ```
 
 **After Core only:**
+
 - Detect task.
 - Load **only** the minimal required Build-layer documents.
 - Load Operate or Knowledge **only** if task explicitly demands it.
@@ -60,15 +62,18 @@ When starting any significant task, load context in this **exact sequence**:
 ## Non-Negotiable Rules
 
 ### 1. Ubiquitous Language (Layer 1, Part 3-4)
+
 - Use **only** canonical terms defined in Layer 1 Part 3 and docs/volumes/01-foundations.md.
 - **Forbidden terms:** `Ticket`, `Reservation`, `Vendor`, `Space` (unless GeoCoordinate), `Group`, `Process` (when `Workflow` is meant).
 - Canonical replacements: `AccessPass`, `Booking`, `Supplier`, `Facility`, `Workflow`.
 - If unsure of canonical term → search Layer-1 Part 3 first.
 
 ### 2. Enterprise Laws (L-01 to L-10)
+
 **Canonical source: Layer-1-Constitution-v5.0.2.md Part 9.**
 
 **Movent Engine Mapping (reinterpreted bounded contexts):**
+
 - IAM → Identity Engine
 - Spatial → Place Engine
 - Commerce → Activation Engine
@@ -78,33 +83,37 @@ These are reusable infrastructure components. Moventios and future Solutions are
 
 Enforcement details: docs/volumes/06-governance.md.
 
-| Law | Rule |
-|-----|------|
-| **L-01** | No cross-bounded-context SQL JOINs. Use Read Models / CQRS at application layer. |
+| Law      | Rule                                                                                                |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| **L-01** | No cross-bounded-context SQL JOINs. Use Read Models / CQRS at application layer.                    |
 | **L-02** | Financial history is immutable. Use reversal journal entries — never UPDATE/DELETE journal_entries. |
-| **L-03** | Soft delete only. All business entities have `deleted_at` + `deleted_by`. |
-| **L-04** | All financial/booking mutations require `idempotency_key`. UNIQUE(tenant_id, idempotency_key). |
-| **L-05** | Every entity must have a tenant owner (directly or via FK chain). RLS enforced. |
-| **L-06** | AI agents have WRITE→PENDING only. Create Approval record — no direct material state mutation. |
-| **L-07** | All state mutations flow through Command Handlers (never raw DB writes from API routes). |
-| **L-08** | Zero-downtime migrations: Expand/Contract pattern. No RENAME COLUMN or breaking DDL. |
-| **L-09** | Observability by default: OpenTelemetry span on every Command Handler + Adapter. |
-| **L-10** | No secrets in code, env files, or DB columns. Use HashiCorp Vault exclusively. |
+| **L-03** | Soft delete only. All business entities have `deleted_at` + `deleted_by`.                           |
+| **L-04** | All financial/booking mutations require `idempotency_key`. UNIQUE(tenant_id, idempotency_key).      |
+| **L-05** | Every entity must have a tenant owner (directly or via FK chain). RLS enforced.                     |
+| **L-06** | AI agents have WRITE→PENDING only. Create Approval record — no direct material state mutation.      |
+| **L-07** | All state mutations flow through Command Handlers (never raw DB writes from API routes).            |
+| **L-08** | Zero-downtime migrations: Expand/Contract pattern. No RENAME COLUMN or breaking DDL.                |
+| **L-09** | Observability by default: OpenTelemetry span on every Command Handler + Adapter.                    |
+| **L-10** | No secrets in code, env files, or DB columns. Use HashiCorp Vault exclusively.                      |
 
 ### 3. Architecture Principles (Internal)
+
 - The internal implementation uses hexagonal, event-driven, and other patterns (details in Layers).
 - From the product view: the system supports reliable coordination and execution for events and projects.
 - Significant product or strategy decisions are captured in `docs/strategy/` and architecture/adr/.
 
 ### 4. AI Agent Behavior (L-06 Enforcement)
+
 - You have **READ** access to all knowledge.
 - You have **WRITE→PENDING** access to material state: propose via Approval workflow, never execute directly.
 - Never generate code that bypasses `Approval` gates for financial, ownership, or workflow changes.
 
 ### 5. Traceability
+
 - Every feature, API, event, or schema change must trace back to how it makes planning, executing, monitoring, or auditing events and projects easier, faster, safer, or more profitable.
 
 ### 6. Output Quality
+
 - All documents you author must be: self-contained, focused on how features help run events and projects (coordination, execution, visibility, accountability, auditability), free of placeholders.
 - Keep public/product content (in `docs/strategy/`) separate in tone from internal engineering details (in `docs/layers/` and architecture docs).
 
@@ -136,6 +145,7 @@ Legacy flat structure under docs/ is being migrated incrementally by moving exis
 ```
 
 **Important for AI agents:**
+
 - Use `docs/layers/` for deep architecture details only when needed.
 - Focus on how features help run events and projects.
 - Never load entire volumes/ or archive/ unless explicitly investigating history.
@@ -145,6 +155,7 @@ Legacy flat structure under docs/ is being migrated incrementally by moving exis
 ## When You Should Create an ADR
 
 Create an ADR when you make a decision that:
+
 - Changes architecture significantly
 - Introduces new patterns or technologies
 - Modifies Enterprise Law enforcement

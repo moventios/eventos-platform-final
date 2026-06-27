@@ -15,7 +15,9 @@ describe('CreateRoomHandler', () => {
 
     const saved: any[] = [];
     const repo: IRoomRepository = {
-      save: vi.fn(async (r) => { saved.push(r); }),
+      save: vi.fn(async (r) => {
+        saved.push(r);
+      }),
       findById: vi.fn(),
       findByFacility: vi.fn(),
     };

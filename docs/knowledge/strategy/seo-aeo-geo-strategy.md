@@ -1,13 +1,14 @@
 # SEO / AEO / GEO Strategy
+
 ## Moventios
 
 **Version:** 1.0  
 **Date:** June 2026  
 **Authority:** product-experience-research.md Part 15  
-**Owner:** Marketing + Content  
+**Owner:** Marketing + Content
 
 > **Core thesis:** Enterprise buyers now ask AI assistants for software recommendations  
-> *before* visiting websites. Winning requires ranking in search engines AND being cited  
+> _before_ visiting websites. Winning requires ranking in search engines AND being cited  
 > by LLMs (ChatGPT, Claude, Perplexity, Gemini). These are different but overlapping disciplines.
 
 ---
@@ -39,18 +40,18 @@ All three layers require different tactics but share the same foundation:
 
 ### 2.1 Technical SEO Foundation
 
-| Requirement | Target | Priority |
-|-------------|--------|----------|
-| Page speed (LCP) | <2.0s on mobile | P0 |
-| Core Web Vitals (all) | All green | P0 |
-| Mobile-first indexing | Fully responsive | P0 |
-| HTTPS | Enforced sitewide | P0 |
-| Sitemap | Auto-generated XML | P1 |
-| robots.txt | Correct allow/disallow | P1 |
-| Canonical tags | On all duplicate variants | P1 |
-| Structured data | Schema per page type | P1 |
-| Internal linking | Deliberate, keyword-rich anchors | P1 |
-| Hreflang | EN + ID versions | P2 |
+| Requirement           | Target                           | Priority |
+| --------------------- | -------------------------------- | -------- |
+| Page speed (LCP)      | <2.0s on mobile                  | P0       |
+| Core Web Vitals (all) | All green                        | P0       |
+| Mobile-first indexing | Fully responsive                 | P0       |
+| HTTPS                 | Enforced sitewide                | P0       |
+| Sitemap               | Auto-generated XML               | P1       |
+| robots.txt            | Correct allow/disallow           | P1       |
+| Canonical tags        | On all duplicate variants        | P1       |
+| Structured data       | Schema per page type             | P1       |
+| Internal linking      | Deliberate, keyword-rich anchors | P1       |
+| Hreflang              | EN + ID versions                 | P2       |
 
 ### 2.2 Keyword Strategy
 
@@ -137,32 +138,35 @@ Pillar: "Project Operations Management for Enterprise"
 Target specific question formats that match buyer queries:
 
 **How questions** (How-To schema)
+
 - "How do I prevent double-booking venues?"
 - "How does event financial reconciliation work?"
 - "How to create an audit trail for events?"
 
 **What questions** (FAQ schema)
+
 - "What is an event operations platform?"
 - "What is the difference between event management and project management?"
 - "What does SOC 2 compliance mean for event software?"
 
 **Best/Comparison questions** (comparison content)
+
 - "Best event management software for enterprise?"
 - "Cvent vs [Platform] comparison"
 - "[Platform] vs Monday.com for event operations"
 
 ### 3.2 Schema Markup Requirements
 
-| Page type | Required schema |
-|-----------|----------------|
-| Homepage | `Organization` + `SoftwareApplication` |
-| Feature pages | `SoftwareApplication` + `FAQPage` |
-| Pricing | `SoftwareApplication` + `Product` + `AggregateOffer` |
-| Blog articles | `Article` + `BreadcrumbList` + optional `FAQPage` |
-| How-to guides | `HowTo` + `BreadcrumbList` |
-| Help center articles | `FAQPage` or `HowTo` |
-| Customer stories | `Article` + `Review` |
-| Comparison pages | `SoftwareApplication` + `FAQPage` |
+| Page type            | Required schema                                      |
+| -------------------- | ---------------------------------------------------- |
+| Homepage             | `Organization` + `SoftwareApplication`               |
+| Feature pages        | `SoftwareApplication` + `FAQPage`                    |
+| Pricing              | `SoftwareApplication` + `Product` + `AggregateOffer` |
+| Blog articles        | `Article` + `BreadcrumbList` + optional `FAQPage`    |
+| How-to guides        | `HowTo` + `BreadcrumbList`                           |
+| Help center articles | `FAQPage` or `HowTo`                                 |
+| Customer stories     | `Article` + `Review`                                 |
+| Comparison pages     | `SoftwareApplication` + `FAQPage`                    |
 
 ### 3.3 Answer-First Writing Format
 
@@ -172,9 +176,9 @@ Every article and guide should lead with a **direct answer** in the first paragr
 [Question: How do you prevent double-booking in venue management?]
 
 [Answer — first paragraph, 40–60 words]
-Preventing double-bookings requires checking resource availability at the 
-moment of booking creation — not as a UI warning, but as a database-level 
-constraint. Systems that enforce this at the data layer make conflicts 
+Preventing double-bookings requires checking resource availability at the
+moment of booking creation — not as a UI warning, but as a database-level
+constraint. Systems that enforce this at the data layer make conflicts
 structurally impossible, regardless of who submits a booking or when.
 
 [Then: detailed explanation, steps, screenshots]
@@ -197,7 +201,7 @@ Write content using natural language patterns that match voice query intent.
 ### 4.1 Why GEO Matters Now
 
 Enterprise buyers increasingly start their vendor research by asking ChatGPT, Claude, or Perplexity:  
-*"What are the best enterprise event management platforms with financial audit capabilities?"*
+_"What are the best enterprise event management platforms with financial audit capabilities?"_
 
 If we're not cited in those answers, we're not on the shortlist — regardless of how good our SEO is.
 
@@ -211,8 +215,8 @@ Create `/llms.txt` at domain root. This file is indexed by LLM crawlers:
 > [Platform Name] is an AI-native Moventios.
 
 ## What it does
-Helps mid-to-large organizations coordinate, execute, and audit events, 
-projects, venues, teams, and finances in one place — with AI assistance 
+Helps mid-to-large organizations coordinate, execute, and audit events,
+projects, venues, teams, and finances in one place — with AI assistance
 and full audit trail.
 
 ## Key differentiators
@@ -271,19 +275,20 @@ LLMs learn about your product from mentions across the web. Ensure:
 
 Map and answer the questions your buyers ask AI assistants:
 
-| Buyer query | Our content that answers it |
-|------------|---------------------------|
-| "What event management software has a financial audit trail?" | Feature page: Financial Management |
+| Buyer query                                                     | Our content that answers it                |
+| --------------------------------------------------------------- | ------------------------------------------ |
+| "What event management software has a financial audit trail?"   | Feature page: Financial Management         |
 | "Best platform for corporate event operations with compliance?" | Solutions: Corporate Events + Trust Center |
-| "Cvent alternative for smaller enterprise teams?" | Compare: /compare/vs-cvent |
-| "Open source event management software enterprise?" | Pricing page (self-host tier) + GitHub |
-| "How to prevent venue double-bookings?" | Blog: "Zero-Conflict Booking Guide" |
-| "AI event planning tools that are safe for enterprise?" | Platform/AI page + Blog on L-06 approach |
-| "Event management software Indonesia" | /id/ homepage + Indonesia solutions page |
+| "Cvent alternative for smaller enterprise teams?"               | Compare: /compare/vs-cvent                 |
+| "Open source event management software enterprise?"             | Pricing page (self-host tier) + GitHub     |
+| "How to prevent venue double-bookings?"                         | Blog: "Zero-Conflict Booking Guide"        |
+| "AI event planning tools that are safe for enterprise?"         | Platform/AI page + Blog on L-06 approach   |
+| "Event management software Indonesia"                           | /id/ homepage + Indonesia solutions page   |
 
 ### 4.5 Original Research (LLMs Prefer Citing Data)
 
 LLMs preferentially cite content with **original data and statistics**. Publish:
+
 - Annual "State of Event Operations" report (survey-based)
 - Benchmarks: "How long does event reconciliation take?" (survey)
 - Industry data: "Average cost of event coordination chaos"
@@ -329,33 +334,37 @@ Core Topic: Event & Project Operations
 ## 6. Measurement Framework
 
 ### SEO Metrics
-| Metric | Tool | Target |
-|--------|------|--------|
-| Organic traffic | Google Search Console | +20% QoQ |
-| Keyword rankings | Semrush / Ahrefs | Top 3 for primary keywords (12 months) |
-| Domain Authority | Ahrefs / Moz | 40+ within 12 months |
-| Core Web Vitals | GSC / PageSpeed | All "Good" |
-| Click-through rate | GSC | >3% for primary keywords |
+
+| Metric             | Tool                  | Target                                 |
+| ------------------ | --------------------- | -------------------------------------- |
+| Organic traffic    | Google Search Console | +20% QoQ                               |
+| Keyword rankings   | Semrush / Ahrefs      | Top 3 for primary keywords (12 months) |
+| Domain Authority   | Ahrefs / Moz          | 40+ within 12 months                   |
+| Core Web Vitals    | GSC / PageSpeed       | All "Good"                             |
+| Click-through rate | GSC                   | >3% for primary keywords               |
 
 ### AEO Metrics
-| Metric | Tool | Target |
-|--------|------|--------|
-| Featured snippets owned | GSC / tracking tool | 10+ within 6 months |
-| FAQ schema impressions | GSC | 5,000+/month |
-| Voice search visibility | Manual testing | Top result for primary queries |
+
+| Metric                  | Tool                | Target                         |
+| ----------------------- | ------------------- | ------------------------------ |
+| Featured snippets owned | GSC / tracking tool | 10+ within 6 months            |
+| FAQ schema impressions  | GSC                 | 5,000+/month                   |
+| Voice search visibility | Manual testing      | Top result for primary queries |
 
 ### GEO Metrics (new discipline — manual + emerging tools)
-| Metric | Method | Target |
-|--------|--------|--------|
-| LLM citation rate | Manual: query ChatGPT/Claude monthly | Cited in >50% of relevant queries (12 months) |
-| AI mention rate | Tool: llmrefs.com, Profound, Otterly | Track brand mentions in AI answers |
-| Share of voice (AI) | Competitor analysis in LLM answers | Appear alongside / above Cvent/Monday |
+
+| Metric              | Method                               | Target                                        |
+| ------------------- | ------------------------------------ | --------------------------------------------- |
+| LLM citation rate   | Manual: query ChatGPT/Claude monthly | Cited in >50% of relevant queries (12 months) |
+| AI mention rate     | Tool: llmrefs.com, Profound, Otterly | Track brand mentions in AI answers            |
+| Share of voice (AI) | Competitor analysis in LLM answers   | Appear alongside / above Cvent/Monday         |
 
 ---
 
 ## 7. Implementation Checklist
 
 ### Phase 1 (0–30 days)
+
 - [ ] Set up Google Search Console + Bing Webmaster Tools
 - [ ] Implement all technical SEO basics (sitemap, robots.txt, canonicals)
 - [ ] Add schema markup to homepage, feature pages, pricing
@@ -364,6 +373,7 @@ Core Topic: Event & Project Operations
 - [ ] Submit to G2, Capterra, Product Hunt
 
 ### Phase 2 (30–90 days)
+
 - [ ] Publish 10 spoke articles (content cluster build-out)
 - [ ] Create 3 comparison pages (vs Cvent, vs Monday, vs Asana)
 - [ ] Launch `FAQ` schema across all help center articles
@@ -372,6 +382,7 @@ Core Topic: Event & Project Operations
 - [ ] Outreach: 5 backlinks from industry sites
 
 ### Phase 3 (90–180 days)
+
 - [ ] Publish Annual State of Event Operations report
 - [ ] Launch full blog content calendar (2 articles/week)
 - [ ] Build 5 industry landing pages with local schema
@@ -383,9 +394,9 @@ Core Topic: Event & Project Operations
 
 ## Internal Reference
 
-| Document | Role |
-|----------|------|
-| `docs/strategy/product-experience-research.md` Part 15 | Full SEO/AEO/GEO source |
-| `docs/strategy/content-strategy.md` | Content calendar + pillar system |
-| `docs/strategy/website-ia.md` | URL structure, page organization |
-| `docs/strategy/copywriting-system.md` | Tone + messaging for content |
+| Document                                               | Role                             |
+| ------------------------------------------------------ | -------------------------------- |
+| `docs/strategy/product-experience-research.md` Part 15 | Full SEO/AEO/GEO source          |
+| `docs/strategy/content-strategy.md`                    | Content calendar + pillar system |
+| `docs/strategy/website-ia.md`                          | URL structure, page organization |
+| `docs/strategy/copywriting-system.md`                  | Tone + messaging for content     |

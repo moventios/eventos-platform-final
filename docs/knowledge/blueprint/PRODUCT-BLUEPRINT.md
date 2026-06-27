@@ -1,4 +1,5 @@
 # PRODUCT BLUEPRINT
+
 ## AI-Native Project & Event Operations Platform (Moventios)
 
 **Status:** Authoritative Reference  
@@ -26,19 +27,21 @@ An **AI-Native Project & Event Operations Platform** that helps organizations pl
 **Who it serves**  
 Mid-to-large organizations running hybrid physical-digital operations: event organizers, exhibition and conference producers, wedding and corporate event companies, venues, convention centers, hotels, production houses, creative/marketing agencies, and project-based service companies.
 
-**Problems it solves**  
-- Operational chaos and double-booking  
-- Fragmented information across spreadsheets, email, and tools  
-- Lack of visibility and accountability during execution  
-- Manual reconciliation, audit risk, and financial leakage  
-- Slow, error-prone coordination between people and resources  
+**Problems it solves**
+
+- Operational chaos and double-booking
+- Fragmented information across spreadsheets, email, and tools
+- Lack of visibility and accountability during execution
+- Manual reconciliation, audit risk, and financial leakage
+- Slow, error-prone coordination between people and resources
 - Fear of using AI on material decisions without guardrails
 
-**What it intentionally does NOT try to become**  
-- A generic Enterprise Resource Planning (ERP) system  
-- A pure project management tool (Asana/ClickUp/Monday replacement)  
-- A consumer event app or ticketing platform  
-- A full accounting or HR system  
+**What it intentionally does NOT try to become**
+
+- A generic Enterprise Resource Planning (ERP) system
+- A pure project management tool (Asana/ClickUp/Monday replacement)
+- A consumer event app or ticketing platform
+- A full accounting or HR system
 - A generic knowledge base or intranet
 
 **Positioning statement**  
@@ -54,21 +57,21 @@ The platform follows the complete real-world operational lifecycle:
 
 ### Phase Details
 
-| Phase          | User Goals                              | Key Decisions                          | Deliverables                     | Primary Roles          | Operational Outputs                  |
-|----------------|-----------------------------------------|----------------------------------------|----------------------------------|------------------------|--------------------------------------|
-| Lead           | Capture opportunity quickly            | Is this a fit?                         | Inquiry record                   | Sales, Owner           | Qualified lead, initial notes        |
-| Discovery      | Understand requirements & constraints  | Scope, dates, constraints, budget range| Survey / site notes, photos      | Event Manager + Client | Requirements document                |
-| Proposal       | Present realistic plan & value         | Scope, timeline, pricing, resources    | Proposal (timeline + budget)     | Event Manager          | Versioned proposal                   |
-| Quotation      | Lock commercial terms                  | Discounts, payment terms               | Quote / revision history         | Sales + Finance        | Signed quotation                     |
-| Approval       | Internal governance                    | Budget, resource availability, risk    | Approved plan                    | Ops, Finance, Owner    | Approval record + committed scope    |
-| Contract       | Legal & financial commitment           | Terms, deposits, SLAs                  | Signed contract                  | Owner + Client         | Contract + deposit schedule          |
-| Project/Event  | Kick off with full context             | Confirm resources & timeline           | Active project + workspace       | Event/Project Manager  | Timeline, budget, tasks, reservations|
-| Planning       | Detailed coordination                  | Assignments, vendors, equipment        | Detailed plan, purchase orders   | Manager + Team         | Allocations, vendor contracts        |
-| Execution      | Deliver without surprises              | Real-time changes, issues              | Live status, incident logs       | On-site team + Manager | Activity log, access records         |
-| Finance        | Accurate money movement & records      | Invoices, variances, payments          | Invoices, reconciliation         | Finance                | Ledger entries, payments             |
-| Closing        | Complete & learn                       | Sign-off, returns, lessons             | Closure report                   | Manager + Client       | Completed project, assets returned   |
-| Reporting      | Extract value & insight                | What worked, what to improve           | Reports, insights, templates     | Manager + Owner        | Performance data, updated knowledge  |
-| Repeat         | Turn success into more business        | Relationship nurturing                 | Templates, case notes            | Sales + Manager        | Repeat opportunity, knowledge reuse  |
+| Phase         | User Goals                            | Key Decisions                           | Deliverables                   | Primary Roles          | Operational Outputs                   |
+| ------------- | ------------------------------------- | --------------------------------------- | ------------------------------ | ---------------------- | ------------------------------------- |
+| Lead          | Capture opportunity quickly           | Is this a fit?                          | Inquiry record                 | Sales, Owner           | Qualified lead, initial notes         |
+| Discovery     | Understand requirements & constraints | Scope, dates, constraints, budget range | Survey / site notes, photos    | Event Manager + Client | Requirements document                 |
+| Proposal      | Present realistic plan & value        | Scope, timeline, pricing, resources     | Proposal (timeline + budget)   | Event Manager          | Versioned proposal                    |
+| Quotation     | Lock commercial terms                 | Discounts, payment terms                | Quote / revision history       | Sales + Finance        | Signed quotation                      |
+| Approval      | Internal governance                   | Budget, resource availability, risk     | Approved plan                  | Ops, Finance, Owner    | Approval record + committed scope     |
+| Contract      | Legal & financial commitment          | Terms, deposits, SLAs                   | Signed contract                | Owner + Client         | Contract + deposit schedule           |
+| Project/Event | Kick off with full context            | Confirm resources & timeline            | Active project + workspace     | Event/Project Manager  | Timeline, budget, tasks, reservations |
+| Planning      | Detailed coordination                 | Assignments, vendors, equipment         | Detailed plan, purchase orders | Manager + Team         | Allocations, vendor contracts         |
+| Execution     | Deliver without surprises             | Real-time changes, issues               | Live status, incident logs     | On-site team + Manager | Activity log, access records          |
+| Finance       | Accurate money movement & records     | Invoices, variances, payments           | Invoices, reconciliation       | Finance                | Ledger entries, payments              |
+| Closing       | Complete & learn                      | Sign-off, returns, lessons              | Closure report                 | Manager + Client       | Completed project, assets returned    |
+| Reporting     | Extract value & insight               | What worked, what to improve            | Reports, insights, templates   | Manager + Owner        | Performance data, updated knowledge   |
+| Repeat        | Turn success into more business       | Relationship nurturing                  | Templates, case notes          | Sales + Manager        | Repeat opportunity, knowledge reuse   |
 
 ---
 
@@ -196,20 +199,22 @@ Everyone lands in a personalized Home/Command Center that surfaces the work that
 
 When key user actions occur, the platform automatically performs supporting work so users only see meaningful operational state.
 
-**Example: Create / Kickoff Event/Project**  
-1. User confirms contract + deposit (or direct create after approval).  
-2. System creates core Project/Event record.  
-3. Generates Timeline (from template + AI suggestion).  
-4. Creates Calendar entries.  
-5. Initializes Budget ledger lines.  
-6. Prepares Tasks / checklist.  
-7. Reserves requested Rooms & Resources (conflict-checked).  
-8. Initializes Approval instances for gated items.  
-9. Prepares Notifications & Realtime subscriptions.  
-10. Seeds AI Context (past similar projects + knowledge base).  
-11. Creates full Activity / Audit trail.  
+**Example: Create / Kickoff Event/Project**
 
-**Example: Book Room**  
+1. User confirms contract + deposit (or direct create after approval).
+2. System creates core Project/Event record.
+3. Generates Timeline (from template + AI suggestion).
+4. Creates Calendar entries.
+5. Initializes Budget ledger lines.
+6. Prepares Tasks / checklist.
+7. Reserves requested Rooms & Resources (conflict-checked).
+8. Initializes Approval instances for gated items.
+9. Prepares Notifications & Realtime subscriptions.
+10. Seeds AI Context (past similar projects + knowledge base).
+11. Creates full Activity / Audit trail.
+
+**Example: Book Room**
+
 - Submit booking → Handler validates → Creates Booking record → Updates availability → Creates budget impact → Publishes domain event → Workers notify relevant parties.
 
 Users experience the result (confirmed slot, updated timeline, budget line) without orchestrating the steps.
@@ -223,6 +228,7 @@ All system actions happen through command handlers + outbox pattern for reliabil
 Navigation is organized around the work people actually do.
 
 ### Top Level
+
 - **Home** — Personalized command center (“What needs me today?”)
 - **Workspace** — Switch between organizations/teams (multi-tenant)
 - **Projects**
@@ -236,6 +242,7 @@ Navigation is organized around the work people actually do.
 - **Settings** (minimal)
 
 ### Inside a Project or Event (consistent structure)
+
 - Overview
 - Timeline
 - Tasks
@@ -309,6 +316,7 @@ All screens follow progressive disclosure and provide clear “what happens next
 AI recommends and explains. Humans decide and approve — especially anything involving money, access, contracts, safety, or external commitments.
 
 **High-Value Use Cases**
+
 - Generate initial project plan / event timeline / checklist from brief + similar past work (with citations).
 - Detect scheduling and resource conflicts + propose alternatives.
 - Suggest vendors based on fit, availability, and historical performance.
@@ -319,26 +327,27 @@ AI recommends and explains. Humans decide and approve — especially anything in
 - Generate post-event report + suggested knowledge updates.
 - Answer grounded operational questions (“What was our average crew utilization on corporate events last quarter?”).
 
-**UI Patterns**  
-- Contextual “Ask AI” or always-available copilot panel.  
-- Suggestions appear as actionable cards with “Why”, “Impact”, “Apply / Edit / Dismiss”.  
-- Every material suggestion shows source + confidence.  
+**UI Patterns**
+
+- Contextual “Ask AI” or always-available copilot panel.
+- Suggestions appear as actionable cards with “Why”, “Impact”, “Apply / Edit / Dismiss”.
+- Every material suggestion shows source + confidence.
 - Full audit trail of AI-influenced actions.
 
 ---
 
 ## 9. Customer Journey & Marketing Funnel
 
-| Stage       | User Intent                          | Key Questions                          | Required Content / Pages                  | CTAs                              | Success Metric                  |
-|-------------|--------------------------------------|----------------------------------------|-------------------------------------------|-----------------------------------|---------------------------------|
-| Discovery   | Find a solution for operational pain | “Is there something better than spreadsheets?” | Homepage, use-case pages, “event operations software” content | “See how it works”, “Watch 2-min demo” | Time on site, sign-up intent   |
-| Education   | Understand how it works              | “Will this actually solve my coordination problems?” | Guides, templates (free run-of-show, budget), comparison | Download template, “Try the demo” | Template downloads, video views |
-| Evaluation  | Compare & validate fit               | “Will it work for my type of events?”   | Case studies, ROI calculator, security/audit page | “Book a demo”, “Start trial”     | Demo bookings, trial starts    |
-| Trial       | Experience first value fast          | “Can my team actually use this?”        | Guided onboarding, sample data (wedding / conference) | “Create first venue”, “Book a room” | Time to first booking          |
-| Activation  | Make it part of daily work           | “This is now how we run events.”        | In-app checklists, tooltips, playbooks    | Complete onboarding checklist    | 3+ active projects/events      |
-| Daily Usage | Rely on it for coordination          | “What needs my attention today?”        | Home, Project workspaces, Approvals       | Daily return                       | Weekly active usage            |
-| Expansion   | Get more value                       | “Can we use this for the whole team / more event types?” | Advanced features, AI copilot, reports    | Enable AI, invite team           | Team seats added, features used|
-| Advocacy    | Recommend and co-create              | “This made us much more professional.”  | Success stories, referral program         | Share story, refer colleague     | Referrals, case study creation |
+| Stage       | User Intent                          | Key Questions                                            | Required Content / Pages                                      | CTAs                                   | Success Metric                  |
+| ----------- | ------------------------------------ | -------------------------------------------------------- | ------------------------------------------------------------- | -------------------------------------- | ------------------------------- |
+| Discovery   | Find a solution for operational pain | “Is there something better than spreadsheets?”           | Homepage, use-case pages, “event operations software” content | “See how it works”, “Watch 2-min demo” | Time on site, sign-up intent    |
+| Education   | Understand how it works              | “Will this actually solve my coordination problems?”     | Guides, templates (free run-of-show, budget), comparison      | Download template, “Try the demo”      | Template downloads, video views |
+| Evaluation  | Compare & validate fit               | “Will it work for my type of events?”                    | Case studies, ROI calculator, security/audit page             | “Book a demo”, “Start trial”           | Demo bookings, trial starts     |
+| Trial       | Experience first value fast          | “Can my team actually use this?”                         | Guided onboarding, sample data (wedding / conference)         | “Create first venue”, “Book a room”    | Time to first booking           |
+| Activation  | Make it part of daily work           | “This is now how we run events.”                         | In-app checklists, tooltips, playbooks                        | Complete onboarding checklist          | 3+ active projects/events       |
+| Daily Usage | Rely on it for coordination          | “What needs my attention today?”                         | Home, Project workspaces, Approvals                           | Daily return                           | Weekly active usage             |
+| Expansion   | Get more value                       | “Can we use this for the whole team / more event types?” | Advanced features, AI copilot, reports                        | Enable AI, invite team                 | Team seats added, features used |
+| Advocacy    | Recommend and co-create              | “This made us much more professional.”                   | Success stories, referral program                             | Share story, refer colleague           | Referrals, case study creation  |
 
 ---
 
@@ -360,63 +369,75 @@ AI recommends and explains. Humans decide and approve — especially anything in
 ## 11. Implementation Roadmap
 
 ### Phase 1 — Core Operational Workflows (Foundation)
+
 **Objectives:** Make the basic end-to-end flow reliable and visible.  
 **Dependencies:** Existing booking, approvals, and handler infrastructure.  
-**Deliverables:**  
-- Strong Home/Command Center  
-- Project/Event creation with automatic timeline, budget, and reservations  
-- Improved Timeline + Resource allocation with conflict handling  
-- Polished unified Approvals  
+**Deliverables:**
+
+- Strong Home/Command Center
+- Project/Event creation with automatic timeline, budget, and reservations
+- Improved Timeline + Resource allocation with conflict handling
+- Polished unified Approvals
 - Educational states and basic AI draft generation (propose only)  
-**Priority:** Highest  
-**Expected user value:** First-time users reach a working event faster; daily users spend less time coordinating.
+  **Priority:** Highest  
+  **Expected user value:** First-time users reach a working event faster; daily users spend less time coordinating.
 
 ### Phase 2 — Project Workspace & Daily Execution
+
 **Objectives:** Make the full planning-to-execution loop feel natural.  
-**Deliverables:**  
-- Consistent Project/Event workspace (Overview, Tasks, Schedule, Resources, Budget, Activity)  
-- Mobile-friendly on-site views (check-in, task completion, incident logging)  
+**Deliverables:**
+
+- Consistent Project/Event workspace (Overview, Tasks, Schedule, Resources, Budget, Activity)
+- Mobile-friendly on-site views (check-in, task completion, incident logging)
 - Basic vendor and team assignment flows  
-**Priority:** High  
-**Expected user value:** Managers have one place for the entire job.
+  **Priority:** High  
+  **Expected user value:** Managers have one place for the entire job.
 
 ### Phase 3 — Resource, Finance & Closing
+
 **Objectives:** Close the loop on money, assets, and learning.  
-**Deliverables:**  
-- Deeper resource inventory & allocation  
-- Budget tracking with actuals and variance  
-- Invoice generation from work  
+**Deliverables:**
+
+- Deeper resource inventory & allocation
+- Budget tracking with actuals and variance
+- Invoice generation from work
 - Project close + lessons capture  
-**Priority:** Medium-High  
-**Expected user value:** Finance and ops have shared reality; clean closes become normal.
+  **Priority:** Medium-High  
+  **Expected user value:** Finance and ops have shared reality; clean closes become normal.
 
 ### Phase 4 — AI Copilot
+
 **Objectives:** Amplify humans without removing control.  
-**Deliverables:**  
-- Proposal / timeline / checklist generator  
-- Conflict detection + suggestions  
-- Risk prediction and approval package preparation  
+**Deliverables:**
+
+- Proposal / timeline / checklist generator
+- Conflict detection + suggestions
+- Risk prediction and approval package preparation
 - Grounded Q&A in Knowledge  
-**Priority:** Medium (after core workflows are stable)  
-**Expected user value:** Dramatic reduction in planning time while maintaining full human oversight.
+  **Priority:** Medium (after core workflows are stable)  
+  **Expected user value:** Dramatic reduction in planning time while maintaining full human oversight.
 
 ### Phase 5 — Knowledge, Templates & Customer Education
+
 **Objectives:** Make success repeatable and help users get better over time.  
-**Deliverables:**  
-- Template library + industry packs  
-- Knowledge base with AI search  
+**Deliverables:**
+
+- Template library + industry packs
+- Knowledge base with AI search
 - In-product playbooks and contextual help  
-**Priority:** Medium  
-**Expected user value:** New users ramp faster; organizations institutionalize their own best practices.
+  **Priority:** Medium  
+  **Expected user value:** New users ramp faster; organizations institutionalize their own best practices.
 
 ### Phase 6 — Growth & Ecosystem
+
 **Objectives:** Scale adoption and expand value.  
-**Deliverables:**  
-- Client/vendor portals  
-- Advanced reporting & insights  
-- Marketplace for templates/vendors (later)  
+**Deliverables:**
+
+- Client/vendor portals
+- Advanced reporting & insights
+- Marketplace for templates/vendors (later)
 - Vertical packs  
-**Priority:** Later  
+  **Priority:** Later
 
 **Overall Guidance**  
 Prioritize anything that makes the core work (plan → execute → close) feel guided, visible, and low-friction. Add AI and advanced capabilities only after the underlying workflows are solid.

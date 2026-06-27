@@ -79,9 +79,7 @@ describe('auth callback GET', () => {
 
   it('rejects absolute URL next targets', async () => {
     const { GET } = await import('./route');
-    const req = new NextRequest(
-      'http://localhost/auth/callback?next=https%3A%2F%2Fevil.test',
-    );
+    const req = new NextRequest('http://localhost/auth/callback?next=https%3A%2F%2Fevil.test');
     const res = await GET(req);
 
     expect(res.headers.get('location')).toBe('http://localhost/');

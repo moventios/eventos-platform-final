@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 
 /**
  * Movent Infrastructure - Activation Engine
- * 
+ *
  * Event = Catalyst (internal).
  * Creates Relationships, Participation, and Opportunities in the Network.
  * User-facing: Events (with Catalysts sparingly).
@@ -65,10 +65,16 @@ export class Event {
     return { event: ev, publishedEvent };
   }
 
-  get id() { return this.props.id; }
-  get status() { return this.props.status; }
+  get id() {
+    return this.props.id;
+  }
+  get status() {
+    return this.props.status;
+  }
 
-  toRecord(): EventProps { return { ...this.props }; }
+  toRecord(): EventProps {
+    return { ...this.props };
+  }
 
   static reconstitute(props: EventProps): Event {
     return new Event(props);

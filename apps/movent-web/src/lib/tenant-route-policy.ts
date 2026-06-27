@@ -7,7 +7,5 @@ export const TENANT_OPTIONAL_API: Array<{ path: string; methods: string[] }> = [
 
 export function isTenantOptionalPath(pathname: string, method: string): boolean {
   if (TENANT_OPTIONAL_PATHS.some((p) => pathname.startsWith(p))) return true;
-  return TENANT_OPTIONAL_API.some(
-    (r) => pathname === r.path && r.methods.includes(method),
-  );
+  return TENANT_OPTIONAL_API.some((r) => pathname === r.path && r.methods.includes(method));
 }

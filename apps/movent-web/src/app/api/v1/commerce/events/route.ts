@@ -12,10 +12,7 @@ export const POST = withTenantContext(async (req: NextRequest, { tenantId, actor
   if (!body.success) return NextResponse.json({ error: body.error.flatten() }, { status: 422 });
 
   const { db } = createDbWithTenant(tenantId);
-  const handler = new PublishEventHandler(
-    new DrizzleEventRepository(db),
-    new OutboxEventBus(db),
-  );
+  const handler = new PublishEventHandler(new DrizzleEventRepository(db), new OutboxEventBus(db));
 
   const result = await handler.handle(body.data, tenantId, actorId);
   return NextResponse.json(result, { status: 201 });

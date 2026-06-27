@@ -53,11 +53,19 @@ export class Room {
     return { room, event };
   }
 
-  get id() { return this.props.id; }
-  get facilityId() { return this.props.facilityId; }
-  get capacity() { return this.props.capacity; }
+  get id() {
+    return this.props.id;
+  }
+  get facilityId() {
+    return this.props.facilityId;
+  }
+  get capacity() {
+    return this.props.capacity;
+  }
 
-  toRecord(): RoomProps { return { ...this.props }; }
+  toRecord(): RoomProps {
+    return { ...this.props };
+  }
 
   static reconstitute(props: RoomProps): Room {
     return new Room(props);

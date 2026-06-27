@@ -33,7 +33,17 @@ function reducer(state: State, action: Action): State {
 
 export function toast(props: Omit<Toast, 'id'>) {
   const id = String(++count);
-  dispatch({ type: 'ADD', toast: { ...props, id, open: true, onOpenChange: (open) => { if (!open) dispatch({ type: 'DISMISS', id }); } } });
+  dispatch({
+    type: 'ADD',
+    toast: {
+      ...props,
+      id,
+      open: true,
+      onOpenChange: (open) => {
+        if (!open) dispatch({ type: 'DISMISS', id });
+      },
+    },
+  });
   return { id, dismiss: () => dispatch({ type: 'DISMISS', id }) };
 }
 
@@ -41,7 +51,10 @@ export function useToast() {
   const [state, setState] = React.useState(memoryState);
   React.useEffect(() => {
     listeners.push(setState);
-    return () => { const i = listeners.indexOf(setState); if (i > -1) listeners.splice(i, 1); };
+    return () => {
+      const i = listeners.indexOf(setState);
+      if (i > -1) listeners.splice(i, 1);
+    };
   }, []);
   return { ...state, toast, dismiss: (id: string) => dispatch({ type: 'DISMISS', id }) };
 }

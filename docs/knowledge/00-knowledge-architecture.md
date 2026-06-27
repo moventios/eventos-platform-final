@@ -1,4 +1,5 @@
 # Volume 00: Knowledge Architecture
+
 ## Moventios Enterprise Knowledge Base (SEKB)
 
 **Version:** 5.1.0  
@@ -15,6 +16,7 @@
 This volume defines the **meta-architecture** of the Moventios Enterprise Knowledge Base itself.
 
 It answers:
+
 - Why SEKB exists
 - How it is structured
 - How knowledge is governed, versioned, and consumed
@@ -30,9 +32,11 @@ SEKB is not documentation. It is the **deterministic operating system for enterp
 ### From Three SSOTs → Enterprise Knowledge Base
 
 **Previous Objective (v5.0.x):**
+
 > Harmonize and maintain three canonical documents (Layer 1 Constitution, Layer 2 Database SSOT, Layer 3 EPXA).
 
 **New Objective (v5.1+):**
+
 > Transform Moventios into a complete, scalable, future-proof **Enterprise Knowledge Base** that serves as the Single Source of Truth for architecture, engineering, product, operations, governance, business, and AI agents for the next 10–15 years.
 
 Layer 1, Layer 2, and Layer 3 remain the **immutable canonical foundation**. Everything else is built systematically on top of them.
@@ -45,19 +49,19 @@ SEKB is organized into **10 core volumes** + **Living Catalogs** + **Foundation 
 
 ### 3.1 Volume Structure (10 Volumes)
 
-| Volume | Title | Primary Audience | Update Cadence | Ownership |
-|--------|-------|------------------|----------------|-----------|
-| **00** | Knowledge Architecture | Architects, AI Agents, EAB | Major versions only | Lead Architect |
-| **01** | Foundations | All engineers + AI | Minor patches | Architecture Team |
-| **02** | Enterprise Architecture | System Architects, Domain Leads | Quarterly | Domain Owners |
-| **03** | Engineering Blueprint | Staff Engineers, Platform Team | As needed | Platform Engineering |
-| **04** | AI Architecture | AI Engineers, Security | Quarterly | AI Lead |
-| **05** | Operations & Reliability | SRE, On-call, Platform | Monthly | SRE Lead |
-| **06** | Governance & Compliance | Compliance, Legal, Auditors | As needed (regulatory) | Compliance Lead |
-| **07** | Business Model & Capabilities | Product, Business, Leadership | Quarterly | Product + Strategy |
-| **08** | Product Experience | Design, Frontend, PMs | Bi-weekly | Design System Owner |
-| **09** | AI IDE Skills & Tooling Ecosystem | All engineers + AI agents + Product | As tools evolve | AI Platform + Engineering |
-| **10** | Remediation, Roadmap & Playbooks | EAB, Tech Leads | Quarterly | Architecture Board |
+| Volume | Title                             | Primary Audience                    | Update Cadence         | Ownership                 |
+| ------ | --------------------------------- | ----------------------------------- | ---------------------- | ------------------------- |
+| **00** | Knowledge Architecture            | Architects, AI Agents, EAB          | Major versions only    | Lead Architect            |
+| **01** | Foundations                       | All engineers + AI                  | Minor patches          | Architecture Team         |
+| **02** | Enterprise Architecture           | System Architects, Domain Leads     | Quarterly              | Domain Owners             |
+| **03** | Engineering Blueprint             | Staff Engineers, Platform Team      | As needed              | Platform Engineering      |
+| **04** | AI Architecture                   | AI Engineers, Security              | Quarterly              | AI Lead                   |
+| **05** | Operations & Reliability          | SRE, On-call, Platform              | Monthly                | SRE Lead                  |
+| **06** | Governance & Compliance           | Compliance, Legal, Auditors         | As needed (regulatory) | Compliance Lead           |
+| **07** | Business Model & Capabilities     | Product, Business, Leadership       | Quarterly              | Product + Strategy        |
+| **08** | Product Experience                | Design, Frontend, PMs               | Bi-weekly              | Design System Owner       |
+| **09** | AI IDE Skills & Tooling Ecosystem | All engineers + AI agents + Product | As tools evolve        | AI Platform + Engineering |
+| **10** | Remediation, Roadmap & Playbooks  | EAB, Tech Leads                     | Quarterly              | Architecture Board        |
 
 ### 3.2 Living Catalogs (Separate from Volumes)
 
@@ -75,11 +79,11 @@ These are **machine-consumable, frequently updated** artifacts:
 
 These three documents are **not volumes**. They are the **bedrock**:
 
-| Layer | Document | Version (Current) | Nature |
-|-------|----------|-------------------|--------|
-| **Layer 1** | Platform Constitution | v5.0.2-HARMONIZED | Governance, Principles, Ontology, Laws, State Machines |
-| **Layer 2** | Enterprise Database SSOT | v5.0.2-HARMONIZED | Physical schema, RLS, Stored Procedures, Enums |
-| **Layer 3** | Enterprise Product Experience Architecture (EPXA) | v5.1-HARMONIZED | Technology stack, Bounded Contexts, Traceability, DX rules |
+| Layer       | Document                                          | Version (Current) | Nature                                                     |
+| ----------- | ------------------------------------------------- | ----------------- | ---------------------------------------------------------- |
+| **Layer 1** | Platform Constitution                             | v5.0.2-HARMONIZED | Governance, Principles, Ontology, Laws, State Machines     |
+| **Layer 2** | Enterprise Database SSOT                          | v5.0.2-HARMONIZED | Physical schema, RLS, Stored Procedures, Enums             |
+| **Layer 3** | Enterprise Product Experience Architecture (EPXA) | v5.1-HARMONIZED   | Technology stack, Bounded Contexts, Traceability, DX rules |
 
 **Rule:** No volume or catalog may contradict these three layers. Conflicts are resolved by referring back to Layer 1 as the highest authority.
 
@@ -89,15 +93,15 @@ These three documents are **not volumes**. They are the **bedrock**:
 
 ### 4.1 Ownership & Accountability
 
-| Artifact Type | Primary Owner | Approval Required | Change Process |
-|---------------|---------------|-------------------|----------------|
-| Layer 1 (Constitution) | Lead Architect + EAB | Full ARB + Lead Architect | RFC → EAB Vote → Ratification |
-| Layer 2 (Database) | Database Architect | Data + Security + Architecture | RFC → Technical Review |
-| Layer 3 (EPXA) | Platform Engineering Lead | Architecture + DX + Security | RFC → Platform Review |
-| Volumes 01–10 | Volume Owner (assigned) | Peer Review + Architecture | PR + Volume Owner sign-off |
-| Living Catalogs | Domain Owner | Automated + Human review | CI/CD + manual override |
-| ADRs | Decision Maker | EAB (for strategic) | ADR template + merge |
-| RFCs | Proposer | Relevant domain owners | Discussion → Decision → ADR |
+| Artifact Type          | Primary Owner             | Approval Required              | Change Process                |
+| ---------------------- | ------------------------- | ------------------------------ | ----------------------------- |
+| Layer 1 (Constitution) | Lead Architect + EAB      | Full ARB + Lead Architect      | RFC → EAB Vote → Ratification |
+| Layer 2 (Database)     | Database Architect        | Data + Security + Architecture | RFC → Technical Review        |
+| Layer 3 (EPXA)         | Platform Engineering Lead | Architecture + DX + Security   | RFC → Platform Review         |
+| Volumes 01–10          | Volume Owner (assigned)   | Peer Review + Architecture     | PR + Volume Owner sign-off    |
+| Living Catalogs        | Domain Owner              | Automated + Human review       | CI/CD + manual override       |
+| ADRs                   | Decision Maker            | EAB (for strategic)            | ADR template + merge          |
+| RFCs                   | Proposer                  | Relevant domain owners         | Discussion → Decision → ADR   |
 
 ### 4.2 Versioning Strategy
 
@@ -127,6 +131,7 @@ When starting a new task, AI agents **MUST** load in this order:
 See `docs/ai-ide/SEKB-AI-Agent-Rules.md` (to be created).
 
 Core principles:
+
 - Never contradict Layer 1 ubiquitous language.
 - All database changes must respect RLS + Enterprise Laws (L-01 to L-10).
 - All AI WRITE actions must go through Approval workflow (L-06).
@@ -137,13 +142,13 @@ Core principles:
 
 ## 6. Roadmap for SEKB Completion
 
-| Phase | Focus | Target Volumes / Artifacts | Timeline | Exit Criteria |
-|-------|-------|----------------------------|----------|---------------|
-| **Phase 0** | Foundation Cleanup | Volume 00, harmonize Layers 1-3, restructure workspace | Week 1 | Clean folder structure + Volume 00 ratified |
-| **Phase 1** | Core Volumes | Complete Volume 04 (AI), 05 (Ops), 06 (Governance) | Weeks 2-4 | 3 new volumes production-ready |
-| **Phase 2** | Business & Product | Volume 07, 08 + Living Catalogs (Event + API) | Weeks 5-7 | Business + Product coverage |
-| **Phase 3** | Developer Experience & Playbooks | Volume 09, 10 + Runbooks + ADR/RFC process | Weeks 8-10 | Full SEKB v5.2 ready |
-| **Phase 4** | AI-Native Optimization | Structured data exports, prompt evaluation harness, agent memory | Ongoing | SEKB becomes active context for autonomous agents |
+| Phase       | Focus                            | Target Volumes / Artifacts                                       | Timeline   | Exit Criteria                                     |
+| ----------- | -------------------------------- | ---------------------------------------------------------------- | ---------- | ------------------------------------------------- |
+| **Phase 0** | Foundation Cleanup               | Volume 00, harmonize Layers 1-3, restructure workspace           | Week 1     | Clean folder structure + Volume 00 ratified       |
+| **Phase 1** | Core Volumes                     | Complete Volume 04 (AI), 05 (Ops), 06 (Governance)               | Weeks 2-4  | 3 new volumes production-ready                    |
+| **Phase 2** | Business & Product               | Volume 07, 08 + Living Catalogs (Event + API)                    | Weeks 5-7  | Business + Product coverage                       |
+| **Phase 3** | Developer Experience & Playbooks | Volume 09, 10 + Runbooks + ADR/RFC process                       | Weeks 8-10 | Full SEKB v5.2 ready                              |
+| **Phase 4** | AI-Native Optimization           | Structured data exports, prompt evaluation harness, agent memory | Ongoing    | SEKB becomes active context for autonomous agents |
 
 ---
 
@@ -163,4 +168,4 @@ A successful Enterprise Knowledge Base must satisfy:
 
 **End of Volume 00**
 
-*This document is the meta-architecture of Moventios knowledge. It is the first document any architect, engineer, or AI agent should read when engaging with Moventios at a deep level.*
+_This document is the meta-architecture of Moventios knowledge. It is the first document any architect, engineer, or AI agent should read when engaging with Moventios at a deep level._

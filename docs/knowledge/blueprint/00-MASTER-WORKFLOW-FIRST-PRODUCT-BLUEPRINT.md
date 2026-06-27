@@ -1,18 +1,20 @@
 # MASTER BLUEPRINT — Workflow-First Product Blueprint
+
 ## AI-Native Project & Event Operations Platform (Moventios)
 
 **Version:** 1.0 — Workflow-First Outside-In Design  
 **Date:** 2026-06-26  
 **Status:** Authoritative Reference (Pre-Implementation)  
-**Team Lens Applied:** CEO + COO + Product Strategist + PM + Enterprise UX Designer + UX Researcher + Service Designer + Business Analyst + Event Ops Director + PM Consultant + CX Specialist + Information Architect + Growth Strategist  
+**Team Lens Applied:** CEO + COO + Product Strategist + PM + Enterprise UX Designer + UX Researcher + Service Designer + Business Analyst + Event Ops Director + PM Consultant + CX Specialist + Information Architect + Growth Strategist
 
 **Core Principle (Strictly Followed):**  
-User → Business → Workflow → Experience → System → Data  
+User → Business → Workflow → Experience → System → Data
 
 **NEVER start from DB, API, modules, entities, or engineering architecture.**  
 The existing technical foundation (DDD/hexagonal, L-07 command handlers via IEventBus/Outbox, Supabase/Postgres/RLS, Next.js app router, Trigger.dev workers, Stoic UX) is **fixed and not to be redesigned**. This blueprint defines **what** the business experience must feel like so that any implementation (current or future) serves real operations as an "operational partner".
 
 **References to Existing Foundation (Do Not Duplicate):**
+
 - Enterprise Product Strategy (docs/strategy/01-enterprise-product-strategy.md)
 - Jobs-to-be-Done (docs/strategy/03-jobs-to-be-done.md)
 - ICP (docs/strategy/04-ideal-customer-profile.md)
@@ -24,6 +26,7 @@ The existing technical foundation (DDD/hexagonal, L-07 command handlers via IEve
 - Current app navigation already reflects work (Facilities, Events, Approvals, Calendar) — extend this pattern.
 
 Every recommendation below answers:
+
 - Who is this for?
 - What user problem / job does it solve?
 - Where does it fit in the workflow?
@@ -73,6 +76,7 @@ Repeat / Advocacy / Expansion (Knowledge Base update, Template creation, Relatio
 ```
 
 **Actors (Mapped for every major step):**
+
 - Owner / Executive Sponsor
 - Sales / Account Manager
 - Operations Director / Event Manager / Project Manager
@@ -87,6 +91,7 @@ Repeat / Advocacy / Expansion (Knowledge Base update, Template creation, Relatio
 Inquiry Form / Survey Report → Proposal (PDF + editable) → Quote/Revision History → Contract + SOW → Deposit Receipt + Payment Schedule → Project Charter / Timeline / Budget → Purchase Orders / Vendor Contracts → Access Lists / Manifests → Incident / Change Logs → Invoice + Reconciliation Report → Final Report + Lessons Learned + NPS.
 
 **Decisions & Approvals (Critical):**
+
 - Scope/budget change > threshold → multi-party approval (Ops + Finance + Client).
 - Resource conflict → auto-detect + suggest alternatives or escalate.
 - Vendor selection > $X or strategic → procurement review.
@@ -94,6 +99,7 @@ Inquiry Form / Survey Report → Proposal (PDF + editable) → Quote/Revision Hi
 - AI-generated plan → human review gate (L-06 style).
 
 **Industry Variations (Examples):**
+
 - Wedding Organizer: Heavy client emotion + vendor coordination + rehearsal + day-of run-of-show. High sensitivity to timeline slips. Deposit + final payment milestones strict.
 - Exhibition / Trade Show: Booth allocation, power/logistics, multiple vendors per exhibitor, move-in/move-out windows, union labor rules, lead retrieval.
 - Corporate Events: Compliance, branding consistency, attendee data privacy (GDPR), ROI measurement tied to business objectives.
@@ -102,17 +108,20 @@ Inquiry Form / Survey Report → Proposal (PDF + editable) → Quote/Revision Hi
 - Project-Based (non-pure-event): Milestones with deliverables, change orders, time & materials vs fixed.
 
 **Finance/Inventory/Resource Flows (Parallel):**
+
 - Every planning action creates or reserves budget line + inventory allocation.
 - Execution consumes/returns resources with audit trail.
 - Closing triggers billing + revenue recognition.
 
 **Exception / Recovery / Escalation Flows:**
+
 - Double-booking detected → block + suggest alternatives + notify stakeholders.
 - Vendor no-show → auto-escalate + contingency playbook + client comms.
 - Budget overrun projected → early warning + approval for change order.
 - Safety incident → freeze affected resources + mandatory reporting chain.
 
 **Automation & AI Opportunities (Phase 1 level):**
+
 - Auto-generate first-draft proposal/timeline/budget from inquiry + past similar jobs (AI).
 - Conflict detection across calendar/resources.
 - Risk scoring on proposals.
@@ -128,6 +137,7 @@ This lifecycle becomes the backbone for all subsequent phases. The platform must
 Built on existing ICP (Mid-to-large B2B hybrid ops orgs). Expanded to 13 operational roles.
 
 ### 1. Owner / Executive
+
 - **Goals:** Profitable growth, risk mitigation, brand reputation, scalable operations without chaos.
 - **Responsibilities:** Final P&L sign-off, major vendor/client relationships, strategic capacity decisions.
 - **Daily/Weekly:** Review high-level dashboards (utilization, margin, pipeline, risk), approve large changes.
@@ -139,6 +149,7 @@ Built on existing ICP (Mid-to-large B2B hybrid ops orgs). Expanded to 13 operati
 - **AI Opportunities:** "Summarize last quarter ops performance + top 3 risks", "What if we add 2 more large weddings next month?" (scenario modeling, never auto-decide).
 
 ### 2. Operations Director
+
 - **Goals:** Reliable delivery, team coordination, capacity planning.
 - **Daily:** Oversee all active projects/events, resolve conflicts, manage approvals queue.
 - **Pain:** Context switching between spreadsheets/tools, late discovery of resource conflicts.
@@ -148,6 +159,7 @@ Built on existing ICP (Mid-to-large B2B hybrid ops orgs). Expanded to 13 operati
 (Continue pattern for all...)
 
 ### 3. Project / Event Manager (Core User)
+
 - **Goals:** Deliver on time/on budget, happy client, clean handoffs.
 - **Daily Tasks:** Plan timeline, assign crew/venues, track tasks, manage vendors, update client, resolve blockers.
 - **Pain Points:** Manual status chasing, versioned files everywhere, last-minute changes without visibility.
@@ -159,6 +171,7 @@ Built on existing ICP (Mid-to-large B2B hybrid ops orgs). Expanded to 13 operati
 ### 4-13. Venue Manager, Sales, Finance, Procurement, Warehouse/Logistics, Vendor (external), Crew Lead, Client (portal view), Visitor/Attendee (limited access), Marketing/Production Coordinator.
 
 **Cross-Cutting:**
+
 - All personas need **role-based views** of the same underlying operation (single source of truth).
 - Mobile-first for on-site (crew, venue, ops director).
 - Strong notification + approval surface (never buried).
@@ -175,6 +188,7 @@ Existing primary JTBD from docs/strategy/03-jobs-to-be-done.md is solid: "When I
 ### Additional High-Impact JTBDs (with full structure)
 
 **JTBD: "Receive & Qualify a New Client Inquiry"**
+
 - Objective: Capture details accurately and fast, assess fit & value quickly.
 - Inputs: Form/website/email/phone, past interaction history.
 - Outputs: Qualified lead record + initial survey task + proposed next step.
@@ -184,17 +198,21 @@ Existing primary JTBD from docs/strategy/03-jobs-to-be-done.md is solid: "When I
 - AI: "Based on inquiry + past similar, this looks like a high-margin corporate series — suggest upsell packages."
 
 **JTBD: "Prepare & Win a Proposal"**
+
 - ... (detailed)
 - AI: Generate first draft from templates + similar closed-won + current pricing.
 
 **JTBD: "Schedule & Reserve Resources Without Conflict"**
+
 - (Core spatial booking + inventory)
 - Ties directly to current facilities/rooms + bookings domain.
 
 **JTBD: "Run Flawless Day-of Operations"**
+
 - Command center view, access control, live adjustments, comms.
 
 **JTBD: "Close, Bill, Learn, and Repeat"**
+
 - Finance flow + knowledge capture + relationship nurturing.
 
 Each JTBD mapped to existing + new screens, flows, and AI assistance opportunities.
@@ -210,6 +228,7 @@ Discovery → Education → Evaluation → Trial/POC → Onboarding & Activation
 **For each stage (detailed table example for Daily Operations):**
 
 **Daily Operations Stage**
+
 - **Questions:** "What's happening today/tomorrow that I must act on?" "Where are the risks?" "What decisions need my input?"
 - **Emotions:** Confidence when everything is visible; anxiety when surprises appear.
 - **Information Needed:** Today's critical path, approvals pending, resource utilization, open issues.
@@ -238,6 +257,7 @@ For core processes (Create Event/Project, Resource Allocation, Approvals, Execut
 **Exception / Escalation / Recovery Flow**
 
 **System Flow Example (Invisible Magic — "Create Project" triggers):**
+
 1. Persist project aggregate (handler).
 2. Generate Timeline + Tasks skeleton (from template + AI suggestion).
 3. Create Budget Ledger lines (double-entry ready).
@@ -258,6 +278,7 @@ All flows expressed as clear diagrams + step lists.
 ## PHASE 7 — INFORMATION ARCHITECTURE (Work-Centered, Not Module-Centered)
 
 **Top-Level Navigation (Work-Oriented):**
+
 - Home (personalized command center: My Today + Alerts + Quick Actions)
 - Workspace (switch between organizations/teams if multi-tenant)
 - Projects (all active + templates)
@@ -271,6 +292,7 @@ All flows expressed as clear diagrams + step lists.
 - Settings (minimal)
 
 **Within a Project / Event (consistent structure):**
+
 - Overview (status, key metrics, next actions, AI summary)
 - Timeline / Schedule
 - Tasks / Kanban
@@ -287,6 +309,7 @@ All flows expressed as clear diagrams + step lists.
 - Settings (for this project)
 
 **Every Screen Must Answer (enforced in design):**
+
 1. What is the user's goal right now?
 2. What decision(s) should be made here?
 3. What is the single best next action?
@@ -303,6 +326,7 @@ Aligns with & extends current app structure (facilities/events/approvals) and re
 **Screen Inventory (Prioritized):**
 
 **Home / Command Center**
+
 - Purpose: "What requires my attention right now?"
 - Primary Action: Act on top 3 alerts or "Go to my active project".
 - Critical Info: Today's events, pending approvals (count + urgency), utilization, open risks.
@@ -310,6 +334,7 @@ Aligns with & extends current app structure (facilities/events/approvals) and re
 - States: Empty (beautiful "create your first" or "all quiet — here's recommended focus"), Loading (skeletons), Success.
 
 **Project Dashboard**
+
 - Similar for Event Dashboard (specialized view with day-of emphasis).
 
 **Timeline / Gantt + Calendar Integration**
@@ -322,6 +347,7 @@ Aligns with & extends current app structure (facilities/events/approvals) and re
 **AI Assistant Panel** (context-aware sidebar or modal)
 
 For **each**:
+
 - Audience
 - Primary/Secondary actions
 - Info hierarchy
@@ -365,6 +391,7 @@ Inventory aligned to existing shadcn + Stoic UX + Volume 08:
 **Core Posture:** AI proposes, explains, surfaces options + risks. Human decides (especially money, access, contracts, safety).
 
 **High-Value Copilot Capabilities (Mapped to Workflows):**
+
 - Generate initial project plan / event checklist / run-of-show from brief + similar past jobs (with citations).
 - Detect & surface scheduling / resource conflicts with alternatives.
 - Risk prediction + mitigation suggestions.
@@ -377,6 +404,7 @@ Inventory aligned to existing shadcn + Stoic UX + Volume 08:
 - Answer "operational questions" grounded in tenant data + knowledge base ("What's our average crew utilization for corporate events this quarter?").
 
 **Guardrails (Non-Negotiable):**
+
 - Every material suggestion shows source + confidence + "Review before applying".
 - No auto-execution on finance, access control, or contracts.
 - Human override + audit log for all AI-influenced actions.
@@ -394,6 +422,7 @@ Aligns with existing recommended AI architecture (human-decided).
 **Education-While-Working Philosophy:** The product teaches operational excellence.
 
 **Inventory:**
+
 - **Homepage / Marketing:** Value-first messaging ("Run events and projects with less chaos and full trust"), industry pages, use-case stories.
 - **Onboarding:** Role-based quickstarts, interactive checklist ("Set up your first venue").
 - **Empty States:** Educational + actionable ("No bookings yet. Book a room or import from calendar.")
@@ -420,6 +449,7 @@ Discovery (SEO for "event operations platform", "venue management software with 
 ## PHASE 13 — IMPLEMENTATION BLUEPRINTS & ROADMAP
 
 **Deliverables Produced by This Blueprint:**
+
 - Business Blueprint (this document + Phase 1 flows)
 - Workflow Blueprints (Phase 5+6 full set)
 - User Journey Blueprint (Phase 4)
@@ -437,6 +467,7 @@ Discovery (SEO for "event operations platform", "venue management software with 
 **Priority Matrix (Now / Next / Later) — Examples:**
 
 **Now (Strengthen current foundation + workflow clarity):**
+
 - Unified Home/Command Center + personalized "Today" view.
 - Enhanced Approvals (detail, realtime, context) — already strong, polish.
 - Timeline + Resource allocation with conflict surfacing.
@@ -445,6 +476,7 @@ Discovery (SEO for "event operations platform", "venue management software with 
 - Ops Director + Event Manager persona flows end-to-end.
 
 **Next:**
+
 - Full Finance flow integration (budget creation auto + reconciliation).
 - Live Command Center for event day.
 - Advanced resource inventory + allocation board.
@@ -453,6 +485,7 @@ Discovery (SEO for "event operations platform", "venue management software with 
 - Industry templates (wedding pack, exhibition pack).
 
 **Later:**
+
 - Marketplace for vendors/templates.
 - Advanced forecasting / scenario planning AI.
 - White-label / multi-brand enterprise.
@@ -465,6 +498,7 @@ This document + companions + referenced strategy files provide **zero ambiguity*
 ---
 
 ## Appendices (To Be Expanded)
+
 - Mermaid diagrams for all major flows.
 - Detailed persona cards.
 - Full JTBD matrix.

@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 
 /**
  * Movent Infrastructure - Identity Engine
- * 
+ *
  * Tenant = Organization (technical).
  * User-facing: Organization. Owns Places, Catalysts, and Participation in the Network.
  */
@@ -53,7 +53,9 @@ export class Tenant {
         name: params.name,
         slug: params.slug,
         ownerEmail: params.ownerEmail,
-        ...(params.ownerDisplayName !== undefined ? { ownerDisplayName: params.ownerDisplayName } : {}),
+        ...(params.ownerDisplayName !== undefined
+          ? { ownerDisplayName: params.ownerDisplayName }
+          : {}),
       },
     };
 
@@ -79,9 +81,15 @@ export class Tenant {
     };
   }
 
-  get id() { return this.props.id; }
-  get slug() { return this.props.slug; }
-  get isActive() { return this.props.isActive; }
+  get id() {
+    return this.props.id;
+  }
+  get slug() {
+    return this.props.slug;
+  }
+  get isActive() {
+    return this.props.isActive;
+  }
 
   toRecord(): TenantProps {
     return { ...this.props };

@@ -10,6 +10,7 @@
 ## Context
 
 > Describe the situation and why this decision is needed. Include:
+>
 > - What problem are we solving?
 > - What forces or constraints are at play?
 > - What is the current state?
@@ -22,10 +23,10 @@
 
 ## Considered Options
 
-| Option | Description | Pros | Cons |
-|--------|-------------|------|------|
-| Option A | {Description} | {Pros} | {Cons} |
-| Option B | {Description} | {Pros} | {Cons} |
+| Option                | Description   | Pros   | Cons   |
+| --------------------- | ------------- | ------ | ------ |
+| Option A              | {Description} | {Pros} | {Cons} |
+| Option B              | {Description} | {Pros} | {Cons} |
 | Option C (status quo) | {Description} | {Pros} | {Cons} |
 
 ## Decision
@@ -37,20 +38,23 @@
 ## Consequences
 
 ### Positive
+
 - {Positive consequence 1}
 - {Positive consequence 2}
 
 ### Negative / Trade-offs
+
 - {Trade-off 1 — and mitigation}
 - {Trade-off 2 — and mitigation}
 
 ### Neutral
+
 - {Neutral consequence}
 
 ## Enterprise Laws Impacted
 
-| Law | Impact | Enforcement |
-|-----|--------|-------------|
+| Law           | Impact                              | Enforcement                  |
+| ------------- | ----------------------------------- | ---------------------------- |
 | L-{N}: {Name} | {How this decision affects the law} | {How compliance is enforced} |
 
 ## Cross-References
@@ -61,10 +65,10 @@
 
 ## Changelog
 
-| Date | Author | Change |
-|------|--------|--------|
+| Date       | Author | Change        |
+| ---------- | ------ | ------------- |
 | YYYY-MM-DD | {Name} | Initial draft |
 
 ---
 
-*This ADR is immutable once status = ACCEPTED. Superseding decisions must create a new ADR.*
+_This ADR is immutable once status = ACCEPTED. Superseding decisions must create a new ADR._

@@ -41,21 +41,27 @@ async function dispatchEvent(event: DomainEventBase, db: any) {
       // Real effect: verify via repo (proves wiring), handler already emitted this
       const repo = new DrizzleAccessPassRepository(db);
       const pass = await repo.findById(event.aggregateId, event.tenantId).catch(() => null);
-      console.log(`[dispatcher] AccessPassExpired side-effect verified for pass=${pass?.id ?? 'n/a'}`);
+      console.log(
+        `[dispatcher] AccessPassExpired side-effect verified for pass=${pass?.id ?? 'n/a'}`,
+      );
       break;
     }
     case 'BookingSubmitted': {
       console.log(`[dispatcher] invoking Booking workflow for ${event.aggregateId}`);
       const repo = new DrizzleBookingRepository(db);
       const booking = await repo.findById(event.aggregateId, event.tenantId).catch(() => null);
-      console.log(`[dispatcher] BookingSubmitted side-effect for booking=${booking?.id ?? event.aggregateId}`);
+      console.log(
+        `[dispatcher] BookingSubmitted side-effect for booking=${booking?.id ?? event.aggregateId}`,
+      );
       break;
     }
     case 'FacilityRegistered':
     case 'RoomCreated':
     case 'EventPublished':
     case 'PassTierCreated':
-      console.log(`[dispatcher] invoking spatial/commerce index update for ${event.eventType} ${event.aggregateId}`);
+      console.log(
+        `[dispatcher] invoking spatial/commerce index update for ${event.eventType} ${event.aggregateId}`,
+      );
       // Could trigger search index / projection here in real impl
       break;
     default:

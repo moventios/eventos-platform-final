@@ -39,7 +39,10 @@ describe('middleware → bridge → real POST (shipped createServiceDb)', () => 
   vi.setConfig({ hookTimeout: 60_000 });
   let db: Awaited<ReturnType<typeof createIamTestDb>>['db'];
   let middleware: (req: NextRequest) => Promise<Response>;
-  let POST: (req: NextRequest, ctx: { params: Promise<Record<string, string>> }) => Promise<Response>;
+  let POST: (
+    req: NextRequest,
+    ctx: { params: Promise<Record<string, string>> },
+  ) => Promise<Response>;
 
   beforeAll(async () => {
     process.env['TENANT_COOKIE_SECRET'] = 'test-secret';

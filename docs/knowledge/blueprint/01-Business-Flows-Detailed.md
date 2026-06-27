@@ -5,6 +5,7 @@
 ## Process 1: Lead → Contract → Kickoff (Core Revenue Flow)
 
 **Business Flow (Actors + Decisions + Docs):**
+
 1. Lead captured (Sales or self-serve form) → Actor: Sales / Owner. Document: Inquiry record.
 2. Qualification call / site survey → Event Manager + Client. Doc: Survey notes + photos.
 3. Draft Proposal (packages, high-level timeline, rough budget) → AI assist suggested. Doc: Proposal v1 (versioned).
@@ -18,6 +19,7 @@
 Home → "New Lead" quick action → Capture form (smart fields from ICP) → "Create Proposal" → AI draft appears in editable canvas (timeline + budget preview) → Submit for internal approval (routes to Approvals) → Client portal link sent → Negotiation in comments + version compare → "Convert to Project" (one click after signatures + deposit).
 
 **Approval Flow:**
+
 - < $5k or standard package: Project Manager self-approve + Ops Director notification.
 - > threshold or custom: Parallel — Ops (resources), Finance (margin), Owner (strategic).
 - Mobile-optimized cards with context (client history, similar past margin).
@@ -30,6 +32,7 @@ Proposal stage: Soft budget created (not committed). Contract: Hard budget lines
 
 **System Flow (Invisible — exactly as Phase 6):**
 On "Convert to Project":
+
 - Create Project aggregate + Event if applicable (via handlers).
 - Generate Timeline from best-match template + AI.
 - Create Budget ledger (double-entry ready).
@@ -44,6 +47,7 @@ On "Convert to Project":
 Capacity conflict during proposal → AI surfaces alternatives + "Reserve tentatively" option. Escalates if none acceptable.
 
 **Mermaid Diagram (simplified):**
+
 ```mermaid
 flowchart TD
     Lead --> Qual[Qualify + Survey]
@@ -63,6 +67,7 @@ flowchart TD
 See current implementation (facilities, rooms, bookings, SubmitBookingHandler with 409 conflict).
 
 **Business Additions:**
+
 - Multi-resource bundles (room + AV + catering package).
 - Time-windowed availability (move-in, teardown).
 - Yield / overbooking rules per venue type (with human override).

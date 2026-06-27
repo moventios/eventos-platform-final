@@ -1,9 +1,11 @@
 # Phase 13: Implementation Priority Matrix & Blueprints
 
 ## Priority Framework
+
 Every item scored by: Business Impact (ops pain relief + revenue enablement) × Workflow Coverage × UX Leverage / (Complexity + Risk to existing foundation).
 
 **Now (0-3 months, strengthen core ops partnership feel)**
+
 - Home / Command Center + personalized "My Today + Alerts" (all personas).
   - Who: Every internal user.
   - Problem: Fragmented starting point, surprises.
@@ -19,6 +21,7 @@ Every item scored by: Business Impact (ops pain relief + revenue enablement) × 
 - Unified search / command palette (work + knowledge).
 
 **Next (3-9 months, complete the operational loop)**
+
 - Full finance integration: auto budget lines from planning, consumption tracking, reconciliation, invoicing triggers.
 - Live Operations Command Center (event-day focus: access, crew status, incidents, client comms).
 - Advanced resource inventory management + bundles + returns.
@@ -28,12 +31,14 @@ Every item scored by: Business Impact (ops pain relief + revenue enablement) × 
 - Expanded reporting + post-event insights + lessons capture.
 
 **Later (9-18+ months, ecosystem & scale)**
+
 - Marketplace (vendor directory, template marketplace).
 - Advanced AI (forecasting, multi-scenario planning, profitability optimization).
 - Enterprise features (white-label, advanced SSO, SLAs, audit export packs).
 - Vertical deep packs + partner implementation tooling.
 
 ## Blueprint Deliverables Checklist
+
 - [x] Business Blueprint (flows for 12+ industries + universal + exceptions)
 - [x] Workflow Blueprints (business + user + approval + finance + system + exception for core processes)
 - [x] Personas (13 cards)
@@ -50,6 +55,6 @@ Every item scored by: Business Impact (ops pain relief + revenue enablement) × 
 **How to Use This Blueprint:**
 Any new feature, screen, AI capability, or content must map back to a phase above and answer the 8 success criteria questions before work begins.
 
-Cross-reference: docs/strategy/* , docs/volumes/07-business + 08-product , current source (apps/web, packages/core for handlers).
+Cross-reference: docs/strategy/\* , docs/volumes/07-business + 08-product , current source (apps/web, packages/core for handlers).
 
 This is the authoritative pre-implementation product definition.

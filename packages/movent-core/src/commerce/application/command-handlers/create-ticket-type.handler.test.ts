@@ -7,10 +7,20 @@ import type { IEventBus } from '../../../shared/i-event-bus.js';
 
 class InMemoryPassTierRepo implements IPassTierRepository {
   private tiers = new Map<string, Record<string, unknown>>();
-  async save(tier: unknown) { const t = tier as { id: string; toRecord?: () => Record<string, unknown> }; const rec = t.toRecord ? t.toRecord() : (t as Record<string, unknown>); this.tiers.set(t.id, rec); }
+  async save(tier: unknown) {
+    const t = tier as { id: string; toRecord?: () => Record<string, unknown> };
+    const rec = t.toRecord ? t.toRecord() : (t as Record<string, unknown>);
+    this.tiers.set(t.id, rec);
+  }
   async findById(id: string, tenantId: string) {
     const t = this.tiers.get(id);
-    return t ? { id: t['id'] as string, capacity: t['capacity'] as number, eventId: t['eventId'] as string } : null;
+    return t
+      ? {
+          id: t['id'] as string,
+          capacity: t['capacity'] as number,
+          eventId: t['eventId'] as string,
+        }
+      : null;
   }
   async incrementIssued(id: string, tenantId: string) {}
 }
@@ -36,7 +46,13 @@ describe('CreateTicketTypeHandler', () => {
   });
 
   it('error path coverage: still succeeds (no capacity check on create) but demonstrates handler contract', async () => {
-    const cmd: CreateTicketTypeCommand = { eventId: 'e2', name: 'GA', price: '50.00', currency: 'IDR', capacity: 10 };
+    const cmd: CreateTicketTypeCommand = {
+      eventId: 'e2',
+      name: 'GA',
+      price: '50.00',
+      currency: 'IDR',
+      capacity: 10,
+    };
     const repo = new InMemoryPassTierRepo();
     const bus: IEventBus = { publish: async () => {} };
     const handler = new CreateTicketTypeHandler(repo, bus);

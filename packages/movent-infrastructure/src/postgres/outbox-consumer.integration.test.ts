@@ -82,4 +82,3 @@ describe('DrizzleOutboxConsumer (real impl)', () => {
     expect(pending.length).toBe(0);
   });
 });
-

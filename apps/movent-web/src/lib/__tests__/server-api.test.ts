@@ -74,9 +74,7 @@ describe('fetchWithRequestContext', () => {
     expect(init.cache).toBe('no-store');
 
     const forwarded = init.headers as Headers;
-    expect(forwarded.get('cookie')).toBe(
-      'sb-access-token=token-value; movent_tenant_id=tenant-1',
-    );
+    expect(forwarded.get('cookie')).toBe('sb-access-token=token-value; movent_tenant_id=tenant-1');
     expect(forwarded.get('x-tenant-id')).toBe('tenant-1');
     expect(forwarded.get('x-actor-id')).toBe('actor-1');
     expect(forwarded.get('x-actor-type')).toBe('USER');
@@ -172,9 +170,7 @@ describe('fetchWithRequestContext', () => {
 
   it('defaults protocol to http in development', async () => {
     const { resolveBaseUrl } = await loadServerApi();
-    expect(resolveBaseUrl(new Headers({ host: 'localhost:3000' }))).toBe(
-      'http://localhost:3000',
-    );
+    expect(resolveBaseUrl(new Headers({ host: 'localhost:3000' }))).toBe('http://localhost:3000');
   });
 
   it('rejects invalid paths', async () => {

@@ -23,7 +23,9 @@ describe('decodeJwtPayload', () => {
 
 describe('resolveTenantId', () => {
   it('prefers JWT tenant_id over cookie', () => {
-    expect(resolveTenantId({ sub: 'u1', tenant_id: 'jwt-tenant' }, 'cookie-tenant')).toBe('jwt-tenant');
+    expect(resolveTenantId({ sub: 'u1', tenant_id: 'jwt-tenant' }, 'cookie-tenant')).toBe(
+      'jwt-tenant',
+    );
   });
 
   it('falls back to movent_tenant_id cookie when JWT lacks claim', () => {

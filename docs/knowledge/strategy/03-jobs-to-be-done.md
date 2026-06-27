@@ -7,6 +7,7 @@
 "When I run operations involving physical spaces, events, or logistics, I want to execute bookings, issue access, process payments, and track everything so that I can trust the records, avoid conflicts, comply with audits, and scale without chaos."
 
 **Functional:**
+
 - Manage space availability without double-booking.
 - Issue verifiable access rights.
 - Record financial transactions immutably.

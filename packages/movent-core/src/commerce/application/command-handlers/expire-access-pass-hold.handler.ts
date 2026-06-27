@@ -19,7 +19,7 @@ export class ExpireAccessPassHoldHandler {
 
     for (const candidate of candidates) {
       // findPendingPastHold now returns proper AccessPass instances (extended with timestamps)
-      const pass = candidate;  // already AccessPass (or reconstituted by repo)
+      const pass = candidate; // already AccessPass (or reconstituted by repo)
 
       const event = pass.expire('SYSTEM');
 

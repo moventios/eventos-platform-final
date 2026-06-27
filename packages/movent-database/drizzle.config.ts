@@ -22,7 +22,7 @@ if (existsSync(rootEnvPath)) {
 
 export default defineConfig({
   dialect: 'postgresql',
-  schema: './src/schema/index.ts',
+  schema: './dist/schema/index.js',
   out: './migrations',
   dbCredentials: {
     url: process.env['POSTGRES_URL'] ?? process.env['DATABASE_URL'] ?? '',

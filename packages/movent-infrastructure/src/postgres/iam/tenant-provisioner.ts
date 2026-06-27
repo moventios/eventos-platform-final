@@ -7,9 +7,7 @@ import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type { PgliteDatabase } from 'drizzle-orm/pglite';
 import * as schema from '@movent/database/schema';
 
-type ProvisionDatabase =
-  | PostgresJsDatabase<typeof schema>
-  | PgliteDatabase<typeof schema>;
+type ProvisionDatabase = PostgresJsDatabase<typeof schema> | PgliteDatabase<typeof schema>;
 
 export class DrizzleTenantProvisioner implements ITenantProvisioner {
   constructor(private readonly db: ProvisionDatabase) {}

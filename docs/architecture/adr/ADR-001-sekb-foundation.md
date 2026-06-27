@@ -10,6 +10,7 @@
 ## Context
 
 Moventios previously operated with three canonical source documents:
+
 - **Layer 1:** Platform Constitution — Governance, principles, ontology, laws, state machines
 - **Layer 2:** Enterprise Database SSOT — Physical schema, RLS, stored procedures, enums
 - **Layer 3:** EPXA (Enterprise Product Experience Architecture) — Technology stack, bounded contexts, traceability, DX rules
@@ -32,17 +33,18 @@ While these three documents established a solid canonical foundation, they were 
 
 ## Considered Options
 
-| Option | Description | Pros | Cons |
-|--------|-------------|------|------|
-| **A: Three SSOTs only** | Maintain Layer 1/2/3 as sole documentation | Simple, minimal overhead | Cannot cover governance, ops, product, business depth; AI context loading inefficient |
-| **B: Single mega-document** | Merge all documentation into one canonical document | Single file to load | Unmaintainable; update cadences conflict; AI token limits exceeded |
-| **C: 10-Volume SEKB (Chosen)** | Structured knowledge base with defined volumes, living catalogs, and immutable foundation | Scalable, audience-targeted, AI-optimized, maintainable | Higher initial authoring effort; requires volume ownership governance |
+| Option                         | Description                                                                               | Pros                                                    | Cons                                                                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **A: Three SSOTs only**        | Maintain Layer 1/2/3 as sole documentation                                                | Simple, minimal overhead                                | Cannot cover governance, ops, product, business depth; AI context loading inefficient |
+| **B: Single mega-document**    | Merge all documentation into one canonical document                                       | Single file to load                                     | Unmaintainable; update cadences conflict; AI token limits exceeded                    |
+| **C: 10-Volume SEKB (Chosen)** | Structured knowledge base with defined volumes, living catalogs, and immutable foundation | Scalable, audience-targeted, AI-optimized, maintainable | Higher initial authoring effort; requires volume ownership governance                 |
 
 ## Decision
 
 **Chosen Option:** C — 10-Volume Enterprise Knowledge Base (SEKB) built on top of the three immutable canonical foundation layers.
 
 The SEKB structure provides:
+
 - **Volume 00**: Meta-architecture (how to use the SEKB itself)
 - **Volumes 01–10**: Specialized domains with clear ownership and update cadences
 - **Living Catalogs**: Event Catalog, API Catalog, MCP Tool Registry, Prompt Registry, ADR Repository, RFC Repository, Runbook Catalog
@@ -53,6 +55,7 @@ Conflicts between volumes are resolved by referring to Layer 1 as the highest au
 ## Consequences
 
 ### Positive
+
 - AI agents can load exactly the context relevant to their task without reading the entire knowledge base.
 - Each volume has a defined owner, update cadence, and approval process (Volume 00 Section 4.1).
 - Architectural decisions are now immutably recorded in ADRs; no more knowledge embedded only in individuals.
@@ -61,20 +64,22 @@ Conflicts between volumes are resolved by referring to Layer 1 as the highest au
 - The SEKB can absorb 10+ years of platform evolution through versioning, deprecation, and RFC governance.
 
 ### Negative / Trade-offs
-- **Higher authoring effort**: Building 10 volumes requires significant upfront investment. *Mitigation: Phased delivery per Volume 00 Section 6 roadmap.*
-- **Governance overhead**: Volume ownership and approval processes add coordination cost. *Mitigation: Lightweight approval for minor patches; RFC only for structural changes.*
-- **Synchronization risk**: Volumes may drift from foundation layers over time. *Mitigation: CI/CD terminology gates + quarterly ARB review via Volume 10.*
+
+- **Higher authoring effort**: Building 10 volumes requires significant upfront investment. _Mitigation: Phased delivery per Volume 00 Section 6 roadmap._
+- **Governance overhead**: Volume ownership and approval processes add coordination cost. _Mitigation: Lightweight approval for minor patches; RFC only for structural changes._
+- **Synchronization risk**: Volumes may drift from foundation layers over time. _Mitigation: CI/CD terminology gates + quarterly ARB review via Volume 10._
 
 ### Neutral
+
 - The three foundation layers (Layer 1/2/3) remain unchanged in authority and structure; SEKB builds on top of them without modifying them.
 
 ## Enterprise Laws Impacted
 
-| Law | Impact | Enforcement |
-|-----|--------|-------------|
-| L-05: No Entity Without Owner | Every volume now has an explicit owner (Volume 00, Table 3.1) | Volume ownership table enforced at PR review |
-| L-06: AI Write Interception | SEKB instructs AI agents explicitly; Volume 04 details MCP enforcement | AI agent instructions in `docs/ai-ide/SEKB-AI-Agent-Instructions.md` |
-| L-09: API Versioning | Volume versioning follows semantic versioning with 90-day deprecation notices | Volume 00 Section 4.2 |
+| Law                           | Impact                                                                        | Enforcement                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| L-05: No Entity Without Owner | Every volume now has an explicit owner (Volume 00, Table 3.1)                 | Volume ownership table enforced at PR review                         |
+| L-06: AI Write Interception   | SEKB instructs AI agents explicitly; Volume 04 details MCP enforcement        | AI agent instructions in `docs/ai-ide/SEKB-AI-Agent-Instructions.md` |
+| L-09: API Versioning          | Volume versioning follows semantic versioning with 90-day deprecation notices | Volume 00 Section 4.2                                                |
 
 ## Cross-References
 
@@ -85,10 +90,10 @@ Conflicts between volumes are resolved by referring to Layer 1 as the highest au
 
 ## Changelog
 
-| Date | Author | Change |
-|------|--------|--------|
+| Date       | Author               | Change                               |
+| ---------- | -------------------- | ------------------------------------ |
 | 2026-06-25 | Lead Architect + EAB | Initial draft — accepted by EAB vote |
 
 ---
 
-*This ADR is immutable. Future structural changes to the SEKB taxonomy require a new RFC → ADR process.*
+_This ADR is immutable. Future structural changes to the SEKB taxonomy require a new RFC → ADR process._

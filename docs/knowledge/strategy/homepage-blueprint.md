@@ -1,4 +1,5 @@
 # Homepage Blueprint
+
 ## Moventios
 
 **Version:** 1.0  
@@ -14,7 +15,9 @@
 ---
 
 ## Page Goal
+
 Convert unknown visitors into:
+
 1. **Engaged evaluators** → watch demo or read further
 2. **Self-serve starters** → begin free trial
 3. **Enterprise prospects** → request a demo
@@ -52,6 +55,7 @@ No credit card required · Free for your first 2 events · Cancel anytime
 ```
 
 ### Design Notes
+
 - H1: 2-line break creates visual rhythm (as above)
 - Background: Deep onyx (`--color-bg-base: #09090b`) with subtle grid texture
 - CTA Primary: Violet accent (`--color-accent: #7c3aed`)
@@ -78,6 +82,7 @@ TRUSTED BY OPERATIONS TEAMS AT
 ```
 
 ### Notes
+
 - Logos: grayscale on hover → color (subtle animation)
 - If no real customers yet: use metrics only, or placeholder with "Launch customers"
 - Must be real companies — never generic silhouette logos
@@ -91,6 +96,7 @@ TRUSTED BY OPERATIONS TEAMS AT
 **Audience:** Problem-aware visitor
 
 ### Headline
+
 ```
 [H2]
 Operations teams deserve better than this.
@@ -125,6 +131,7 @@ Operations teams deserve better than this.
 **Audience:** Solution-aware visitor
 
 ### Headline
+
 ```
 [H2]
 One platform. Every stage of your operation.
@@ -161,6 +168,7 @@ exportable — so you can always prove what happened.
 **Audience:** Evaluator (feature-curious)
 
 ### Headline
+
 ```
 [H2]
 Everything your operations team needs.
@@ -197,7 +205,7 @@ Everyone sees the same calendar, the same status, the same numbers.
 [Card 5 — Small, bottom-left]
 Financial Integrity
 [Icon: ledger]
-Double-entry accounting for events. Immutable records. 
+Double-entry accounting for events. Immutable records.
 No retroactive edits — ever.
 
 [Card 6 — Large, bottom-right]
@@ -216,6 +224,7 @@ Data isolation per organization. From 10 to 10,000 users.
 **Audience:** Late-stage evaluator
 
 ### Structure
+
 ```
 [H2 — eyebrow]
 Real teams. Real results.
@@ -252,7 +261,7 @@ Events              Uptime SLA         Double-bookings     Average time
 coordinated                            ever                to full setup
 ```
 
-*Update with real metrics as they become available. Placeholder is acceptable during launch.*
+_Update with real metrics as they become available. Placeholder is acceptable during launch._
 
 ---
 
@@ -287,13 +296,13 @@ See `docs/strategy/website-ia.md` Section 3 for full footer structure.
 
 ## Performance Requirements
 
-| Metric | Target | Notes |
-|--------|--------|-------|
-| LCP | <1.5s | Marketing page — static/SSG |
-| INP | <100ms | No heavy interactivity above fold |
-| CLS | <0.05 | Reserve space for images / logos |
-| Hero image | <200KB | WebP format, priority loading |
-| JS bundle | <100KB | Minimal above-fold JS |
+| Metric     | Target | Notes                             |
+| ---------- | ------ | --------------------------------- |
+| LCP        | <1.5s  | Marketing page — static/SSG       |
+| INP        | <100ms | No heavy interactivity above fold |
+| CLS        | <0.05  | Reserve space for images / logos  |
+| Hero image | <200KB | WebP format, priority loading     |
+| JS bundle  | <100KB | Minimal above-fold JS             |
 
 ---
 
@@ -301,9 +310,15 @@ See `docs/strategy/website-ia.md` Section 3 for full footer structure.
 
 ```html
 <title>Moventios — Run Operations Without Chaos</title>
-<meta name="description" content="The AI-native platform for coordinating events, projects, venues, and finance — with full audit trail. Built for operations teams. Start free.">
-<meta property="og:title" content="Moventios">
-<meta property="og:description" content="One coordinated system for scheduling, resources, teams, finance, approvals, and audit.">
+<meta
+  name="description"
+  content="The AI-native platform for coordinating events, projects, venues, and finance — with full audit trail. Built for operations teams. Start free."
+/>
+<meta property="og:title" content="Moventios" />
+<meta
+  property="og:description"
+  content="One coordinated system for scheduling, resources, teams, finance, approvals, and audit."
+/>
 ```
 
 **Primary keyword target:** event operations platform, project operations software  

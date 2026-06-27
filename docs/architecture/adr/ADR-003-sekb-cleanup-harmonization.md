@@ -13,14 +13,14 @@ Following a systematic audit of the SEKB workspace, the following structural pro
 
 ### Quantified Problems at Time of Audit
 
-| Problem | Measurement |
-|---------|-------------|
-| Total active workspace | 27 files, 18,194 lines |
-| Legacy bloat (active, not archived) | 4 files + 1 deprecated = **308 KB** |
-| Enterprise Laws L-01..L-10 found in | **20 of 27 files** |
-| Files claiming "RATIFIED CANONICAL SSOT" | **7 different files** (authority conflict) |
-| Broken folder references in AI instructions | **5 references** to non-existent paths |
-| `.cursorrules` completeness | 13 lines — missing L-01..L-10, no loading order |
+| Problem                                     | Measurement                                     |
+| ------------------------------------------- | ----------------------------------------------- |
+| Total active workspace                      | 27 files, 18,194 lines                          |
+| Legacy bloat (active, not archived)         | 4 files + 1 deprecated = **308 KB**             |
+| Enterprise Laws L-01..L-10 found in         | **20 of 27 files**                              |
+| Files claiming "RATIFIED CANONICAL SSOT"    | **7 different files** (authority conflict)      |
+| Broken folder references in AI instructions | **5 references** to non-existent paths          |
+| `.cursorrules` completeness                 | 13 lines — missing L-01..L-10, no loading order |
 
 ### Root Cause
 
@@ -38,13 +38,13 @@ Execute a four-phase cleanup as documented in `00-SEKB-AUDIT-MAPPING-CLEANUP-PLA
 
 Move 5 files to `archive/` (not delete — git history preserved):
 
-| File | Lines | Superseded By |
-|------|-------|---------------|
-| `01_database-SSOT.md` | 4,219 | `Layer-2-Database-SSOT-v5.0.2.md` |
-| `00_constitution-ref.md` | 1,523 | `Layer-1-Constitution-v5.0.2.md` |
-| `SEKB-v1.0-Complete.md` | 822 | All `volumes/00..10-*.md` volumes (folder previously named SEKB/, now volumes/) |
-| `03-engineering.md` (root) | 758 | `volumes/03-engineering.md` (folder previously named SEKB/) |
-| `volumes/02_engineering-kb.md` (previously SEKB/) | 1,004 | `volumes/03-engineering.md` (folder previously named SEKB/) |
+| File                                              | Lines | Superseded By                                                                   |
+| ------------------------------------------------- | ----- | ------------------------------------------------------------------------------- |
+| `01_database-SSOT.md`                             | 4,219 | `Layer-2-Database-SSOT-v5.0.2.md`                                               |
+| `00_constitution-ref.md`                          | 1,523 | `Layer-1-Constitution-v5.0.2.md`                                                |
+| `SEKB-v1.0-Complete.md`                           | 822   | All `volumes/00..10-*.md` volumes (folder previously named SEKB/, now volumes/) |
+| `03-engineering.md` (root)                        | 758   | `volumes/03-engineering.md` (folder previously named SEKB/)                     |
+| `volumes/02_engineering-kb.md` (previously SEKB/) | 1,004 | `volumes/03-engineering.md` (folder previously named SEKB/)                     |
 
 ### Phase 2 — Fix AI Agent Instructions (Executed 2026-06-25)
 
@@ -60,6 +60,7 @@ Pattern: Each volume declares which Layer section is the definition source, and 
 ### Phase 4 — Structural Governance
 
 Create `archive/README.md` with:
+
 - Explicit "DO NOT LOAD" warning for AI agents
 - Archived file manifest with supersession mapping
 - Canonical replacement pointers
@@ -92,11 +93,11 @@ Create `archive/README.md` with:
 
 ## Alternatives Considered
 
-| Alternative | Rejected Because |
-|-------------|-----------------|
-| Delete legacy files entirely | Git history loss; forensic value lost; unnecessary risk |
+| Alternative                       | Rejected Because                                            |
+| --------------------------------- | ----------------------------------------------------------- |
+| Delete legacy files entirely      | Git history loss; forensic value lost; unnecessary risk     |
 | Keep all files, just add warnings | Agents still load all files; context window bloat continues |
-| Merge all into one giant file | Opposite of the Layered SSOT goal; kills selective loading |
+| Merge all into one giant file     | Opposite of the Layered SSOT goal; kills selective loading  |
 
 ---
 
@@ -110,5 +111,5 @@ It is a **structural cleanup** and requires no RFC per Volume 06 Part 3.1.
 
 ---
 
-*References:*  
-*`00-SEKB-AUDIT-MAPPING-CLEANUP-PLAN.md` | `ADR-001` (foundation) | `ADR-002` (L-06)*
+_References:_  
+_`00-SEKB-AUDIT-MAPPING-CLEANUP-PLAN.md` | `ADR-001` (foundation) | `ADR-002` (L-06)_

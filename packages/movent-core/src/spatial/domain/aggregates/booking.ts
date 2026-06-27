@@ -1,17 +1,28 @@
-import type { BookingSubmittedEvent, BookingApprovedEvent, BookingCanceledEvent } from '@movent/contracts';
+import type {
+  BookingSubmittedEvent,
+  BookingApprovedEvent,
+  BookingCanceledEvent,
+} from '@movent/contracts';
 import { InvalidStateTransitionError } from '../../../shared/errors.js';
 import { randomUUID } from 'crypto';
 
 /**
  * Movent Infrastructure - Activation Engine
- * 
+ *
  * Booking = Participation in a Place (Venue).
  * Creates Relationships between Identity and Place.
  * Complements AccessPass (Participation Credential).
  * User-facing: Participation / Activation. Technical name preserved.
  */
 
-export type BookingState = 'pending' | 'under_review' | 'approved' | 'active' | 'completed' | 'rejected' | 'canceled';
+export type BookingState =
+  | 'pending'
+  | 'under_review'
+  | 'approved'
+  | 'active'
+  | 'completed'
+  | 'rejected'
+  | 'canceled';
 
 export interface BookingProps {
   id: string;
@@ -110,9 +121,8 @@ export class Booking {
       tenantId: this.props.tenantId,
       actorId,
       occurredAt: new Date().toISOString(),
-      payload: reason !== undefined
-        ? { bookingId: this.props.id, reason }
-        : { bookingId: this.props.id },
+      payload:
+        reason !== undefined ? { bookingId: this.props.id, reason } : { bookingId: this.props.id },
     };
   }
 
@@ -124,12 +134,22 @@ export class Booking {
     this.props.status = to;
   }
 
-  get id() { return this.props.id; }
-  get status() { return this.props.status; }
-  get startsAt() { return this.props.startsAt; }
-  get endsAt() { return this.props.endsAt; }
+  get id() {
+    return this.props.id;
+  }
+  get status() {
+    return this.props.status;
+  }
+  get startsAt() {
+    return this.props.startsAt;
+  }
+  get endsAt() {
+    return this.props.endsAt;
+  }
 
-  toRecord(): BookingProps { return { ...this.props }; }
+  toRecord(): BookingProps {
+    return { ...this.props };
+  }
 
   static reconstitute(props: BookingProps): Booking {
     return new Booking(props);

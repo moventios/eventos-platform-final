@@ -66,9 +66,7 @@ export function createDbWithTenant(tenantId: string) {
     db,
     async withTenant<T>(fn: (db: ReturnType<typeof drizzle>) => Promise<T>): Promise<T> {
       return db.transaction(async (tx) => {
-        await tx.execute(
-          `SET LOCAL app.tenant_id = '${tenantId.replace(/'/g, "''")}'`,
-        );
+        await tx.execute(`SET LOCAL app.tenant_id = '${tenantId.replace(/'/g, "''")}'`);
         return fn(tx as unknown as ReturnType<typeof drizzle>);
       });
     },
@@ -80,7 +78,10 @@ export function createServiceDb(): PostgresDb {
   const bound = getBoundTestServiceDb();
   if (bound) return bound as PostgresDb;
 
-  const url = process.env['DATABASE_URL_SERVICE_ROLE'] ?? process.env['POSTGRES_URL'] ?? process.env['DATABASE_URL'];
+  const url =
+    process.env['DATABASE_URL_SERVICE_ROLE'] ??
+    process.env['POSTGRES_URL'] ??
+    process.env['DATABASE_URL'];
   if (!url) throw new Error('DATABASE_URL or POSTGRES_URL is required');
   const sql = postgres(url, { max: 5 });
   return drizzle(sql, { schema });

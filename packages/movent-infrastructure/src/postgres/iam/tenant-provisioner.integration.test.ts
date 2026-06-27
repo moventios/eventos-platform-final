@@ -28,8 +28,14 @@ describe('DrizzleTenantProvisioner (integration)', () => {
 
     const tenantRow = await db.query.tenants.findFirst({ where: eq(tenants.id, tenant.id) });
     const profileRow = await db.query.profiles.findFirst({ where: eq(profiles.id, actorId) });
-    const membershipRows = await db.select().from(memberships).where(eq(memberships.tenantId, tenant.id));
-    const eventRows = await db.select().from(domainEvents).where(eq(domainEvents.tenantId, tenant.id));
+    const membershipRows = await db
+      .select()
+      .from(memberships)
+      .where(eq(memberships.tenantId, tenant.id));
+    const eventRows = await db
+      .select()
+      .from(domainEvents)
+      .where(eq(domainEvents.tenantId, tenant.id));
 
     expect(tenantRow?.slug).toBe('integration-org');
     expect(tenantRow?.metadata).toEqual({ source: 'vitest' });

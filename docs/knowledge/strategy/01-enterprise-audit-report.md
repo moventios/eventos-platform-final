@@ -17,6 +17,7 @@ However, it lacks a complete enterprise layer for Product, Brand, Business, and 
 The documentation is engineering-heavy and lacks cohesive product identity, brand strategy, and go-to-market guidance.
 
 Key gaps:
+
 - No formal Brand Architecture or Canvas
 - Limited Business Model and Go-To-Market
 - Product positioning is implicit (enterprise operations for physical + digital)
@@ -30,17 +31,20 @@ Recommendations in this report aim to build a complete EKB that supports 10+ yea
 ### 1. brand.md (caiopizzol/brand.md)
 
 **Strengths:**
+
 - AI-first design: Markdown file for AI tools to consume brand context directly.
 - Structured, parseable format with frontmatter + clear sections.
 - Excellent for guardrails and tonal rules to prevent off-brand AI output.
 - Supports brand hierarchy (master + sub-brands).
 
 **Weaknesses:**
+
 - Primarily copy and basic visual focused.
 - Limited business strategy or marketing depth.
 - Examples are narrow (deployment platform).
 
 **Reusable Ideas:**
+
 - Frontmatter for metadata (name, tagline, version).
 - Strategy section: Positioning, Personality, Promise, Guardrails.
 - Voice: Identity, Tonal Rules table.
@@ -48,6 +52,7 @@ Recommendations in this report aim to build a complete EKB that supports 10+ yea
 - Hierarchy support.
 
 **Non-applicable:**
+
 - Heavy on visual asset details.
 - Specific examples.
 
@@ -57,23 +62,27 @@ Adopt the brand.md structure in `docs/brand/brand.md`. Use it as the single sour
 ### 2. Brand-building-skills (arnabbagxd)
 
 **Strengths:**
+
 - Modular skills system for AI agents.
 - `brand-context` as mandatory foundation skill read by all others.
 - Comprehensive coverage of brand tasks with workflows and questionnaires.
 - Cross-skill references create a knowledge graph.
 
 **Weaknesses:**
+
 - Many skills are tactical marketing execution (ads, email, whatsapp).
 - Some regional or D2C specific.
 - Requires specific agent skills framework.
 
 **Reusable Ideas:**
+
 - Brand-context as foundation.
 - Modular skills for: brand-strategy, brand-naming, brand-identity, brand-voice, brand-positioning, brand-messaging, brand-audit, brand-guidelines, brand-architecture, target-audience, competitor-branding, brand-launch, rebranding.
 - Questionnaires for data gathering.
 - Skill interdependencies.
 
 **Non-applicable:**
+
 - Tactical ad skills (unless added to marketing volume).
 - Specific platform dependencies.
 
@@ -83,22 +92,26 @@ Create a `docs/brand/skills/` or integrate as playbooks in EKB. Use brand-contex
 ### 3. openmaster-ai/brand
 
 **Strengths:**
+
 - Clear Brand Architecture (Platform/Universe + Flagship products).
 - Practical Asset Catalog and token system.
 - Separation of Guidelines and Usage rules.
 - Multi-language taglines.
 
 **Weaknesses:**
+
 - Very asset and visual heavy.
 - Product-specific examples.
 
 **Reusable Ideas:**
+
 - Brand Architecture types and diagram.
 - Asset index structure.
 - Brand tokens for design system integration (align with Layer 3).
 - Usage rules and guidelines separation.
 
 **Non-applicable:**
+
 - Full visual asset management (beyond docs scope for now).
 
 **Adaptation:**
@@ -111,11 +124,13 @@ Content not accessible (404). Skipped. No reusable ideas extracted.
 ## Current Project Audit Summary
 
 **Strengths:**
+
 - Strong engineering SSOT (Layers 1-3).
 - Deterministic principles (Stoic Ledger, AI-First, Zero Trust, Immutable).
 - Good foundation in volumes for business capabilities, product experience (Stoic UX), governance, engineering.
 
 **Weaknesses:**
+
 - No dedicated Brand strategy or canvas.
 - Business model is partially covered in Volume 07 but not full canvas.
 - Product positioning is implicit.
@@ -124,6 +139,7 @@ Content not accessible (404). Skipped. No reusable ideas extracted.
 - Some volumes still use old branding language (to be neutralized).
 
 **Opportunities:**
+
 - Leverage the engineering strength to build a premium, trustworthy brand.
 - Use the multi-layer structure as unique differentiator.
 - Build AI-native documentation from the start.

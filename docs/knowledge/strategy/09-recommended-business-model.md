@@ -3,6 +3,7 @@
 **Platform**: AI-Native Project & Event Operations Platform
 
 ## Model
+
 - **Core**: Open source (AGPL or similar) + hosted Moventios on Movent infrastructure.
 - **Pricing**:
   - Free tier: Small events/projects (limited events, basic AI).
@@ -14,12 +15,14 @@
   - Partner: Revenue share for agencies/integrators.
 
 ## Inspired By
+
 - Pretix/Hi.Events: OSS + hosted for events.
 - Plane: Modern open-core PM.
 - Odoo/ERPNext: Module-based expansion.
 - Monday.com: Flexible tiers.
 
 ## Expansion
+
 Start with events/projects, expand to adjacent ops (logistics, facilities) via marketplace.
 
 See full business model canvas in this folder.
