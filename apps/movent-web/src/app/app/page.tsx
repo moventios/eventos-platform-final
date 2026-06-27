@@ -75,8 +75,8 @@ export default function EcosystemHome() {
       setFacilities(facsRes || []);
       setBookings(bksRes || []);
       setApprovals(appRes || []);
-    } catch (err) {
-      setError('Failed to synchronize active operational state.');
+    } catch {
+      setError('Gagal sinkronisasi data operasional.');
     } finally {
       setLoading(false);
     }
@@ -92,16 +92,16 @@ export default function EcosystemHome() {
       const res = await fetch(`/api/v1/workflow/approvals/${approvalId}/resolve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ approvalId, resolution, note: 'Resolved from Mission Control' }),
+        body: JSON.stringify({ approvalId, resolution, note: 'Diselesaikan dari Dasbor Kontrol' }),
       });
       if (res.ok) {
         await loadDashboardData();
       } else {
         const data = await res.json().catch(() => ({}));
-        alert(data.error || 'Failed to resolve approval');
+        alert(data.error || 'Gagal memproses persetujuan');
       }
     } catch {
-      alert('Communication failure with workflow gate.');
+      alert('Gagal terhubung dengan layanan persetujuan.');
     } finally {
       setActioningApproval(null);
     }
@@ -115,15 +115,15 @@ export default function EcosystemHome() {
       {/* Operational Alerts Header */}
       <div className="flex flex-col justify-between gap-4 border-b border-border/40 pb-5 md:flex-row md:items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Mission Control</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Dasbor Kontrol</h1>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            Real-time operational dashboard for orchestrating active event flows
+            Dasbor operasional waktu-nyata untuk mengelola alur kegiatan aktif
           </p>
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
           <span className="font-mono text-xs uppercase text-muted-foreground">
-            Live Ops Connection Active
+            Koneksi Operasional Aktif
           </span>
         </div>
       </div>
@@ -138,26 +138,26 @@ export default function EcosystemHome() {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {[
           {
-            label: 'Active Events',
+            label: 'Event Aktif',
             val: liveEvents.length,
             icon: Calendar,
             color: 'from-blue-500 to-indigo-600',
           },
           {
-            label: 'Spaces Reserved',
+            label: 'Ruangan Dipesan',
             val: activeBookings.length,
             icon: Building2,
             color: 'from-emerald-500 to-teal-600',
           },
           {
-            label: 'Pending Approvals',
+            label: 'Persetujuan Tertunda',
             val: approvals.length,
             icon: Shield,
             color: 'from-amber-500 to-orange-600',
             alert: approvals.length > 0,
           },
           {
-            label: 'Total Venues',
+            label: 'Total Venue',
             val: facilities.length,
             icon: Ticket,
             color: 'from-violet-500 to-purple-600',
@@ -195,10 +195,10 @@ export default function EcosystemHome() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Shield className="h-4.5 w-4.5 text-amber-500" />
-                <h2 className="text-base font-semibold">Pending Approvals Queue</h2>
+                <h2 className="text-base font-semibold">Antrean Persetujuan Tertunda</h2>
               </div>
               <Link href="/app/approvals" className="text-xs font-medium text-primary hover:underline">
-                View Queue →
+                Lihat Antrean →
               </Link>
             </div>
 
@@ -212,7 +212,7 @@ export default function EcosystemHome() {
                 <div className="space-y-2 p-8 text-center text-muted-foreground">
                   <CheckCircle2 className="mx-auto h-8 w-8 text-emerald-500 opacity-50" />
                   <p className="text-sm">
-                    Governance queue cleared. All AI agent writes validated.
+                    Antrean tata kelola bersih. Semua perubahan data telah divalidasi.
                   </p>
                 </div>
               ) : (
@@ -248,7 +248,7 @@ export default function EcosystemHome() {
                           disabled={actioningApproval !== null}
                           onClick={() => handleResolve(app.id, 'approved')}
                         >
-                          Approve
+                          Setujui
                         </Button>
                         <Button
                           size="sm"
@@ -257,7 +257,7 @@ export default function EcosystemHome() {
                           disabled={actioningApproval !== null}
                           onClick={() => handleResolve(app.id, 'rejected')}
                         >
-                          Reject
+                          Tolak
                         </Button>
                       </div>
                     </div>
@@ -272,10 +272,10 @@ export default function EcosystemHome() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Building2 className="h-4.5 w-4.5 text-primary" />
-                <h2 className="text-base font-semibold">Active Space Allocations</h2>
+                <h2 className="text-base font-semibold">Alokasi Ruangan Aktif</h2>
               </div>
               <Link href="/app/bookings" className="text-xs font-medium text-primary hover:underline">
-                Open Scheduler →
+                Buka Kalender →
               </Link>
             </div>
 
@@ -287,7 +287,7 @@ export default function EcosystemHome() {
                 </div>
               ) : activeBookings.length === 0 ? (
                 <div className="p-8 text-center text-muted-foreground">
-                  <p className="text-sm">No spaces occupied right now.</p>
+                  <p className="text-sm">Tidak ada ruangan yang digunakan saat ini.</p>
                 </div>
               ) : (
                 <div className="divide-y divide-border/40">
@@ -298,20 +298,20 @@ export default function EcosystemHome() {
                     >
                       <div className="min-w-0">
                         <div className="truncate text-sm font-semibold">
-                          {b.title || 'Allocated Space'}
+                          {b.title || 'Alokasi Ruangan'}
                         </div>
                         <div className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="h-3 w-3" />
                           <span>
-                            {new Date(b.startAt).toLocaleString([], {
+                            {new Date(b.startAt).toLocaleString('id-ID', {
                               dateStyle: 'short',
                               timeStyle: 'short',
                             })}{' '}
                             -{' '}
-                            {new Date(b.endAt).toLocaleTimeString([], {
+                            {new Date(b.endAt).toLocaleTimeString('id-ID', {
                               hour: '2-digit',
                               minute: '2-digit',
-                            })}
+                            })} WIB
                           </span>
                         </div>
                       </div>
@@ -330,10 +330,10 @@ export default function EcosystemHome() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Ticket className="h-4.5 w-4.5 text-emerald-500" />
-                <h2 className="text-base font-semibold">Live Event Hub</h2>
+                <h2 className="text-base font-semibold">Pusat Event Aktif</h2>
               </div>
               <Link href="/app/events" className="text-xs font-medium text-primary hover:underline">
-                All Events →
+                Semua Event →
               </Link>
             </div>
 
@@ -345,7 +345,7 @@ export default function EcosystemHome() {
                 </div>
               ) : liveEvents.length === 0 ? (
                 <div className="py-6 text-center text-muted-foreground">
-                  <p className="text-sm">No live events today.</p>
+                  <p className="text-sm">Tidak ada event aktif hari ini.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -362,18 +362,18 @@ export default function EcosystemHome() {
                       </div>
                       {e.startsAt && (
                         <p className="mt-1 text-[10px] text-muted-foreground">
-                          📅 {new Date(e.startsAt).toLocaleString()}
+                          📅 {new Date(e.startsAt).toLocaleString('id-ID')} WIB
                         </p>
                       )}
                       <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2.5">
                         <span className="font-mono text-[10px] uppercase text-muted-foreground">
-                          Gate Checked-in
+                          Tiket Terverifikasi
                         </span>
                         <Link
                           href={`/app/passes?eventId=${e.id}`}
                           className="text-[10px] font-medium text-primary hover:underline"
                         >
-                          Manage Tickets →
+                          Kelola Tiket →
                         </Link>
                       </div>
                     </div>
@@ -385,15 +385,15 @@ export default function EcosystemHome() {
 
           {/* Platform Onboarding CTA */}
           <div className="space-y-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-center shadow-sm">
-            <h3 className="text-sm font-bold text-foreground">Operational Administration</h3>
+            <h3 className="text-sm font-bold text-foreground">Administrasi Operasional</h3>
             <p className="text-xs text-muted-foreground">
-              Configure tenant parameters, roles, and integrations in the Administration workspace.
+              Atur parameter organisasi, peran anggota, dan integrasi sistem di ruang kerja Administrasi.
             </p>
             <Link
               href="/app/admin"
               className="bg-gradient-brand inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-medium text-white shadow transition-all hover:opacity-90"
             >
-              Open Administration
+              Buka Administrasi
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>

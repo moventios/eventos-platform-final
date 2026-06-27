@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft, Calendar, CheckCircle2, Plus, Ticket, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -22,8 +21,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const issueSchema = z.object({
-  passTierId: z.string().uuid('Must be uuid'),
-  customerId: z.string().uuid('Must be uuid'),
+  passTierId: z.string().uuid('Harus berupa format UUID'),
+  customerId: z.string().uuid('Harus berupa format UUID'),
   metadata: z.string().optional(),
 });
 type IssueForm = z.infer<typeof issueSchema>;
@@ -49,6 +48,7 @@ export default function EventDetailPage() {
     startsAt?: string | undefined;
   } | null>(null);
   const [passes, setPasses] = useState<AccessPass[]>([]);
+  const [tiers, setTiers] = useState<Array<{ id: string; name: string; price: string; capacity: number; pointCost: number }>>([]);
   const [open, setOpen] = useState(false);
   const [tierOpen, setTierOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,15 +66,21 @@ export default function EventDetailPage() {
     name: z.string().min(1),
     price: z.string().min(1),
     capacity: z.coerce.number().int().positive(),
+    pointCost: z.coerce.number().int().nonnegative(),
   });
-  type TierForm = z.infer<typeof tierSchema>;
+  type TierForm = {
+    name: string;
+    price: string;
+    capacity: number;
+    pointCost: number;
+  };
   const {
     register: regTier,
     handleSubmit: handleTier,
     reset: resetTier,
   } = useForm<TierForm>({
     resolver: zodResolver(tierSchema),
-    defaultValues: { price: '0.0000', capacity: 100 },
+    defaultValues: { price: '0.0000', capacity: 100, pointCost: 0 },
   });
 
   async function load() {
@@ -82,12 +88,15 @@ export default function EventDetailPage() {
     setLoading(true);
     setError(null);
     try {
-      const [evsRes, psRes] = await Promise.all([
+      const [evsRes, psRes, tiersRes] = await Promise.all([
         fetch('/api/v1/commerce/events'),
         fetch(`/api/v1/commerce/access-passes?eventId=${eventId}`),
+        fetch(`/api/v1/commerce/events/${eventId}/pass-tiers?eventId=${eventId}`),
       ]);
       const evs = evsRes.ok ? await evsRes.json() : [];
       const ps = psRes.ok ? await psRes.json() : [];
+      const trs = tiersRes.ok ? await tiersRes.json() : [];
+
       const ev = (evs || []).find(
         (e: {
           id: string;
@@ -102,8 +111,9 @@ export default function EventDetailPage() {
         setEventData({ description: ev.description, status: ev.status, startsAt: ev.startsAt });
       }
       setPasses(ps || []);
+      setTiers(trs || []);
     } catch {
-      setError('Unable to load live event data (participation may require sign-in).');
+      setError('Gagal memuat data event.');
     } finally {
       setLoading(false);
     }
@@ -132,11 +142,11 @@ export default function EventDetailPage() {
       setOpen(false);
       await load();
     } else if (res.status === 202) {
-      setError('Access pass issuance queued for approval (L-06).');
+      setError('Penerbitan tiket masuk ditunda untuk persetujuan admin.');
       setOpen(false);
     } else {
       const e = await res.json().catch(() => ({}));
-      setError(e.error || 'Issue failed (capacity?)');
+      setError(e.error || 'Gagal menerbitkan tiket (kuota penuh?)');
     }
     setSubmitting(false);
   }
@@ -152,31 +162,18 @@ export default function EventDetailPage() {
         name: data.name,
         price: data.price,
         capacity: data.capacity,
+        pointCost: data.pointCost,
       }),
     });
     if (res.ok) {
       resetTier();
       setTierOpen(false);
-    } else {
-      const e = await res.json().catch(() => ({}));
-      setError(e.error || 'Failed to create pass tier');
-    }
-    setSubmitting(false);
-  }
-
-  async function doCheckIn(passId: string) {
-    setError(null);
-    const res = await fetch(`/api/v1/commerce/access-passes/${passId}/check-in`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ accessPassId: passId }),
-    });
-    if (res.ok) {
       await load();
     } else {
       const e = await res.json().catch(() => ({}));
-      setError(e.error || 'Check-in failed');
+      setError(e.error || 'Gagal membuat kategori tiket');
     }
+    setSubmitting(false);
   }
 
   return (
@@ -188,7 +185,7 @@ export default function EventDetailPage() {
           className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
-          Back to Events
+          Kembali ke Event
         </Link>
       </div>
 
@@ -213,12 +210,11 @@ export default function EventDetailPage() {
             )}
             {eventData?.startsAt && (
               <p className="mt-1.5 text-xs text-muted-foreground">
-                📅 {new Date(eventData.startsAt).toLocaleString()}
+                📅 {new Date(eventData.startsAt).toLocaleString('id-ID')} WIB
               </p>
             )}
             <p className="mt-2 border-t border-border/40 pt-2 text-xs text-muted-foreground/70">
-              This Event activates Relationships in the Network — connected to Organizations,
-              Places, and Participation Credentials.
+              Event ini menghubungkan Organisasi, Venue, dan Kehadiran Peserta dalam jaringan.
             </p>
           </div>
         </div>
@@ -235,19 +231,19 @@ export default function EventDetailPage() {
         {[
           {
             icon: Users,
-            label: 'Participants',
+            label: 'Peserta',
             val: passes.length,
             color: 'from-violet-500 to-purple-600',
           },
           {
             icon: Ticket,
-            label: 'Credentials',
+            label: 'Tiket Diterbitkan',
             val: passes.filter((p) => p.status === 'issued').length,
             color: 'from-blue-500 to-indigo-600',
           },
           {
             icon: CheckCircle2,
-            label: 'Checked In',
+            label: 'Telah Hadir',
             val: passes.filter((p) => p.status === 'checked_in').length,
             color: 'from-emerald-500 to-teal-600',
           },
@@ -272,39 +268,43 @@ export default function EventDetailPage() {
       {/* Participation Credentials section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-foreground">Participation Credentials</h2>
+          <h2 className="text-base font-semibold text-foreground">Kategori Tiket Masuk</h2>
           <div className="flex gap-2">
             <Dialog open={tierOpen} onOpenChange={setTierOpen}>
               <DialogTrigger asChild>
                 <Button size="sm" variant="outline" className="h-8 text-xs">
-                  Create Tier
+                  Buat Kategori
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Create Participation Tier</DialogTitle>
+                  <DialogTitle>Buat Kategori Tiket</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleTier(onCreateTier)} className="space-y-4">
                   <div className="space-y-1.5">
-                    <Label>Name</Label>
-                    <Input {...regTier('name')} placeholder="General Admission" />
+                    <Label>Nama Kategori</Label>
+                    <Input {...regTier('name')} placeholder="Tiket Masuk Umum" />
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <Label>Price</Label>
-                      <Input {...regTier('price')} placeholder="0.0000" />
+                   <div className="grid grid-cols-3 gap-3">
+                    <div className="space-y-1.5 col-span-1">
+                      <Label>Harga (IDR)</Label>
+                      <Input {...regTier('price')} placeholder="0.00" />
                     </div>
-                    <div className="space-y-1.5">
-                      <Label>Capacity</Label>
+                    <div className="space-y-1.5 col-span-1">
+                      <Label>Biaya Poin</Label>
+                      <Input type="number" {...regTier('pointCost')} placeholder="0" />
+                    </div>
+                    <div className="space-y-1.5 col-span-1">
+                      <Label>Kapasitas</Label>
                       <Input type="number" {...regTier('capacity')} />
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 pt-2">
                     <Button type="button" variant="outline" onClick={() => setTierOpen(false)}>
-                      Cancel
+                      Batal
                     </Button>
                     <Button type="submit" disabled={submitting}>
-                      Create Tier
+                      Buat Kategori
                     </Button>
                   </div>
                 </form>
@@ -315,17 +315,17 @@ export default function EventDetailPage() {
               <DialogTrigger asChild>
                 <Button size="sm" className="bg-gradient-brand h-8 border-0 text-xs text-white">
                   <Plus className="mr-1 h-3.5 w-3.5" />
-                  Issue Pass
+                  Kirim Tiket
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Issue Participation Credential</DialogTitle>
+                  <DialogTitle>Kirim Tiket Masuk</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit(onIssue)} className="space-y-4">
                   <div className="space-y-1.5">
                     <Label>
-                      Pass Tier ID <span className="text-xs text-muted-foreground">(uuid)</span>
+                      ID Kategori Tiket <span className="text-xs text-muted-foreground">(UUID)</span>
                     </Label>
                     <Input
                       {...register('passTierId')}
@@ -338,7 +338,7 @@ export default function EventDetailPage() {
                   </div>
                   <div className="space-y-1.5">
                     <Label>
-                      Customer ID <span className="text-xs text-muted-foreground">(uuid)</span>
+                      ID Pengguna / Peserta <span className="text-xs text-muted-foreground">(UUID)</span>
                     </Label>
                     <Input
                       {...register('customerId')}
@@ -351,14 +351,14 @@ export default function EventDetailPage() {
                   </div>
                   <div className="flex justify-end gap-2 pt-2">
                     <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                      Cancel
+                      Batal
                     </Button>
                     <Button
                       type="submit"
                       disabled={submitting}
                       className="bg-gradient-brand border-0 text-white"
                     >
-                      {submitting ? 'Issuing…' : 'Issue Pass'}
+                      {submitting ? 'Mengirim…' : 'Kirim Tiket'}
                     </Button>
                   </div>
                 </form>
@@ -367,16 +367,48 @@ export default function EventDetailPage() {
           </div>
         </div>
 
+        {/* Kategori Tiket List */}
+        <div className="bg-card overflow-hidden rounded-xl border border-border/60 shadow-sm">
+          {tiers.length === 0 ? (
+            <div className="py-6 text-center text-muted-foreground text-xs">
+              Belum ada kategori tiket masuk untuk event ini.
+            </div>
+          ) : (
+            <ul className="divide-y divide-border/40">
+              {tiers.map((t) => (
+                <li
+                  key={t.id}
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-3 text-xs gap-2 hover:bg-muted/10 transition-colors"
+                >
+                  <div className="space-y-1">
+                    <p className="font-semibold text-foreground">{t.name}</p>
+                    <p className="font-mono text-[10px] text-muted-foreground">ID Kategori: {t.id}</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-muted-foreground">Kapasitas: <strong className="text-foreground">{t.capacity}</strong></span>
+                    <span className="text-muted-foreground">Harga: <strong className="text-foreground">{Number(t.price) === 0 ? 'Gratis' : `${Number(t.price).toLocaleString('id-ID')} IDR`}</strong></span>
+                    {t.pointCost > 0 && (
+                      <span className="rounded bg-teal-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-teal-600 dark:text-teal-400 border border-teal-500/20">
+                        ✨ {t.pointCost.toLocaleString('id-ID')} Poin
+                      </span>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <div className="bg-card flex flex-col items-center justify-between gap-4 rounded-xl border border-border/60 p-6 shadow-sm sm:flex-row">
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-foreground">Operational Ticket Gate</h3>
+            <h3 className="text-sm font-semibold text-foreground">Pintu Masuk & Verifikasi</h3>
             <p className="text-xs text-muted-foreground">
-              Validate guest credentials, search issued passes, and register check-ins at the gate.
+              Validasi tiket masuk, cari daftar tiket diterbitkan, dan verifikasi kehadiran peserta.
             </p>
           </div>
           <Link href={`/app/passes?eventId=${eventId}`} className="shrink-0">
             <Button size="sm" className="bg-gradient-brand border-0 text-white shadow-sm">
-              Open Gate & Scan Passes →
+              Buka Pintu & Pindai Tiket →
             </Button>
           </Link>
         </div>
@@ -385,10 +417,10 @@ export default function EventDetailPage() {
       {/* Cross-link */}
       <div className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/30 px-4 py-3 text-xs text-muted-foreground">
         <span>
-          This Event connects via Participation to Places and Organizations in the Network.
+          Event ini terhubung melalui partisipasi ke Venue dan Organisasi.
         </span>
         <Link href="/app/venues" className="ml-3 shrink-0 font-medium text-primary hover:underline">
-          See connected Places →
+          Lihat Venue Terhubung →
         </Link>
       </div>
     </div>

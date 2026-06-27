@@ -60,6 +60,7 @@ export const rooms = pgTable(
     name: varchar('name', { length: 255 }).notNull(),
     capacity: integer('capacity').notNull(),
     status: roomStateEnum('status').default('available').notNull(),
+    pointCost: integer('point_cost').default(0).notNull(),
     metadata: jsonb('metadata').default({}).notNull(),
     ...auditColumns,
   },

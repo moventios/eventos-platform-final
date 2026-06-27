@@ -25,36 +25,48 @@ import { useTheme } from 'next-themes';
 import { Building2, CalendarDays, LayoutDashboard, Settings, Ticket } from 'lucide-react';
 
 const primaryNavItems = [
-  { href: '/app', label: 'Mission Control', icon: LayoutDashboard, exact: true },
+  { href: '/app', label: 'Dasbor Kontrol', icon: LayoutDashboard, exact: true },
 ];
 
 const operationsNavItems = [
-  { href: '/app/passes', label: 'Access Passes', icon: Ticket },
-  { href: '/app/bookings', label: 'Reservations', icon: CalendarDays },
+  { href: '/app/passes', label: 'Tiket Masuk', icon: Ticket },
+  { href: '/app/bookings', label: 'Pemesanan Ruangan', icon: CalendarDays },
 ];
 
 const assetsNavItems = [
-  { href: '/app/events', label: 'Events', icon: Calendar },
-  { href: '/app/venues', label: 'Venues', icon: Building2 },
+  { href: '/app/events', label: 'Kelola Event', icon: Calendar },
+  { href: '/app/venues', label: 'Kelola Venue', icon: Building2 },
 ];
 
-const governanceNavItems = [{ href: '/app/approvals', label: 'Approvals Queue', icon: Shield }];
+const governanceNavItems = [{ href: '/app/approvals', label: 'Antrean Persetujuan', icon: Shield }];
 
-const managementNavItems = [{ href: '/app/admin', label: 'Administration', icon: Settings }];
+const managementNavItems = [{ href: '/app/admin', label: 'Administrasi', icon: Settings }];
 
 export default function EcosystemLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [pendingCount, setPendingCount] = useState<number>(0);
+  const [points, setPoints] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!pathname.startsWith('/app/approvals')) {
+    if (pathname.startsWith('/app/approvals')) {
+      fetch('/api/v1/workflow/approvals')
+        .then((r) => r.json())
+        .then((data: unknown[]) => setPendingCount(data.length))
+        .catch(() => setPendingCount(0));
+    } else {
       setPendingCount(0);
-      return;
     }
-    fetch('/api/v1/workflow/approvals')
-      .then((r) => r.json())
-      .then((data: unknown[]) => setPendingCount(data.length))
-      .catch(() => setPendingCount(0));
+  }, [pathname]);
+
+  useEffect(() => {
+    fetch('/api/v1/commerce/points')
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data) {
+          setPoints(data.ownBalance ?? data.account?.balance ?? 1000);
+        }
+      })
+      .catch(() => {});
   }, [pathname]);
 
   return (
@@ -82,7 +94,7 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
             />
           ))}
 
-          <NavSection label="Operations">
+          <NavSection label="Operasional">
             {operationsNavItems.map((item) => (
               <NavLink
                 key={item.href}
@@ -94,7 +106,7 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
             ))}
           </NavSection>
 
-          <NavSection label="Assets">
+          <NavSection label="Aset">
             {assetsNavItems.map((item) => (
               <NavLink
                 key={item.href}
@@ -106,10 +118,10 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
             ))}
           </NavSection>
 
-          <NavSection label="Governance">
+          <NavSection label="Tata Kelola">
             {governanceNavItems.map((item) => {
               const badgeCount =
-                item.label === 'Approvals Queue' && pendingCount > 0 ? pendingCount : undefined;
+                item.label === 'Antrean Persetujuan' && pendingCount > 0 ? pendingCount : undefined;
               return (
                 <NavLink
                   key={item.href}
@@ -123,7 +135,7 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
             })}
           </NavSection>
 
-          <NavSection label="Management">
+          <NavSection label="Manajemen">
             {managementNavItems.map((item) => (
               <NavLink
                 key={item.href}
@@ -148,28 +160,34 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
             <div>
               <span className="text-sm font-semibold text-foreground">
                 {[
-                  { href: '/app', label: 'Mission Control', exact: true },
-                  { href: '/app/passes', label: 'Access & Tickets' },
-                  { href: '/app/bookings', label: 'Reservations' },
-                  { href: '/app/events', label: 'Events' },
-                  { href: '/app/venues', label: 'Venues' },
-                  { href: '/app/approvals', label: 'Approvals Queue' },
-                  { href: '/app/admin', label: 'Administration' },
+                  { href: '/app', label: 'Dasbor Kontrol', exact: true },
+                  { href: '/app/passes', label: 'Tiket Masuk' },
+                  { href: '/app/bookings', label: 'Pemesanan Ruangan' },
+                  { href: '/app/events', label: 'Kelola Event' },
+                  { href: '/app/venues', label: 'Kelola Venue' },
+                  { href: '/app/approvals', label: 'Antrean Persetujuan' },
+                  { href: '/app/admin', label: 'Administrasi' },
                 ].find((n) => (n.exact ? pathname === n.href : pathname.startsWith(n.href)))
                   ?.label ?? 'Moventios'}
               </span>
               <span className="ml-2.5 hidden text-xs text-muted-foreground md:inline">
-                Discover and participate
+                Kelola ruang kerja komunitas Anda
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            {points !== null && (
+              <div className="flex items-center gap-1.5 rounded-full bg-teal-500/10 px-3 py-1 text-xs font-semibold text-teal-600 dark:text-teal-400 border border-teal-500/20">
+                <span>✨</span>
+                <span>{points.toLocaleString('id-ID')} Poin</span>
+              </div>
+            )}
             <DarkModeToggle />
             <Link
               href="/login"
               className="rounded-md px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
-              Sign in
+              Keluar
             </Link>
           </div>
         </header>

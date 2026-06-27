@@ -15,7 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Calendar, Plus, Search } from 'lucide-react';
+import { Calendar, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
@@ -35,7 +35,7 @@ type Event = {
 };
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Nama wajib diisi'),
   description: z.string().optional(),
   startsAt: z.string().optional(),
   endsAt: z.string().optional(),
@@ -47,7 +47,7 @@ type FormValues = z.infer<typeof schema>;
 const columns: ColumnDef<Event>[] = [
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Nama Event',
     cell: ({ getValue, row }) => (
       <div>
         <Link
@@ -71,26 +71,28 @@ const columns: ColumnDef<Event>[] = [
   },
   {
     accessorKey: 'startsAt',
-    header: 'Starts At',
+    header: 'Waktu Mulai',
     cell: ({ getValue }) => {
       const v = getValue<string | null>();
       if (!v) return <span className="text-xs text-muted-foreground">—</span>;
       const d = new Date(v);
       return (
         <div className="text-sm">
-          <div className="font-medium">{d.toLocaleDateString()}</div>
+          <div className="font-medium">
+            {d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </div>
           <div className="text-xs text-muted-foreground">
-            {d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
           </div>
         </div>
       );
     },
   },
   {
-    header: 'Network',
+    header: 'Jaringan',
     cell: () => (
       <span className="rounded-full bg-muted/60 px-2 py-0.5 text-[10px] text-muted-foreground">
-        Identity · Place · Org · Participation
+        Identitas · Lokasi · Organisasi · Partisipasi
       </span>
     ),
   },
@@ -102,7 +104,7 @@ const columns: ColumnDef<Event>[] = [
         href={`/app/events/${row.original.id}`}
         className="text-xs font-medium text-primary hover:underline"
       >
-        View & Connect →
+        Lihat & Kelola →
       </Link>
     ),
   },
@@ -136,7 +138,7 @@ function EventsContent() {
       .then((data) => setEvents(data || []))
       .catch(() => {
         setEvents([]);
-        setError('Could not load events (try searching or signing in for full access).');
+        setError('Gagal memuat daftar event.');
       })
       .finally(() => setLoading(false));
   };
@@ -169,7 +171,7 @@ function EventsContent() {
       body: JSON.stringify(data),
     });
     if (!res.ok) {
-      setError('Create failed (may require workspace tenant).');
+      setError('Gagal membuat event (memerlukan tenant organisasi).');
       return;
     }
     reset();
@@ -181,43 +183,43 @@ function EventsContent() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="name">
-          Name <span className="text-destructive">*</span>
+          Nama Event <span className="text-destructive">*</span>
         </Label>
-        <Input id="name" {...register('name')} placeholder="Event name" />
+        <Input id="name" {...register('name')} placeholder="Nama event" />
         {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">Deskripsi</Label>
         <Input
           id="description"
           {...register('description')}
-          placeholder="Brief description"
+          placeholder="Deskripsi singkat"
         />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
-          <Label htmlFor="startsAt">Starts At</Label>
+          <Label htmlFor="startsAt">Waktu Mulai</Label>
           <Input id="startsAt" type="datetime-local" {...register('startsAt')} />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="endsAt">Ends At</Label>
+          <Label htmlFor="endsAt">Waktu Selesai</Label>
           <Input id="endsAt" type="datetime-local" {...register('endsAt')} />
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="timezone">Timezone</Label>
+        <Label htmlFor="timezone">Zona Waktu</Label>
         <Input id="timezone" {...register('timezone')} />
       </div>
       <div className="flex justify-end gap-2 pt-2">
         <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-          Cancel
+          Batal
         </Button>
         <Button
           type="submit"
           disabled={isSubmitting}
           className="bg-gradient-brand border-0 text-white"
         >
-          {isSubmitting ? 'Creating…' : 'Create Event'}
+          {isSubmitting ? 'Membuat…' : 'Proses Event'}
         </Button>
       </div>
     </form>
@@ -225,25 +227,25 @@ function EventsContent() {
 
   return (
     <ResourcePageLayout
-      title="Events"
-      description="Relationships, Participation & Opportunities in the Network"
+      title="Kelola Event"
+      description="Kelola hubungan, partisipasi, dan kesempatan kegiatan dalam jaringan."
       icon={<Calendar className="h-5 w-5 text-white" />}
       iconGradient="from-blue-500 to-indigo-600"
-      searchPlaceholder="Search events in the network..."
+      searchPlaceholder="Cari event komunitas..."
       searchQuery={q}
       onSearchChange={handleSearchChange}
       data={filteredEvents}
       loading={loading}
       error={error}
-      emptyMessage="No events match. Try broadening your search or propose one."
-      createButtonText="Propose Event"
+      emptyMessage="Tidak ada event yang cocok. Cari dengan kata kunci lain atau ajukan baru."
+      createButtonText="Ajukan Event"
       createButtonIcon={<Plus className="mr-1.5 h-3.5 w-3.5" />}
       isCreateOpen={open}
       onCreateOpenChange={setOpen}
-      createDialogTitle="Propose New Event"
+      createDialogTitle="Ajukan Event Baru"
       createDialogContent={createForm}
       featuredItems={filteredEvents.slice(0, 3)}
-      featuredTitle="Featured Events"
+      featuredTitle="Event Unggulan"
       renderFeaturedItem={(e) => (
         <Link
           key={e.id}
@@ -257,7 +259,7 @@ function EventsContent() {
             <div className="min-w-0">
               <div className="truncate text-sm font-semibold">{e.name}</div>
               <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                {e.description || 'No description'}
+                {e.description || 'Tidak ada deskripsi'}
               </div>
             </div>
           </div>

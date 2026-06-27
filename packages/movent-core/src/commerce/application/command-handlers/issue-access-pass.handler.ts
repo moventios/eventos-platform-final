@@ -15,7 +15,7 @@ export interface IPassTierRepository {
   findById(
     id: string,
     tenantId: string,
-  ): Promise<{ id: string; capacity: number; eventId: string } | null>;
+  ): Promise<{ id: string; capacity: number; eventId: string; pointCost: number } | null>;
   incrementIssued(id: string, tenantId: string): Promise<void>;
 }
 

@@ -39,14 +39,15 @@ type Room = {
   name: string;
   capacity: number;
   status: string;
+  pointCost?: number;
 };
 
 const bookingSchema = z.object({
-  facilityId: z.string().uuid('Facility required'),
-  roomId: z.string().uuid('Space required'),
-  title: z.string().min(1, 'Title is required').max(255),
-  startsAt: z.string().min(1, 'Start time required'),
-  endsAt: z.string().min(1, 'End time required'),
+  facilityId: z.string().uuid('Venue wajib dipilih'),
+  roomId: z.string().uuid('Ruangan wajib dipilih'),
+  title: z.string().min(1, 'Judul reservasi wajib diisi').max(255),
+  startsAt: z.string().min(1, 'Waktu Mulai wajib diisi'),
+  endsAt: z.string().min(1, 'Waktu Selesai wajib diisi'),
   notes: z.string().optional(),
 });
 
@@ -83,7 +84,7 @@ function BookingsContent() {
       setBookings(bks || []);
       setFacilities(facs || []);
     } catch {
-      setError('Failed to load reservations.');
+      setError('Gagal memuat jadwal pemesanan.');
     } finally {
       setLoading(false);
     }
@@ -128,13 +129,13 @@ function BookingsContent() {
         await loadData();
       } else if (res.status === 409) {
         const e = await res.json().catch(() => ({}));
-        setBookingError(e.error || 'Conflict detected. Room already reserved.');
+        setBookingError(e.error || 'Jadwal bentrok. Ruangan sudah dipesan pada jam tersebut.');
       } else {
         const e = await res.json().catch(() => ({}));
-        setBookingError(e.error?.message || 'Failed to submit booking.');
+        setBookingError(e.error?.message || 'Gagal mengirim pemesanan.');
       }
     } catch {
-      setBookingError('Failed to communicate with scheduler.');
+      setBookingError('Gagal terhubung dengan layanan kalender.');
     }
   };
 
@@ -147,9 +148,9 @@ function BookingsContent() {
             <CalendarRange className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-foreground">Reservations</h1>
+            <h1 className="text-xl font-bold text-foreground">Pemesanan Ruangan</h1>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Spatio-temporal scheduler and space allocations across venues
+              Penjadwalan ruang-waktu dan alokasi ruangan di berbagai venue.
             </p>
           </div>
         </div>
@@ -158,12 +159,12 @@ function BookingsContent() {
           <DialogTrigger asChild>
             <Button size="sm" className="bg-gradient-brand border-0 text-white shadow-sm">
               <Plus className="mr-1.5 h-3.5 w-3.5" />
-              Reserve Space
+              Pesan Ruangan
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Reserve a Space / Room</DialogTitle>
+              <DialogTitle>Pesan Ruangan / Space</DialogTitle>
             </DialogHeader>
             {bookingError && (
               <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
@@ -176,9 +177,9 @@ function BookingsContent() {
                 <select
                   id="facilityId"
                   {...register('facilityId')}
-                  className="w-full rounded-lg border border-border bg-background p-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full rounded-lg border border-border bg-background p-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
                 >
-                  <option value="">Select Venue</option>
+                  <option value="">Pilih Venue</option>
                   {facilities.map((fac) => (
                     <option key={fac.id} value={fac.id}>
                       {fac.name}
@@ -191,17 +192,17 @@ function BookingsContent() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="roomId">Space / Room</Label>
+                <Label htmlFor="roomId">Ruangan / Space</Label>
                 <select
                   id="roomId"
                   {...register('roomId')}
                   disabled={!selectedFacilityId}
-                  className="w-full rounded-lg border border-border bg-background p-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full rounded-lg border border-border bg-background p-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
                 >
-                  <option value="">Select Space</option>
+                  <option value="">Pilih Ruangan</option>
                   {rooms.map((r) => (
                     <option key={r.id} value={r.id}>
-                      {r.name} (Cap: {r.capacity})
+                      {r.name} (Kapasitas: {r.capacity} orang {r.pointCost ? `| Biaya: ${r.pointCost} Poin` : '| Gratis'})
                     </option>
                   ))}
                 </select>
@@ -211,25 +212,25 @@ function BookingsContent() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="title">Reservation Title</Label>
+                <Label htmlFor="title">Judul Reservasi</Label>
                 <Input
                   id="title"
                   {...register('title')}
-                  placeholder="Meeting, Workshop, Session..."
+                  placeholder="Rapat, Workshop, Diskusi..."
                 />
                 {errors.title && <p className="text-xs text-destructive">{errors.title.message}</p>}
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label htmlFor="startsAt">Start Time</Label>
+                  <Label htmlFor="startsAt">Waktu Mulai</Label>
                   <Input id="startsAt" type="datetime-local" {...register('startsAt')} />
                   {errors.startsAt && (
                     <p className="text-xs text-destructive">{errors.startsAt.message}</p>
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="endsAt">End Time</Label>
+                  <Label htmlFor="endsAt">Waktu Selesai</Label>
                   <Input id="endsAt" type="datetime-local" {...register('endsAt')} />
                   {errors.endsAt && (
                     <p className="text-xs text-destructive">{errors.endsAt.message}</p>
@@ -238,8 +239,8 @@ function BookingsContent() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="notes">Notes</Label>
-                <Input id="notes" {...register('notes')} placeholder="Extra instructions..." />
+                <Label htmlFor="notes">Catatan</Label>
+                <Input id="notes" {...register('notes')} placeholder="Catatan atau instruksi tambahan..." />
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
@@ -252,14 +253,14 @@ function BookingsContent() {
                     reset();
                   }}
                 >
-                  Cancel
+                  Batal
                 </Button>
                 <Button
                   type="submit"
                   disabled={isSubmitting}
                   className="bg-gradient-brand border-0 text-white"
                 >
-                  {isSubmitting ? 'Submitting…' : 'Confirm Booking'}
+                  {isSubmitting ? 'Mengirim…' : 'Konfirmasi Pemesanan'}
                 </Button>
               </div>
             </form>
@@ -276,7 +277,7 @@ function BookingsContent() {
       {/* Interactive Calendar Scheduler */}
       <div className="space-y-3">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-          Interactive Booking Grid
+          Kalender Pemesanan Interaktif
         </h2>
         <div className="bg-card rounded-xl border border-border/60 p-4 shadow-sm">
           {loading ? (

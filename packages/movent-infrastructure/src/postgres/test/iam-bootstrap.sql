@@ -58,3 +58,48 @@ CREATE TABLE domain_events (
   actor_id uuid,
   created_at timestamptz NOT NULL DEFAULT now()
 );
+
+CREATE TABLE points_accounts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE RESTRICT,
+  profile_id uuid NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE RESTRICT,
+  balance integer NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  created_by uuid,
+  updated_at timestamptz,
+  updated_by uuid,
+  deleted_at timestamptz,
+  deleted_by uuid
+);
+
+CREATE TYPE points_transaction_type AS ENUM ('grant', 'spend', 'adjust', 'refund');
+
+CREATE TABLE points_transactions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE RESTRICT,
+  profile_id uuid NOT NULL REFERENCES profiles(id) ON DELETE RESTRICT,
+  amount integer NOT NULL,
+  type points_transaction_type NOT NULL,
+  description text,
+  metadata jsonb NOT NULL DEFAULT '{}',
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Trigger function for auto-provisioning default welcome points in test environment
+CREATE OR REPLACE FUNCTION handle_new_profile_points()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO points_accounts (id, tenant_id, profile_id, balance, created_at)
+  VALUES (gen_random_uuid(), NEW.tenant_id, NEW.id, 1000, now())
+  ON CONFLICT (profile_id) DO NOTHING;
+  
+  INSERT INTO points_transactions (id, tenant_id, profile_id, amount, type, description, created_at)
+  VALUES (gen_random_uuid(), NEW.tenant_id, NEW.id, 1000, 'grant', 'Saldo awal selamat datang (1.000 Poin)', now());
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER on_profile_created_points
+  AFTER INSERT ON profiles
+  FOR EACH ROW EXECUTE FUNCTION handle_new_profile_points();

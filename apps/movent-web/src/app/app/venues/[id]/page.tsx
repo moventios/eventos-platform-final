@@ -1,6 +1,5 @@
 'use client';
 
-import { BookingCalendar } from '@/components/booking-calendar';
 import { StatusBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,10 +21,15 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const roomSchema = z.object({
-  name: z.string().min(1, 'Name required'),
-  capacity: z.coerce.number().int().positive(),
+  name: z.string().min(1, 'Nama wajib diisi'),
+  capacity: z.coerce.number().int().positive('Kapasitas harus berupa angka positif'),
+  pointCost: z.coerce.number().int().nonnegative('Biaya poin tidak boleh negatif'),
 });
-type RoomForm = z.infer<typeof roomSchema>;
+type RoomForm = {
+  name: string;
+  capacity: number;
+  pointCost: number;
+};
 
 const bookingSchema = z.object({
   roomId: z.string().min(1),
@@ -40,6 +44,7 @@ interface Room {
   name: string;
   capacity: number;
   status: string;
+  pointCost: number;
 }
 
 interface Booking {
@@ -76,7 +81,7 @@ export default function PlaceDetailPage() {
     formState: { errors: roomErr },
   } = useForm<RoomForm>({
     resolver: zodResolver(roomSchema),
-    defaultValues: { capacity: 10 },
+    defaultValues: { capacity: 10, pointCost: 0 },
   });
 
   const {
@@ -115,7 +120,7 @@ export default function PlaceDetailPage() {
       const bks = (bookRes || []) as Booking[];
       setBookings(bks.filter((b) => !b.roomId || currentRooms.some((r) => r.id === b.roomId)));
     } catch {
-      setError('Unable to load place details.');
+      setError('Gagal memuat detail venue.');
     } finally {
       setLoading(false);
     }
@@ -131,7 +136,7 @@ export default function PlaceDetailPage() {
     const res = await fetch(`/api/v1/spatial/facilities/${facilityId}/rooms`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ facilityId, name: data.name, capacity: data.capacity }),
+      body: JSON.stringify({ facilityId, name: data.name, capacity: data.capacity, pointCost: data.pointCost }),
     });
     if (res.ok) {
       resetRoom();
@@ -139,7 +144,7 @@ export default function PlaceDetailPage() {
       await loadData();
     } else {
       const e = await res.json().catch(() => ({}));
-      setError(e.error?.message || 'Failed to create room');
+      setError(e.error?.message || 'Gagal membuat ruangan');
     }
     setSubmitting(false);
   }
@@ -165,10 +170,10 @@ export default function PlaceDetailPage() {
       await loadData();
     } else if (res.status === 409) {
       const e = await res.json().catch(() => ({}));
-      setError(e.error || 'Booking conflict: time range overlaps with existing booking');
+      setError(e.error || 'Jadwal bentrok: waktu tumpang tindih dengan pemesanan yang ada');
     } else {
       const e = await res.json().catch(() => ({}));
-      setError(e.error || 'Failed to create booking');
+      setError(e.error || 'Gagal membuat pemesanan');
     }
     setSubmitting(false);
   }
@@ -187,7 +192,7 @@ export default function PlaceDetailPage() {
           className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
-          Back to Places
+          Kembali ke Venue
         </Link>
       </div>
 
@@ -204,7 +209,7 @@ export default function PlaceDetailPage() {
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl font-bold text-foreground">{placeName || 'Place'}</h1>
+              <h1 className="text-2xl font-bold text-foreground">{placeName || 'Venue'}</h1>
               {placeData?.status && <StatusBadge status={placeData.status} />}
             </div>
             {placeData?.address && (
@@ -214,8 +219,7 @@ export default function PlaceDetailPage() {
               </p>
             )}
             <p className="mt-2 border-t border-border/40 pt-2 text-xs text-muted-foreground/70">
-              This Place is a node in the Network — connected to Events, Organizations, and
-              Participation Activity.
+              Venue ini terhubung dengan Event, Organisasi, dan Aktivitas Partisipasi Komunitas.
             </p>
           </div>
         </div>
@@ -232,19 +236,19 @@ export default function PlaceDetailPage() {
         {[
           {
             icon: BookOpen,
-            label: 'Spaces',
+            label: 'Ruangan',
             val: rooms.length,
             color: 'from-emerald-500 to-teal-600',
           },
           {
             icon: CalendarDays,
-            label: 'Bookings',
+            label: 'Pemesanan',
             val: bookings.length,
             color: 'from-blue-500 to-indigo-600',
           },
           {
             icon: Users,
-            label: 'Active rooms',
+            label: 'Ruangan Aktif',
             val: rooms.filter((r) => r.status === 'active').length,
             color: 'from-violet-500 to-purple-600',
           },
@@ -269,7 +273,7 @@ export default function PlaceDetailPage() {
       {/* Spaces / Rooms */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-foreground">Spaces at this Place</h2>
+          <h2 className="text-base font-semibold text-foreground">Ruangan di Venue Ini</h2>
           <Dialog open={roomDialogOpen} onOpenChange={setRoomDialogOpen}>
             <DialogTrigger asChild>
               <Button
@@ -277,37 +281,43 @@ export default function PlaceDetailPage() {
                 className="h-8 border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-xs text-white"
               >
                 <Plus className="mr-1 h-3.5 w-3.5" />
-                Add Space
+                Tambah Ruangan
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Add New Space</DialogTitle>
+                <DialogTitle>Tambah Ruangan Baru</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleRoom(onCreateRoom)} className="space-y-4">
                 <div className="space-y-1.5">
                   <Label>
-                    Name <span className="text-destructive">*</span>
+                    Nama Ruangan <span className="text-destructive">*</span>
                   </Label>
-                  <Input {...regRoom('name')} placeholder="Conference Room A" />
+                  <Input {...regRoom('name')} placeholder="Ruang Rapat A" />
                   {roomErr.name && (
                     <p className="text-xs text-destructive">{roomErr.name.message}</p>
                   )}
                 </div>
-                <div className="space-y-1.5">
-                  <Label>Capacity</Label>
-                  <Input type="number" {...regRoom('capacity')} />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label>Kapasitas (Orang)</Label>
+                    <Input type="number" {...regRoom('capacity')} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Biaya Sewa (Poin)</Label>
+                    <Input type="number" {...regRoom('pointCost')} placeholder="0" />
+                  </div>
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
                   <Button type="button" variant="outline" onClick={() => setRoomDialogOpen(false)}>
-                    Cancel
+                    Batal
                   </Button>
                   <Button
                     type="submit"
                     disabled={submitting}
                     className="border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
                   >
-                    {submitting ? 'Creating…' : 'Create Space'}
+                    {submitting ? 'Membuat…' : 'Tambah Ruangan'}
                   </Button>
                 </div>
               </form>
@@ -319,7 +329,7 @@ export default function PlaceDetailPage() {
           {rooms.length === 0 ? (
             <div className="py-10 text-center text-muted-foreground">
               <BookOpen className="mx-auto mb-3 h-8 w-8 opacity-30" />
-              <p className="text-sm">No spaces yet. Add one to enable bookings.</p>
+              <p className="text-sm">Belum ada ruangan. Tambahkan satu untuk memulai pemesanan.</p>
             </div>
           ) : (
             <ul className="divide-y divide-border/40">
@@ -334,7 +344,12 @@ export default function PlaceDetailPage() {
                     </div>
                     <div>
                       <span className="text-sm font-medium">{r.name}</span>
-                      <span className="ml-2 text-xs text-muted-foreground">cap. {r.capacity}</span>
+                      <span className="ml-2 text-xs text-muted-foreground font-mono">Kapasitas: {r.capacity} orang</span>
+                      {r.pointCost > 0 && (
+                        <span className="ml-2.5 rounded bg-teal-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-teal-600 dark:text-teal-400 border border-teal-500/20">
+                          ✨ {r.pointCost.toLocaleString('id-ID')} Poin
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -345,7 +360,7 @@ export default function PlaceDetailPage() {
                       className="h-7 text-xs"
                       onClick={() => openBookingForRoom(r.id)}
                     >
-                      Book this space
+                      Pesan Ruangan Ini
                     </Button>
                   </div>
                 </li>
@@ -359,15 +374,14 @@ export default function PlaceDetailPage() {
       <div className="space-y-3">
         <div className="bg-card flex flex-col items-center justify-between gap-4 rounded-xl border border-border/60 p-6 shadow-sm sm:flex-row">
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-foreground">Venue Scheduling & Bookings</h3>
+            <h3 className="text-sm font-semibold text-foreground">Penjadwalan & Pemesanan Venue</h3>
             <p className="text-xs text-muted-foreground">
-              View complete booking grids, resolve timeline conflicts, and reserve rooms at this
-              venue.
+              Lihat kalender pemesanan lengkap, kelola bentrok jadwal, dan pesan ruangan di venue ini.
             </p>
           </div>
           <Link href={`/app/bookings?facilityId=${facilityId}`} className="shrink-0">
             <Button size="sm" className="bg-gradient-brand border-0 text-white shadow-sm">
-              Open Scheduler →
+              Buka Kalender →
             </Button>
           </Link>
         </div>
@@ -376,10 +390,10 @@ export default function PlaceDetailPage() {
       {/* Cross-link */}
       <div className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/30 px-4 py-3 text-xs text-muted-foreground">
         <span>
-          This Place connects via Participation to Events and Organizations in the Network.
+          Venue ini terhubung melalui partisipasi ke Event dan Organisasi.
         </span>
         <Link href="/app/events" className="ml-3 shrink-0 font-medium text-primary hover:underline">
-          See connected Events →
+          Lihat Event Terhubung →
         </Link>
       </div>
     </div>

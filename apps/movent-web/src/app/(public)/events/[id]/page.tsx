@@ -38,93 +38,93 @@ export default function PublicEventDetailPage() {
         if (found) {
           setEvent(found);
         } else {
-          setError('Event not found.');
+          setError('Event tidak ditemukan.');
         }
       })
       .catch(() => {
-        setError('Could not load event data.');
+        setError('Gagal memuat data event.');
       })
       .finally(() => setLoading(false));
   }, [eventId]);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 space-y-8 flex-1">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 space-y-8 flex-1 bg-background text-foreground">
       {/* Breadcrumb */}
       <div>
         <Link
           href="/events"
-          className="group inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
+          className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-          Back to Events Directory
+          Kembali ke Jadwal Event
         </Link>
       </div>
 
       {loading ? (
         <div className="space-y-4">
-          <Skeleton className="h-8 w-64 bg-slate-800/40 rounded-xl" />
-          <Skeleton className="h-4 w-full bg-slate-800/40 rounded-xl" />
-          <Skeleton className="h-24 w-full bg-slate-800/40 rounded-xl" />
+          <Skeleton className="h-8 w-64 rounded-xl" />
+          <Skeleton className="h-4 w-full rounded-xl" />
+          <Skeleton className="h-24 w-full rounded-xl" />
         </div>
       ) : error ? (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
           {error}
         </div>
       ) : event ? (
         <div className="space-y-8">
           {/* Main Info */}
-          <div className="bg-slate-950/40 border border-slate-850 p-6 sm:p-8 rounded-2xl space-y-6">
+          <div className="bg-card border border-border p-6 sm:p-8 rounded-2xl space-y-6 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-extrabold text-white tracking-tight">{event.name}</h1>
+                  <h1 className="text-3xl font-extrabold text-foreground tracking-tight">{event.name}</h1>
                   <StatusBadge status={event.status} />
                 </div>
                 {event.startsAt && (
-                  <p className="text-sm text-slate-400 flex items-center gap-1.5">
-                    <Calendar className="h-4 w-4 text-teal-500" />
-                    {new Date(event.startsAt).toLocaleString(undefined, {
+                  <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+                    {new Date(event.startsAt).toLocaleString('id-ID', {
                       dateStyle: 'long',
                       timeStyle: 'short',
-                    })}
+                    })} WIB
                   </p>
                 )}
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-500/10 shrink-0">
-                <Calendar className="h-6 w-6 text-teal-400" />
+                <Calendar className="h-6 w-6 text-teal-600 dark:text-teal-400" />
               </div>
             </div>
 
-            <hr className="border-slate-850" />
+            <hr className="border-border" />
 
             <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">About the Event</h3>
-              <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line">
-                {event.description || 'No description provided.'}
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tentang Event</h3>
+              <p className="text-foreground text-sm leading-relaxed whitespace-pre-line">
+                {event.description || 'Tidak ada deskripsi.'}
               </p>
             </div>
           </div>
 
           {/* Marketing/Conversion CTA Card */}
-          <div className="bg-gradient-to-r from-teal-950/40 to-emerald-950/30 border border-teal-500/20 p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-card border border-border hover:border-teal-500/30 p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
             <div className="space-y-2 max-w-xl text-center md:text-left">
-              <h3 className="text-lg font-bold text-white tracking-tight flex items-center justify-center md:justify-start gap-2">
-                <KeyRound className="h-5 w-5 text-teal-400" />
-                Participation Credential Required
+              <h3 className="text-lg font-bold text-foreground tracking-tight flex items-center justify-center md:justify-start gap-2">
+                <KeyRound className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+                Pendaftaran & Tiket Diperlukan
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                To attend this event, claim access passes, or check in at the gate, you must sign in with your sovereign community workspace credentials.
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Untuk menghadiri event ini, mengklaim tiket masuk, atau memverifikasi kehadiran di lokasi, silakan masuk ke Ruang Kerja Anda.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
               <Link href="/login" className="w-full sm:w-auto">
                 <Button className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold">
-                  Sign In to Attend
+                  Masuk untuk Hadir
                 </Button>
               </Link>
               <Link href="/login?tab=register" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full border-slate-800 bg-slate-900/40 text-slate-300 hover:text-white">
-                  Create Workspace
+                <Button variant="outline" className="w-full border-border bg-background hover:bg-accent text-foreground">
+                  Daftar Baru
                 </Button>
               </Link>
             </div>

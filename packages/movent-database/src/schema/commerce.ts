@@ -56,6 +56,7 @@ export const passTiers = pgTable(
     currency: varchar('currency', { length: 3 }).default('IDR').notNull(),
     capacity: integer('capacity').notNull(),
     quantityIssued: integer('quantity_issued').default(0).notNull(),
+    pointCost: integer('point_cost').default(0).notNull(),
     metadata: jsonb('metadata').default({}).notNull(),
     ...auditColumns,
   },

@@ -40,11 +40,11 @@ type Approval = {
 };
 
 const filterConfig = [
-  { key: 'pending', label: 'Pending', color: 'amber' },
-  { key: 'approved', label: 'Approved', color: 'emerald' },
-  { key: 'rejected', label: 'Rejected', color: 'red' },
-  { key: 'expired', label: 'Expired', color: 'slate' },
-  { key: 'all', label: 'All', color: 'blue' },
+  { key: 'pending', label: 'Menunggu', color: 'amber' },
+  { key: 'approved', label: 'Disetujui', color: 'emerald' },
+  { key: 'rejected', label: 'Ditolak', color: 'red' },
+  { key: 'expired', label: 'Kedaluwarsa', color: 'slate' },
+  { key: 'all', label: 'Semua', color: 'blue' },
 ] as const;
 
 function isExpiringSoon(expiresAt: string) {
@@ -97,23 +97,23 @@ export default function ApprovalsPage() {
 
   const columns: ColumnDef<Approval>[] = [
     {
-      header: 'Command Type',
+      header: 'Tipe Perintah',
       accessorFn: (row) => row.requestContext.command_type,
       cell: ({ getValue }) => (
-        <span className="rounded bg-muted/80 px-1.5 py-0.5 font-mono text-xs">
+        <span className="rounded bg-muted/80 px-1.5 py-0.5 font-mono text-xs text-foreground">
           {getValue<string>()}
         </span>
       ),
     },
     {
-      header: 'Aggregate Type',
+      header: 'Tipe Agregat',
       accessorFn: (row) => row.requestContext.aggregate_type,
       cell: ({ getValue }) => (
         <span className="text-sm text-muted-foreground">{getValue<string>()}</span>
       ),
     },
     {
-      header: 'Actor',
+      header: 'Aktor',
       cell: ({ row }) => <StatusBadge status={row.original.actorType} />,
     },
     {
@@ -121,7 +121,7 @@ export default function ApprovalsPage() {
       cell: ({ row }) => <StatusBadge status={row.original.status} />,
     },
     {
-      header: 'Expires',
+      header: 'Batas Waktu',
       accessorFn: (row) => row.expiresAt,
       cell: ({ row }) => {
         const d = new Date(row.original.expiresAt);
@@ -132,15 +132,15 @@ export default function ApprovalsPage() {
             <span
               className={`text-xs ${soon ? 'font-medium text-amber-600 dark:text-amber-400' : 'text-muted-foreground'}`}
             >
-              {d.toLocaleDateString()}{' '}
-              {d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {d.toLocaleDateString('id-ID')}{' '}
+              {d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
             </span>
           </div>
         );
       },
     },
     {
-      header: 'Actions',
+      header: 'Aksi',
       cell: ({ row }) => {
         const isPending = row.original.status === 'pending';
         return (
@@ -154,7 +154,7 @@ export default function ApprovalsPage() {
                 setRejectionNote('');
               }}
             >
-              Details
+              Detail
             </Button>
             {isPending && (
               <>
@@ -164,7 +164,7 @@ export default function ApprovalsPage() {
                   onClick={() => resolve(row.original.id, 'approved')}
                 >
                   <CheckCircle2 className="mr-1 h-3 w-3" />
-                  Approve
+                  Setujui
                 </Button>
                 <Button
                   size="sm"
@@ -173,7 +173,7 @@ export default function ApprovalsPage() {
                   onClick={() => resolve(row.original.id, 'rejected')}
                 >
                   <XCircle className="mr-1 h-3 w-3" />
-                  Reject
+                  Tolak
                 </Button>
               </>
             )}
@@ -195,7 +195,7 @@ export default function ApprovalsPage() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-foreground">Approvals</h1>
+              <h1 className="text-xl font-bold text-foreground">Persetujuan</h1>
               {statusFilter === 'pending' && pendingCount > 0 && (
                 <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold leading-none text-white">
                   {pendingCount}
@@ -203,7 +203,7 @@ export default function ApprovalsPage() {
               )}
             </div>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Trust and verification keeping the Network connected (Workspace — authenticated)
+              Tata kelola dan verifikasi data yang menjaga keamanan jaringan komunitas.
             </p>
           </div>
         </div>
@@ -267,8 +267,8 @@ export default function ApprovalsPage() {
           <Shield className="mx-auto mb-3 h-8 w-8 opacity-30" />
           <p className="text-sm">
             {statusFilter === 'pending'
-              ? 'No pending approvals. The network is in good shape!'
-              : `No ${statusFilter} approvals found.`}
+              ? 'Tidak ada persetujuan yang tertunda. Semua perubahan data aman!'
+              : `Tidak ditemukan persetujuan dengan status ${statusFilter}.`}
           </p>
         </div>
       )}
@@ -281,11 +281,11 @@ export default function ApprovalsPage() {
         }}
       >
         {selectedApproval && (
-          <DialogContent className="max-w-xl">
+          <DialogContent className="max-w-xl text-foreground">
             <DialogHeader>
-              <DialogTitle>Approval Request Detail</DialogTitle>
+              <DialogTitle>Detail Pengajuan Persetujuan</DialogTitle>
               <DialogDescription>
-                Detailed context and actions history for this approval
+                Detail riwayat konteks dan aksi untuk persetujuan ini
               </DialogDescription>
             </DialogHeader>
 
@@ -293,7 +293,7 @@ export default function ApprovalsPage() {
               <div className="grid grid-cols-2 gap-4 border-b border-border/60 pb-4">
                 <div>
                   <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Command Type
+                    Tipe Perintah
                   </span>
                   <span className="rounded bg-muted/80 px-1.5 py-0.5 font-mono text-xs">
                     {selectedApproval.requestContext.command_type}
@@ -301,13 +301,13 @@ export default function ApprovalsPage() {
                 </div>
                 <div>
                   <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Actor Type
+                    Tipe Aktor
                   </span>
                   <StatusBadge status={selectedApproval.actorType} />
                 </div>
                 <div>
                   <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Aggregate Type
+                    Tipe Agregat
                   </span>
                   <span>{selectedApproval.requestContext.aggregate_type}</span>
                 </div>
@@ -319,7 +319,7 @@ export default function ApprovalsPage() {
                 </div>
                 <div>
                   <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Expires At
+                    Kedaluwarsa Pada
                   </span>
                   <span
                     className={
@@ -328,20 +328,20 @@ export default function ApprovalsPage() {
                         : ''
                     }
                   >
-                    {new Date(selectedApproval.expiresAt).toLocaleString()}
+                    {new Date(selectedApproval.expiresAt).toLocaleString('id-ID')} WIB
                   </span>
                 </div>
                 <div>
                   <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Created At
+                    Diajukan Pada
                   </span>
-                  <span>{new Date(selectedApproval.createdAt).toLocaleString()}</span>
+                  <span>{new Date(selectedApproval.createdAt).toLocaleString('id-ID')} WIB</span>
                 </div>
               </div>
 
               <div>
                 <span className="mb-2 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Request Payload
+                  Payload Permintaan
                 </span>
                 <pre className="max-h-40 overflow-auto rounded-lg border border-border/40 bg-muted/60 p-3 font-mono text-xs">
                   {JSON.stringify(selectedApproval.requestContext, null, 2)}
@@ -351,17 +351,17 @@ export default function ApprovalsPage() {
               {selectedApproval.status !== 'pending' && (
                 <div className="space-y-2 rounded-lg border border-border/40 bg-muted/40 p-3">
                   <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Resolution Info
+                    Informasi Penyelesaian
                   </h4>
                   {selectedApproval.resolvedAt && (
                     <p className="text-sm">
-                      <strong>Resolved At:</strong>{' '}
-                      {new Date(selectedApproval.resolvedAt).toLocaleString()}
+                      <strong>Diselesaikan Pada:</strong>{' '}
+                      {new Date(selectedApproval.resolvedAt).toLocaleString('id-ID')} WIB
                     </p>
                   )}
                   {selectedApproval.resolutionNote && (
                     <p className="text-sm">
-                      <strong>Note:</strong> {selectedApproval.resolutionNote}
+                      <strong>Catatan:</strong> {selectedApproval.resolutionNote}
                     </p>
                   )}
                 </div>
@@ -370,17 +370,17 @@ export default function ApprovalsPage() {
               {selectedApproval.status === 'pending' && (
                 <div className="space-y-4 border-t border-border/60 pt-2">
                   <div className="space-y-1.5">
-                    <Label htmlFor="note">Resolution Note (Required for Reject)</Label>
+                    <Label htmlFor="note">Catatan Penyelesaian (Wajib jika menolak)</Label>
                     <Input
                       id="note"
-                      placeholder="Enter a reason or feedback..."
+                      placeholder="Masukkan alasan atau catatan..."
                       value={rejectionNote}
                       onChange={(e) => setRejectionNote(e.target.value)}
                     />
                   </div>
                   <div className="flex justify-end gap-2">
                     <Button variant="outline" onClick={() => setSelectedApproval(null)}>
-                      Close
+                      Tutup
                     </Button>
                     <Button
                       variant="destructive"
@@ -388,19 +388,19 @@ export default function ApprovalsPage() {
                         resolve(
                           selectedApproval.id,
                           'rejected',
-                          rejectionNote || 'Rejected to preserve network trust',
+                          rejectionNote || 'Ditolak untuk menjaga keamanan jaringan',
                         )
                       }
                     >
                       <XCircle className="mr-1.5 h-4 w-4" />
-                      Reject
+                      Tolak
                     </Button>
                     <Button
                       className="border-0 bg-emerald-600 text-white hover:bg-emerald-700"
                       onClick={() => resolve(selectedApproval.id, 'approved', rejectionNote)}
                     >
                       <CheckCircle2 className="mr-1.5 h-4 w-4" />
-                      Approve
+                      Setujui
                     </Button>
                   </div>
                 </div>

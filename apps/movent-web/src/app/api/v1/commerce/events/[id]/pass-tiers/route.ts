@@ -8,7 +8,8 @@ import { passTiers } from '@movent/database/schema';
 import { eq, and } from 'drizzle-orm';
 
 export const POST = withTenantContext(async (req: NextRequest, { tenantId, actorId }) => {
-  const body = CreateTicketTypeSchema.safeParse(await req.json());
+  const rawJson = await req.json();
+  const body = CreateTicketTypeSchema.safeParse(rawJson);
   if (!body.success) return NextResponse.json({ error: body.error.flatten() }, { status: 422 });
 
   const { db } = createDbWithTenant(tenantId);
@@ -18,7 +19,17 @@ export const POST = withTenantContext(async (req: NextRequest, { tenantId, actor
   );
 
   const result = await handler.handle(body.data, tenantId, actorId);
-  return NextResponse.json(result, { status: 201 });
+
+  // Update point cost if provided
+  const pointCost = Number(rawJson.pointCost || 0);
+  if (pointCost > 0) {
+    await db
+      .update(passTiers)
+      .set({ pointCost })
+      .where(and(eq(passTiers.id, result.passTierId), eq(passTiers.tenantId, tenantId)));
+  }
+
+  return NextResponse.json({ ...result, pointCost }, { status: 201 });
 });
 
 export const GET = withTenantContext(async (req: NextRequest, { tenantId }) => {

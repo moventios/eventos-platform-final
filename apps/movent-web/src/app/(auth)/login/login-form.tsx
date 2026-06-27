@@ -11,10 +11,10 @@ import { ArrowRight, Mail, Lock, Zap, MapPin, Users, Calendar } from 'lucide-rea
 import Link from 'next/link';
 
 const networkFeatures = [
-  { icon: Calendar, text: 'Discover events happening near you' },
-  { icon: MapPin, text: 'Find places for gatherings & collaboration' },
-  { icon: Users, text: 'Connect with people & organizations' },
-  { icon: Zap, text: 'Find opportunities & projects' },
+  { icon: Calendar, text: 'Temukan berbagai event menarik di sekitar Anda' },
+  { icon: MapPin, text: 'Cari venue untuk kumpul & kolaborasi' },
+  { icon: Users, text: 'Terhubung dengan komunitas & organisasi' },
+  { icon: Zap, text: 'Temukan peluang kerja sama & proyek' },
 ];
 
 export function LoginForm() {
@@ -68,15 +68,15 @@ export function LoginForm() {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
             <Mail className="h-6 w-6 text-primary" />
           </div>
-          <h1 className="text-xl font-bold">Check your email</h1>
+          <h1 className="text-xl font-bold">Periksa email Anda</h1>
           <p className="text-sm text-muted-foreground">
-            A magic link has been sent to{' '}
+            Tautan login aman telah dikirim ke{' '}
             <span className="font-semibold text-foreground">{email}</span>.
             <br />
-            Click the link to sign in securely.
+            Klik tautan di email tersebut untuk masuk secara aman.
           </p>
           <Link href="/" className="block text-xs text-primary hover:underline">
-            ← Explore the network while you wait
+            ← Jelajahi direktori selagi Anda menunggu
           </Link>
         </div>
       </main>
@@ -100,13 +100,13 @@ export function LoginForm() {
             <span className="text-xl font-bold text-white">Moventios</span>
           </div>
           <p className="text-sm text-white/70">
-            The public Relationship, Activation & Collaboration Network
+            Jaringan Hubungan, Aktivitas & Kolaborasi Publik
           </p>
         </div>
 
         {/* Features */}
         <div className="relative space-y-4">
-          <p className="text-lg font-semibold text-white/90">Join the ecosystem network</p>
+          <p className="text-lg font-semibold text-white/90">Gabung ke Jaringan Ekosistem</p>
           {networkFeatures.map((f) => (
             <div key={f.text} className="flex items-center gap-3">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/15">
@@ -119,7 +119,7 @@ export function LoginForm() {
 
         {/* Tagline */}
         <div className="relative">
-          <p className="text-xs text-white/50">Powered by Movent Infrastructure</p>
+          <p className="text-xs text-white/50">Didukung oleh Movent Infrastructure</p>
         </div>
       </div>
 
@@ -135,13 +135,13 @@ export function LoginForm() {
           </div>
 
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Sign in to your workspace</p>
+            <h1 className="text-2xl font-bold text-foreground">Selamat Datang Kembali</h1>
+            <p className="mt-1 text-sm text-muted-foreground">Masuk ke Ruang Kerja Anda</p>
           </div>
 
           {callbackFailed && (
             <div className="animate-fade-in rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
-              Sign-in could not be completed. Please try again.
+              Gagal masuk. Silakan coba kembali.
             </div>
           )}
 
@@ -153,7 +153,7 @@ export function LoginForm() {
 
           <form onSubmit={handlePasswordLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email">Alamat Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
@@ -164,12 +164,12 @@ export function LoginForm() {
                   required
                   className="pl-10"
                   autoComplete="email"
-                  placeholder="you@example.com"
+                  placeholder="anda@email.com"
                 />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Kata Sandi</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
@@ -190,10 +190,10 @@ export function LoginForm() {
               className="bg-gradient-brand w-full border-0 text-white shadow-sm hover:opacity-90"
             >
               {loading ? (
-                'Signing in…'
+                'Masuk…'
               ) : (
                 <>
-                  Sign in <ArrowRight className="ml-2 h-4 w-4" />
+                  Masuk <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}
             </Button>
@@ -204,7 +204,7 @@ export function LoginForm() {
               <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">or</span>
+              <span className="bg-background px-2 text-muted-foreground">atau</span>
             </div>
           </div>
 
@@ -215,13 +215,13 @@ export function LoginForm() {
             disabled={loading || !email}
           >
             <Mail className="mr-2 h-4 w-4" />
-            Send magic link to {email || 'your email'}
+            Kirim tautan masuk ke {email || 'email Anda'}
           </Button>
 
           <p className="text-center text-xs text-muted-foreground">
-            No account?{' '}
+            Belum punya akun?{' '}
             <Link href="/" className="font-medium text-primary hover:underline">
-              Explore the network first →
+              Jelajahi direktori terlebih dahulu →
             </Link>
           </p>
         </div>

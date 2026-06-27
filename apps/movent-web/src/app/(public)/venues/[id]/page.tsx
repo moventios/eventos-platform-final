@@ -43,96 +43,96 @@ export default function PublicVenueDetailPage() {
         .then((data: Venue[]) => {
           const found = data.find((v) => v.id === venueId);
           if (found) setVenue(found);
-          else throw new Error('Venue not found');
+          else throw new Error('Venue tidak ditemukan');
         }),
       fetch(`/api/v1/spatial/facilities/${venueId}/rooms`)
         .then((r) => (r.ok ? r.json() : []))
         .then((data: Room[]) => setRooms(data || [])),
     ])
       .catch(() => {
-        setError('Could not load venue details.');
+        setError('Gagal memuat detail venue.');
       })
       .finally(() => setLoading(false));
   }, [venueId]);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 space-y-8 flex-1">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 space-y-8 flex-1 bg-background text-foreground">
       {/* Breadcrumb */}
       <div>
         <Link
           href="/venues"
-          className="group inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
+          className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-          Back to Venues Directory
+          Kembali ke Daftar Venue
         </Link>
       </div>
 
       {loading ? (
         <div className="space-y-4">
-          <Skeleton className="h-8 w-64 bg-slate-800/40 rounded-xl" />
-          <Skeleton className="h-4 w-full bg-slate-800/40 rounded-xl" />
-          <Skeleton className="h-24 w-full bg-slate-800/40 rounded-xl" />
+          <Skeleton className="h-8 w-64 rounded-xl" />
+          <Skeleton className="h-4 w-full rounded-xl" />
+          <Skeleton className="h-24 w-full rounded-xl" />
         </div>
       ) : error ? (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
           {error}
         </div>
       ) : venue ? (
         <div className="space-y-8">
           {/* Main Info */}
-          <div className="bg-slate-950/40 border border-slate-850 p-6 sm:p-8 rounded-2xl space-y-6">
+          <div className="bg-card border border-border p-6 sm:p-8 rounded-2xl space-y-6 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-extrabold text-white tracking-tight">{venue.name}</h1>
+                  <h1 className="text-3xl font-extrabold text-foreground tracking-tight">{venue.name}</h1>
                   <StatusBadge status={venue.status} />
                 </div>
                 {venue.address && (
-                  <p className="text-sm text-slate-400 flex items-center gap-1.5">
-                    <MapPin className="h-4 w-4 text-teal-500" />
+                  <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+                    <MapPin className="h-4 w-4 text-teal-600 dark:text-teal-400" />
                     {venue.address}
                   </p>
                 )}
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-500/10 shrink-0">
-                <MapPin className="h-6 w-6 text-teal-400" />
+                <MapPin className="h-6 w-6 text-teal-600 dark:text-teal-400" />
               </div>
             </div>
 
-            <hr className="border-slate-850" />
+            <hr className="border-border" />
 
             <div className="space-y-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">About the Venue</h3>
-              <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line">
-                {venue.description || 'No description provided.'}
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tentang Venue</h3>
+              <p className="text-foreground text-sm leading-relaxed whitespace-pre-line">
+                {venue.description || 'Tidak ada deskripsi.'}
               </p>
             </div>
           </div>
 
           {/* Spaces / Rooms */}
           <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white">Available Spaces</h2>
-            <div className="bg-slate-950/40 rounded-2xl border border-slate-850 overflow-hidden">
+            <h2 className="text-lg font-bold text-foreground">Ruangan yang Tersedia</h2>
+            <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
               {rooms.length === 0 ? (
-                <div className="py-12 text-center text-slate-500">
-                  <BookOpen className="mx-auto mb-3 h-8 w-8 opacity-30" />
-                  <p className="text-sm">No individual spaces registered at this venue.</p>
+                <div className="py-12 text-center text-muted-foreground">
+                  <BookOpen className="mx-auto mb-3 h-8 w-8 opacity-35" />
+                  <p className="text-sm">Belum ada ruangan yang terdaftar di venue ini.</p>
                 </div>
               ) : (
-                <ul className="divide-y divide-slate-850">
+                <ul className="divide-y divide-border">
                   {rooms.map((room) => (
                     <li
                       key={room.id}
-                      className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-slate-900/20"
+                      className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-accent/40"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-900">
-                          <BookOpen className="h-4.5 w-4.5 text-slate-400" />
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-background">
+                          <BookOpen className="h-4.5 w-4.5 text-muted-foreground" />
                         </div>
                         <div>
-                          <span className="text-sm font-semibold text-white">{room.name}</span>
-                          <span className="ml-3 text-xs text-slate-500">Capacity: {room.capacity}</span>
+                          <span className="text-sm font-semibold text-foreground">{room.name}</span>
+                          <span className="ml-3 text-xs text-muted-foreground">Kapasitas: {room.capacity} orang</span>
                         </div>
                       </div>
                       <StatusBadge status={room.status} />
@@ -144,25 +144,25 @@ export default function PublicVenueDetailPage() {
           </div>
 
           {/* Marketing/Conversion CTA Card */}
-          <div className="bg-gradient-to-r from-teal-950/40 to-emerald-950/30 border border-teal-500/20 p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-card border border-border hover:border-teal-500/30 p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
             <div className="space-y-2 max-w-xl text-center md:text-left">
-              <h3 className="text-lg font-bold text-white tracking-tight flex items-center justify-center md:justify-start gap-2">
-                <KeyRound className="h-5 w-5 text-teal-400" />
-                Reserve Spaces at this Venue
+              <h3 className="text-lg font-bold text-foreground tracking-tight flex items-center justify-center md:justify-start gap-2">
+                <KeyRound className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+                Pesan Ruangan di Venue Ini
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                To request space reservations, view scheduling timetables, or manage booking events, please sign in with your sovereign community workspace.
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Untuk mengajukan pemesanan ruangan, melihat jadwal pemakaian, atau mengelola reservasi event, silakan masuk ke Ruang Kerja Anda.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
               <Link href="/login" className="w-full sm:w-auto">
                 <Button className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold">
-                  Sign In to Book
+                  Masuk untuk Memesan
                 </Button>
               </Link>
               <Link href="/login?tab=register" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full border-slate-800 bg-slate-900/40 text-slate-300 hover:text-white">
-                  Create Workspace
+                <Button variant="outline" className="w-full border-border bg-background hover:bg-accent text-foreground">
+                  Daftar Baru
                 </Button>
               </Link>
             </div>

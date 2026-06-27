@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { ColumnDef } from '@tanstack/react-table';
-import { MapPin, Plus, Search } from 'lucide-react';
+import { MapPin, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -47,7 +47,7 @@ interface Booking {
 }
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Nama wajib diisi'),
   description: z.string().optional(),
   address: z.string().optional(),
 });
@@ -57,7 +57,7 @@ type FormValues = z.infer<typeof schema>;
 const columns: ColumnDef<Facility>[] = [
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Nama Venue',
     cell: ({ getValue, row }) => (
       <div>
         <Link
@@ -81,7 +81,7 @@ const columns: ColumnDef<Facility>[] = [
   },
   {
     accessorKey: 'address',
-    header: 'Address',
+    header: 'Alamat',
     cell: ({ getValue }) => {
       const v = getValue<string>();
       return v ? (
@@ -102,7 +102,7 @@ const columns: ColumnDef<Facility>[] = [
         href={`/app/venues/${row.original.id}`}
         className="text-xs font-medium text-primary hover:underline"
       >
-        View →
+        Detail →
       </Link>
     ),
   },
@@ -139,10 +139,10 @@ function VenuesContent() {
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const bookingSchema = z.object({
-    roomId: z.string().min(1, 'Room required'),
+    roomId: z.string().min(1, 'Ruangan wajib diisi'),
     title: z.string().optional(),
-    startsAt: z.string().min(1, 'Start required'),
-    endsAt: z.string().min(1, 'End required'),
+    startsAt: z.string().min(1, 'Waktu Mulai wajib diisi'),
+    endsAt: z.string().min(1, 'Waktu Selesai wajib diisi'),
   });
   type BookingFormValues = z.infer<typeof bookingSchema>;
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -169,7 +169,7 @@ function VenuesContent() {
       .catch(() => {
         setFacilities([]);
         setBookings([]);
-        setError('Could not load venues.');
+        setError('Gagal memuat daftar venue.');
       })
       .finally(() => setLoading(false));
   }, []);
@@ -230,10 +230,10 @@ function VenuesContent() {
         .catch(() => {});
     } else if (res.status === 409) {
       const e = await res.json().catch(() => ({}));
-      setBookingError(e.error || 'Booking conflict detected. Choose different time.');
+      setBookingError(e.error || 'Jadwal bentrok. Silakan pilih waktu yang lain.');
     } else {
       const e = await res.json().catch(() => ({}));
-      setBookingError(e.error?.message || 'Failed to book');
+      setBookingError(e.error?.message || 'Gagal melakukan pemesanan');
     }
   }
 
@@ -241,29 +241,29 @@ function VenuesContent() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="name">
-          Name <span className="text-destructive">*</span>
+          Nama Venue <span className="text-destructive">*</span>
         </Label>
-        <Input id="name" {...register('name')} placeholder="Venue name" />
+        <Input id="name" {...register('name')} placeholder="Nama venue" />
         {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">Deskripsi</Label>
         <Input id="description" {...register('description')} />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="address">Address</Label>
-        <Input id="address" {...register('address')} placeholder="Full address" />
+        <Label htmlFor="address">Alamat</Label>
+        <Input id="address" {...register('address')} placeholder="Alamat lengkap" />
       </div>
       <div className="flex justify-end gap-2 pt-2">
         <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-          Cancel
+          Batal
         </Button>
         <Button
           type="submit"
           disabled={submitting}
           className="border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
         >
-          {submitting ? 'Creating…' : 'Create Venue'}
+          {submitting ? 'Membuat…' : 'Tambah Venue'}
         </Button>
       </div>
     </form>
@@ -273,12 +273,12 @@ function VenuesContent() {
     <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="outline">
-          Activate (Book)
+          Pesan Ruangan
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Activate Participation at this Venue</DialogTitle>
+          <DialogTitle>Pesan Ruangan di Venue Ini</DialogTitle>
         </DialogHeader>
         {bookingError && (
           <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
@@ -287,23 +287,23 @@ function VenuesContent() {
         )}
         <form onSubmit={handleB(onSubmitBooking)} className="space-y-4">
           <div className="space-y-1.5">
-            <Label>Space / Room ID</Label>
-            <Input {...regB('roomId')} placeholder="UUID of room" />
+            <Label>ID Ruangan / Space</Label>
+            <Input {...regB('roomId')} placeholder="UUID ruangan" />
             {bErrors.roomId && (
               <p className="text-xs text-destructive">{bErrors.roomId.message}</p>
             )}
           </div>
           <div className="space-y-1.5">
-            <Label>Title (optional)</Label>
+            <Label>Judul Acara (opsional)</Label>
             <Input {...regB('title')} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>Start</Label>
+              <Label>Waktu Mulai</Label>
               <Input type="datetime-local" {...regB('startsAt')} />
             </div>
             <div className="space-y-1.5">
-              <Label>End</Label>
+              <Label>Waktu Selesai</Label>
               <Input type="datetime-local" {...regB('endsAt')} />
             </div>
           </div>
@@ -316,10 +316,10 @@ function VenuesContent() {
                 setBookingError(null);
               }}
             >
-              Cancel
+              Batal
             </Button>
             <Button type="submit" disabled={bSubmitting}>
-              {bSubmitting ? 'Booking…' : 'Submit Booking'}
+              {bSubmitting ? 'Memesan…' : 'Kirim Pemesanan'}
             </Button>
           </div>
         </form>
@@ -329,25 +329,25 @@ function VenuesContent() {
 
   return (
     <ResourcePageLayout
-      title="Venues"
-      description="Venues where Participation & Collaboration happen in the Network"
+      title="Kelola Venue"
+      description="Kelola tempat kumpul fisik, ruang kolaborasi, dan hub kegiatan komunitas."
       icon={<MapPin className="h-5 w-5 text-white" />}
       iconGradient="from-emerald-500 to-teal-600"
-      searchPlaceholder="Search venues in the network..."
+      searchPlaceholder="Cari venue komunitas..."
       searchQuery={q}
       onSearchChange={handleSearchChange}
       data={filteredFacilities}
       loading={loading}
       error={error}
-      emptyMessage="No venues match. Broaden search or create one."
-      createButtonText="New Venue"
+      emptyMessage="Tidak ada venue yang cocok. Cari dengan kata kunci lain atau tambah baru."
+      createButtonText="Tambah Venue"
       createButtonIcon={<Plus className="mr-1.5 h-3.5 w-3.5" />}
       isCreateOpen={open}
       onCreateOpenChange={setOpen}
-      createDialogTitle="Add New Venue"
+      createDialogTitle="Tambah Venue Baru"
       createDialogContent={createForm}
       featuredItems={filteredFacilities.slice(0, 3)}
-      featuredTitle="Featured Venues"
+      featuredTitle="Venue Unggulan"
       renderFeaturedItem={(f) => (
         <Link
           key={f.id}
@@ -360,7 +360,7 @@ function VenuesContent() {
           <div className="min-w-0">
             <div className="truncate text-sm font-semibold">{f.name}</div>
             <div className="mt-0.5 truncate text-xs text-muted-foreground">
-              {f.address || 'No address'}
+              {f.address || 'Alamat tidak ada'}
             </div>
           </div>
         </Link>
@@ -369,7 +369,7 @@ function VenuesContent() {
       headerActions={headerActions}
     >
       <div className="space-y-3">
-        <h2 className="text-base font-semibold">Bookings Calendar</h2>
+        <h2 className="text-base font-semibold">Kalender Pemesanan Ruangan</h2>
         <div className="bg-card rounded-xl border border-border/60 p-4 shadow-sm">
           <BookingCalendar
             bookings={bookings}

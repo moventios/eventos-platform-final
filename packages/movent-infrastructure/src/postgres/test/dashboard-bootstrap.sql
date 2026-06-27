@@ -53,6 +53,7 @@ CREATE TABLE rooms (
   name varchar(255) NOT NULL,
   capacity integer NOT NULL,
   status room_state NOT NULL DEFAULT 'available',
+  point_cost integer NOT NULL DEFAULT 0,
   metadata jsonb NOT NULL DEFAULT '{}',
   created_at timestamptz NOT NULL DEFAULT now(),
   created_by uuid,

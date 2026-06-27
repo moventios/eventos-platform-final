@@ -9,7 +9,7 @@ import {
 import { OutboxEventBus, createDbWithTenant } from '@movent/infrastructure/postgres';
 import { CapacityExceededError } from '@movent/core';
 import { sql, eq, and } from 'drizzle-orm';
-import { accessPasses } from '@movent/database/schema';
+import { accessPasses, passTiers, pointsAccounts, pointsTransactions } from '@movent/database/schema';
 
 export const POST = withTenantContext(
   async (req: NextRequest, { tenantId, actorId, actorType }) => {
@@ -32,6 +32,58 @@ export const POST = withTenantContext(
       );
     }
 
+    // Verify point cost and balance
+    const tier = await db.query.passTiers.findFirst({
+      where: and(eq(passTiers.id, body.data.passTierId), eq(passTiers.tenantId, tenantId)),
+    });
+
+    if (!tier) {
+      return NextResponse.json({ error: 'Kategori tiket tidak ditemukan.' }, { status: 404 });
+    }
+
+    if (tier.pointCost > 0) {
+      const customerId = body.data.customerId;
+      let account = await db.query.pointsAccounts.findFirst({
+        where: and(eq(pointsAccounts.tenantId, tenantId), eq(pointsAccounts.profileId, customerId)),
+      });
+
+      if (!account) {
+        await db.insert(pointsAccounts).values({
+          tenantId,
+          profileId: customerId,
+          balance: 1000,
+        }).onConflictDoNothing();
+        account = await db.query.pointsAccounts.findFirst({
+          where: and(eq(pointsAccounts.tenantId, tenantId), eq(pointsAccounts.profileId, customerId)),
+        });
+      }
+
+      const balance = account?.balance ?? 1000;
+      if (balance < tier.pointCost) {
+        return NextResponse.json(
+          { error: `Saldo poin tidak mencukupi. Saldo Anda: ${balance} Poin, Biaya: ${tier.pointCost} Poin.` },
+          { status: 400 }
+        );
+      }
+
+      // Deduct points
+      await db.transaction(async (tx) => {
+        await tx
+          .update(pointsAccounts)
+          .set({ balance: balance - tier.pointCost, updatedAt: new Date() })
+          .where(and(eq(pointsAccounts.tenantId, tenantId), eq(pointsAccounts.profileId, customerId)));
+
+        await tx.insert(pointsTransactions).values({
+          tenantId,
+          profileId: customerId,
+          amount: -tier.pointCost,
+          type: 'spend',
+          description: `Pembelian tiket "${tier.name}"`,
+          metadata: { passTierId: tier.id, eventId: tier.eventId },
+        });
+      });
+    }
+
     const handler = new IssueAccessPassHandler(
       new DrizzleAccessPassRepository(db),
       new DrizzlePassTierRepository(db),
@@ -43,6 +95,29 @@ export const POST = withTenantContext(
       return NextResponse.json(result, { status: 201 });
     } catch (err) {
       if (err instanceof CapacityExceededError) {
+        // Refund points if capacity failed
+        if (tier.pointCost > 0) {
+          const customerId = body.data.customerId;
+          const account = await db.query.pointsAccounts.findFirst({
+            where: and(eq(pointsAccounts.tenantId, tenantId), eq(pointsAccounts.profileId, customerId)),
+          });
+          const balance = account?.balance ?? 1000;
+          await db.transaction(async (tx) => {
+            await tx
+              .update(pointsAccounts)
+              .set({ balance: balance + tier.pointCost, updatedAt: new Date() })
+              .where(and(eq(pointsAccounts.tenantId, tenantId), eq(pointsAccounts.profileId, customerId)));
+
+            await tx.insert(pointsTransactions).values({
+              tenantId,
+              profileId: customerId,
+              amount: tier.pointCost,
+              type: 'refund',
+              description: `Pengembalian poin: Kuota tiket "${tier.name}" habis`,
+              metadata: { passTierId: tier.id },
+            });
+          });
+        }
         return NextResponse.json({ error: err.message, code: err.code }, { status: 409 });
       }
       throw err;

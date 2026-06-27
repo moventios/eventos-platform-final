@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Ticket, Search, Filter, CheckCircle2 } from 'lucide-react';
+import { Ticket, Search, Filter } from 'lucide-react';
 import type { ColumnDef } from '@tanstack/react-table';
 
 type AccessPass = {
@@ -46,10 +46,10 @@ function PassesContent() {
         const data = await res.json();
         setPasses(data || []);
       } else {
-        setError('Failed to load access tickets.');
+        setError('Gagal memuat tiket masuk.');
       }
     } catch {
-      setError('Failed to synchronize with gate records.');
+      setError('Gagal sinkronisasi data pintu masuk.');
     } finally {
       setLoading(false);
     }
@@ -71,10 +71,10 @@ function PassesContent() {
         await fetchPasses();
       } else {
         const data = await res.json().catch(() => ({}));
-        alert(data.error || 'Check-in failed.');
+        alert(data.error || 'Proses Check-In gagal.');
       }
     } catch {
-      alert('Gate communication failed.');
+      alert('Gagal terhubung dengan pintu masuk.');
     } finally {
       setActioningId(null);
     }
@@ -91,14 +91,14 @@ function PassesContent() {
   const columns: ColumnDef<AccessPass>[] = [
     {
       accessorKey: 'id',
-      header: 'Ticket ID',
+      header: 'ID Tiket',
       cell: ({ getValue }) => (
         <span className="font-mono text-xs text-muted-foreground">{getValue<string>()}</span>
       ),
     },
     {
       accessorKey: 'customerId',
-      header: 'Customer ID',
+      header: 'ID Peserta',
       cell: ({ getValue }) => <span className="font-mono text-xs">{getValue<string>()}</span>,
     },
     {
@@ -108,11 +108,11 @@ function PassesContent() {
     },
     {
       accessorKey: 'issuedAt',
-      header: 'Issued At',
+      header: 'Diterbitkan Pada',
       cell: ({ getValue }) => {
         const val = getValue<string | null>();
         return val ? (
-          <span className="text-xs">{new Date(val).toLocaleString()}</span>
+          <span className="text-xs">{new Date(val).toLocaleString('id-ID')} WIB</span>
         ) : (
           <span className="text-xs text-muted-foreground">—</span>
         );
@@ -120,12 +120,12 @@ function PassesContent() {
     },
     {
       accessorKey: 'checkedInAt',
-      header: 'Checked In',
+      header: 'Waktu Masuk',
       cell: ({ getValue }) => {
         const val = getValue<string | null>();
         return val ? (
           <span className="text-xs font-medium text-emerald-600">
-            ✓ {new Date(val).toLocaleTimeString()}
+            ✓ {new Date(val).toLocaleTimeString('id-ID')} WIB
           </span>
         ) : (
           <span className="text-xs text-muted-foreground">—</span>
@@ -145,7 +145,7 @@ function PassesContent() {
             disabled={actioningId !== null}
             onClick={() => handleCheckIn(p.id)}
           >
-            Check In
+            Verifikasi Masuk
           </Button>
         ) : null;
       },
@@ -161,9 +161,9 @@ function PassesContent() {
             <Ticket className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-foreground">Access & Tickets</h1>
+            <h1 className="text-xl font-bold text-foreground">Tiket Masuk</h1>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Scan gates, credential validation, and real-time attendance management
+              Pindai tiket pintu masuk, validasi kredensial, dan manajemen kehadiran real-time.
             </p>
           </div>
         </div>
@@ -177,7 +177,7 @@ function PassesContent() {
               router.replace(`?${params.toString()}`);
             }}
           >
-            Clear Event Filter
+            Hapus Filter Event
           </Button>
         )}
       </div>
@@ -187,7 +187,7 @@ function PassesContent() {
         <div className="relative max-w-sm flex-1">
           <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search by ID or Customer UUID..."
+            placeholder="Cari berdasarkan ID tiket atau UUID peserta..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 text-sm"
@@ -203,15 +203,15 @@ function PassesContent() {
             id="statusFilter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded border border-border bg-background p-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+            className="rounded border border-border bg-background p-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
           >
-            <option value="all">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="issued">Issued</option>
-            <option value="checked_in">Checked In</option>
-            <option value="consumed">Consumed</option>
-            <option value="revoked">Revoked</option>
-            <option value="expired">Expired</option>
+            <option value="all">Semua Status</option>
+            <option value="pending">Menunggu</option>
+            <option value="issued">Diterbitkan</option>
+            <option value="checked_in">Telah Hadir</option>
+            <option value="consumed">Digunakan</option>
+            <option value="revoked">Dibatalkan</option>
+            <option value="expired">Kedaluwarsa</option>
           </select>
         </div>
       </div>

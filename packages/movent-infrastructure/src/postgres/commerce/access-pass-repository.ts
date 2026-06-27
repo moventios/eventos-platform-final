@@ -102,7 +102,7 @@ export class DrizzlePassTierRepository implements IPassTierRepository {
       where: and(eq(passTiers.id, id), eq(passTiers.tenantId, tenantId)),
     });
     if (!row) return null;
-    return { id: row.id, capacity: row.capacity, eventId: row.eventId };
+    return { id: row.id, capacity: row.capacity, eventId: row.eventId, pointCost: row.pointCost };
   }
 
   async incrementIssued(id: string, tenantId: string): Promise<void> {

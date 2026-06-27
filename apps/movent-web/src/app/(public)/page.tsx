@@ -9,32 +9,31 @@ export const metadata = {
 
 export default function MarketingLandingPage() {
   return (
-    <div className="bg-slate-900 overflow-hidden">
+    <div className="bg-background overflow-hidden">
       {/* Hero Section */}
-      <section className="relative py-24 sm:py-32">
+      <section className="relative py-24 sm:py-32 border-b border-border/40">
         {/* Decorative Grid background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(13,148,136,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(13,148,136,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-70" />
         
         {/* Floating gradient orbs */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center space-y-6 max-w-3xl mx-auto">
             {/* Badge */}
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-950/40 px-3.5 py-1 text-xs font-medium text-teal-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-50/50 dark:bg-teal-950/40 px-3.5 py-1 text-xs font-medium text-teal-600 dark:text-teal-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-teal-500 dark:bg-teal-400 animate-pulse" />
               Sistem Manajemen Komunitas Mandiri
             </div>
             
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl font-sans">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl font-sans">
               Kelola Event & Ruangan{' '}
-              <span className="bg-gradient-to-r from-teal-400 via-emerald-400 to-emerald-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 dark:from-teal-400 dark:via-emerald-400 dark:to-emerald-300 bg-clip-text text-transparent">
                 Komunitas Modern
               </span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-slate-400 leading-relaxed font-sans max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed font-sans max-w-2xl mx-auto">
               Moventios membantu komunitas mengelola tempat kumpul fisik, registrasi event langsung, dan data kehadiran dalam satu dasbor terpadu.
             </p>
             
@@ -45,7 +44,7 @@ export default function MarketingLandingPage() {
                 </Button>
               </Link>
               <Link href="/events" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 hover:text-white text-base py-6 rounded-xl">
+                <Button size="lg" variant="outline" className="w-full border-border bg-background/50 hover:bg-accent text-foreground hover:text-foreground text-base py-6 rounded-xl">
                   Lihat Jadwal & Lokasi
                 </Button>
               </Link>
@@ -55,18 +54,18 @@ export default function MarketingLandingPage() {
       </section>
 
       {/* Trust Stats / Connection Points */}
-      <section className="border-y border-slate-850 bg-slate-950/60 py-10 relative">
+      <section className="border-b border-border/40 bg-card/30 py-10 relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { val: 'Data 100% Aman', desc: 'Setiap komunitas memiliki penyimpanan data terisolasi yang aman.' },
               { val: 'Tiket Digital', desc: 'Verifikasi kehadiran peserta otomatis tanpa antrean.' },
               { val: 'Reservasi Real-Time', desc: 'Kalender pemesanan ruangan terintegrasi bebas bentrok.' },
               { val: 'Kontrol Admin', desc: 'Setiap perubahan penting memerlukan persetujuan sebelum aktif.' },
             ].map((stat) => (
-              <div key={stat.val} className="p-4 rounded-xl border border-slate-900 bg-slate-900/30">
-                <div className="text-lg font-bold text-teal-400">{stat.val}</div>
-                <div className="mt-1 text-xs text-slate-500">{stat.desc}</div>
+              <div key={stat.val} className="p-4 rounded-xl border border-border/60 bg-card/60 shadow-sm">
+                <div className="text-lg font-bold text-teal-600 dark:text-teal-400">{stat.val}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{stat.desc}</div>
               </div>
             ))}
           </div>
@@ -74,13 +73,13 @@ export default function MarketingLandingPage() {
       </section>
 
       {/* Feature Pillars */}
-      <section className="py-24 sm:py-32 relative bg-slate-900">
+      <section className="py-24 sm:py-32 relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Dirancang untuk Kelancaran Acara Anda
             </h2>
-            <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
+            <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto">
               Berbeda dari sekadar aplikasi kalender biasa, Moventios menyatukan penjadwalan, sewa ruangan, dan kontrol kehadiran peserta dalam satu sistem.
             </p>
           </div>
@@ -108,13 +107,13 @@ export default function MarketingLandingPage() {
                 desc: 'Kelola izin akses tim penyelenggara dan verifikasi pendaftaran anggota baru secara terpusat oleh administrator.',
               },
             ].map((feature) => (
-              <div key={feature.title} className="bg-slate-950/40 border border-slate-800/80 p-6 rounded-2xl flex flex-col justify-between hover:border-slate-700/80 transition-colors">
+              <div key={feature.title} className="bg-card/50 border border-border/60 p-6 rounded-2xl flex flex-col justify-between hover:border-teal-500/30 transition-colors shadow-sm">
                 <div className="space-y-4">
                   <div className="h-10 w-10 bg-teal-500/10 rounded-lg flex items-center justify-center">
-                    <feature.icon className="h-5 w-5 text-teal-400" />
+                    <feature.icon className="h-5 w-5 text-teal-600 dark:text-teal-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-white tracking-tight">{feature.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-lg font-bold text-foreground tracking-tight">{feature.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{feature.desc}</p>
                 </div>
               </div>
             ))}
@@ -123,97 +122,77 @@ export default function MarketingLandingPage() {
       </section>
 
       {/* Tech Specs / Outbox / Event OS Visual Mock */}
-      <section className="py-20 bg-slate-950/50 border-t border-slate-850">
+      <section className="py-20 border-t border-border/40 bg-card/20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-5 space-y-6">
-              <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-teal-500">
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                 <Cpu className="h-4 w-4" />
                 Teknologi & Keamanan
               </div>
-              <h2 className="text-3xl font-bold tracking-tight text-white">
+              <h2 className="text-3xl font-bold tracking-tight text-foreground">
                 Didesain dengan Standar Keamanan Tinggi
               </h2>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Keamanan data komunitas adalah prioritas utama. Moventios menggunakan enkripsi data terisolasi untuk memastikan informasi penting komunitas Anda tidak bocor ke pihak luar, serta sistem pencatatan transaksi terverifikasi untuk mencegah kegagalan jadwal reservasi.
               </p>
               
-              <ul className="space-y-3.5 text-xs text-slate-300">
+              <ul className="space-y-3.5 text-xs text-foreground">
                 <li className="flex items-start gap-2.5">
-                  <KeyRound className="h-4.5 w-4.5 text-teal-500 shrink-0 mt-0.5" />
+                  <KeyRound className="h-4.5 w-4.5 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
                   <span><strong>Privasi Data Komunitas:</strong> Setiap komunitas memiliki isolasi data penuh. Informasi Anda tidak akan tercampur dengan penyewa lain.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
-                  <Activity className="h-4.5 w-4.5 text-teal-500 shrink-0 mt-0.5" />
+                  <Activity className="h-4.5 w-4.5 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
                   <span><strong>Sinkronisasi Instan:</strong> Pembaruan status tiket dan izin masuk terupdate dalam hitungan detik di semua perangkat panitia.</span>
                 </li>
               </ul>
             </div>
 
-            <div className="lg:col-span-7 bg-slate-900 border border-slate-800 p-4 sm:p-6 rounded-2xl shadow-2xl relative overflow-hidden group">
+            <div className="lg:col-span-7 bg-card border border-border p-4 sm:p-6 rounded-2xl shadow-xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full blur-2xl" />
               
               {/* Fake Terminal Dashboard Mock */}
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+              <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
                 <div className="flex gap-1.5">
                   <span className="w-2.5 h-2.5 bg-red-500/80 rounded-full" />
                   <span className="w-2.5 h-2.5 bg-yellow-500/80 rounded-full" />
                   <span className="w-2.5 h-2.5 bg-emerald-500/80 rounded-full" />
                 </div>
-                <span className="font-mono text-[10px] text-slate-500 uppercase tracking-widest">
+                <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
                   Log Aktivitas Event Terkini
                 </span>
               </div>
 
-              <div className="space-y-3 font-mono text-[11px] text-slate-400">
-                <div className="p-2.5 bg-slate-950/80 border border-slate-800 rounded-lg flex items-center justify-between">
+              <div className="space-y-3 font-mono text-[11px] text-foreground">
+                <div className="p-2.5 bg-background border border-border rounded-lg flex items-center justify-between shadow-sm">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 bg-amber-500 rounded-full" />
-                    <span className="text-amber-500 font-bold">[MENUNGGU]</span>
+                    <span className="text-amber-600 dark:text-amber-500 font-bold">[MENUNGGU]</span>
                     <span>Pendaftaran Anggota Baru - Budi Santoso</span>
                   </div>
-                  <span className="text-slate-500">Persetujuan Admin</span>
+                  <span className="text-muted-foreground">Persetujuan Admin</span>
                 </div>
 
-                <div className="p-2.5 bg-slate-950/80 border border-slate-800 rounded-lg flex items-center justify-between">
+                <div className="p-2.5 bg-background border border-border rounded-lg flex items-center justify-between shadow-sm">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 bg-emerald-500 rounded-full" />
-                    <span className="text-emerald-500 font-bold">[BERHASIL]</span>
+                    <span className="text-emerald-600 dark:text-emerald-500 font-bold">[BERHASIL]</span>
                     <span>Sewa Ruang Aula Utama - Komunitas Seni</span>
                   </div>
-                  <span className="text-slate-500">Ruangan Dipesan</span>
+                  <span className="text-muted-foreground">Ruangan Dipesan</span>
                 </div>
 
-                <div className="p-2.5 bg-slate-950/80 border border-slate-800 rounded-lg flex items-center justify-between">
+                <div className="p-2.5 bg-background border border-border rounded-lg flex items-center justify-between shadow-sm">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 bg-blue-500 rounded-full" />
-                    <span className="text-blue-500 font-bold">[SELESAI]</span>
+                    <span className="text-blue-600 dark:text-blue-500 font-bold">[SELESAI]</span>
                     <span>Tiket Masuk Dikirim - Budiyono</span>
                   </div>
-                  <span className="text-slate-500">Terkirim ke Email</span>
+                  <span className="text-muted-foreground">Terkirim ke Email</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final Call to Action */}
-      <section className="py-20 relative bg-slate-950">
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 to-emerald-500/5" />
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center relative space-y-6">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Mulai Kelola Komunitasmu Hari Ini
-          </h2>
-          <p className="text-sm sm:text-base text-slate-400 max-w-lg mx-auto">
-            Siap untuk mengelola event dengan mudah? Daftarkan ruang kerja komunitasmu sekarang dan kelola jadwal secara efisien.
-          </p>
-          <div className="pt-4">
-            <Link href="/login?tab=register">
-              <Button size="lg" className="bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl px-8 shadow-xl shadow-teal-600/10">
-                Buat Ruang Kerja
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
