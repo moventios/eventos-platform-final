@@ -25,7 +25,7 @@ export default defineConfig({
   schema: './src/schema/index.ts',
   out: './migrations',
   dbCredentials: {
-    url: process.env['DATABASE_URL'] ?? '',
+    url: process.env['POSTGRES_URL'] ?? process.env['DATABASE_URL'] ?? '',
   },
   // Expand/Contract pattern (L-08): never rename columns, always expand then contract
   migrations: {

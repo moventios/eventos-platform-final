@@ -36,8 +36,8 @@ let client: ReturnType<typeof postgres> | null = null;
 
 function getPostgresClient() {
   if (!client) {
-    const url = process.env['DATABASE_URL'];
-    if (!url) throw new Error('DATABASE_URL is required');
+    const url = process.env['POSTGRES_URL'] || process.env['DATABASE_URL'];
+    if (!url) throw new Error('DATABASE_URL or POSTGRES_URL is required');
     client = postgres(url, { max: 10 });
   }
   return client;
@@ -80,8 +80,8 @@ export function createServiceDb(): PostgresDb {
   const bound = getBoundTestServiceDb();
   if (bound) return bound as PostgresDb;
 
-  const url = process.env['DATABASE_URL_SERVICE_ROLE'] ?? process.env['DATABASE_URL'];
-  if (!url) throw new Error('DATABASE_URL is required');
+  const url = process.env['DATABASE_URL_SERVICE_ROLE'] ?? process.env['POSTGRES_URL'] ?? process.env['DATABASE_URL'];
+  if (!url) throw new Error('DATABASE_URL or POSTGRES_URL is required');
   const sql = postgres(url, { max: 5 });
   return drizzle(sql, { schema });
 }
