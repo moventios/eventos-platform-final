@@ -1,5 +1,5 @@
 # Panduan Pengembangan Lokal (Localhost Dev Setup & Status)
-**Sovereign OS / Eventos Platform**
+**Moventios Platform (internal: Movent)**
 
 Dokumen ini menjelaskan status pengembangan platform saat ini, tingkat kesiapan produksi, serta instruksi langkah-demi-langkah untuk menjalankan platform ini secara lokal di `localhost`.
 
@@ -7,14 +7,14 @@ Dokumen ini menjelaskan status pengembangan platform saat ini, tingkat kesiapan 
 
 ## 1. Status Pengembangan Saat Ini (Current Dev Status)
 
-Platform **Eventos** menggunakan arsitektur monorepo berbasis **Turborepo** dan **pnpm workspaces** dengan pendekatan **Hexagonal Architecture + DDD (Domain-Driven Design)**.
+Platform **Moventios** (internal: Movent) menggunakan arsitektur monorepo berbasis **Turborepo** dan **pnpm workspaces** dengan pendekatan **Hexagonal Architecture + DDD (Domain-Driven Design)**.
 
 ### A. Struktur Kode & Modul
-*   **`apps/web`**: Aplikasi frontend utama berbasis **Next.js 15 (App Router)** yang berfungsi sebagai BFF (Backend-for-Frontend) dan antarmuka pengguna.
-*   **`apps/workers`**: Background workers berbasis **Trigger.dev** untuk menangani tugas asinkron.
-*   **`packages/core`**: Logika bisnis murni (domain logic) untuk sub-sistem (IAM, Commerce, Spatial, Workflow). Bebas dari dependensi infrastruktur/database.
-*   **`packages/database`**: Skema basis data menggunakan **Drizzle ORM** dan aturan keamanan Row-Level Security (RLS) PostgreSQL/Supabase.
-*   **`packages/infrastructure`**: Adapter luar (database client, email client, payment gateway client).
+*   **`apps/movent-web`**: Aplikasi frontend utama berbasis **Next.js 15 (App Router)** yang berfungsi sebagai BFF (Backend-for-Frontend) dan antarmuka pengguna.
+*   **`apps/movent-workers`**: Background workers berbasis **Trigger.dev** untuk menangani tugas asinkron.
+*   **`packages/movent-core`**: Logika bisnis murni (domain logic) untuk sub-sistem (IAM, Commerce, Spatial, Workflow). Bebas dari dependensi infrastruktur/database.
+*   **`packages/movent-database`**: Skema basis data menggunakan **Drizzle ORM** dan aturan keamanan Row-Level Security (RLS) PostgreSQL/Supabase.
+*   **`packages/movent-infrastructure`**: Adapter luar (database client, email client, payment gateway client).
 
 ### B. Status Kesiapan Produksi (Production Readiness)
 Platform saat ini berada di fase **Pre-alpha / Development lokal**. 
@@ -44,7 +44,7 @@ pnpm install
 ```
 
 ### Langkah 2: Konfigurasi Environment Variables
-Salin file template `.env.example` ke file `.env` di root direktori (dan opsional `.env.local` di `apps/web/` jika diperlukan override spesifik):
+Salin file template `.env.example` ke file `.env` di root direktori (dan opsional `.env.local` di `apps/movent-web/` jika diperlukan override spesifik):
 ```bash
 cp .env.example .env
 ```
@@ -63,9 +63,9 @@ cp .env.example .env
     *Anda dapat mengakses Supabase Studio di `http://127.0.0.1:54323` untuk memantau data secara visual.*
 
 ### Langkah 4: Sinkronisasi Skema Database
-Dorong skema Drizzle ORM yang didefinisikan di `packages/database` ke instance database lokal Supabase:
+Dorong skema Drizzle ORM yang didefinisikan di `packages/movent-database` ke instance database lokal Supabase:
 ```bash
-pnpm --filter @eventos/database db:push
+pnpm --filter @movent/database db:push
 ```
 Perintah ini akan membuat semua tabel (termasuk pemicu/trigger audit dan aturan RLS) di PostgreSQL.
 
@@ -86,4 +86,4 @@ Output terminal akan menunjukkan status kompilasi. Aplikasi web Next.js dapat la
 *   **Solusi**: Buka aplikasi Docker Desktop secara manual di sistem operasi macOS Anda, tunggu hingga statusnya berubah menjadi *Running*, lalu jalankan ulang `npx supabase start`.
 
 #### 2. Masalah: Port konflik (misal port 3000 atau 54321 sudah terpakai)
-*   **Solusi**: Ubah konfigurasi port pada `apps/web/package.json` untuk dev server (contoh: `next dev -p 3001`) atau ubah port db di `supabase/config.toml`.
+*   **Solusi**: Ubah konfigurasi port pada `apps/movent-web/package.json` untuk dev server (contoh: `next dev -p 3001`) atau ubah port db di `supabase/config.toml`.

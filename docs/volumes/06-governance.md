@@ -1,5 +1,5 @@
 # Volume 06: Governance & Compliance
-## Sovereign OS Enterprise Knowledge Base
+## Moventios Enterprise Knowledge Base
 
 **Enterprise Laws, Change Management, Audit, and Regulatory Compliance**
 
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Volume 06 is the **single source of truth for governance, compliance, and enforcement** across Sovereign OS. It translates the Enterprise Laws (L-01 through L-10) from abstract principles into concrete, auditable, and machine-enforceable mechanisms.
+Volume 06 is the **single source of truth for governance, compliance, and enforcement** across Moventios. It translates the Enterprise Laws (L-01 through L-10) from abstract principles into concrete, auditable, and machine-enforceable mechanisms.
 
 This volume governs:
 - How every Enterprise Law is detected, prevented, and remediated
@@ -204,7 +204,7 @@ ALTER TABLE bookings ADD CONSTRAINT uq_bookings_idempotency_key
 
 **Statement:** Every row in every business table must be traceable to a `tenant_id` either directly or via foreign key chain. Orphan entities without tenant context are forbidden.
 
-**Rationale:** Multi-tenancy isolation is the core security boundary of Sovereign OS. An entity without `tenant_id` is an isolation violation.
+**Rationale:** Multi-tenancy isolation is the core security boundary of Moventios. An entity without `tenant_id` is an isolation violation.
 
 #### Required Traceability Chain
 
@@ -411,7 +411,7 @@ Day 90+: v1 removed from routing
 
 ### L-10: Secrets Never at Rest in App DB
 
-**Statement:** API keys, OAuth secrets, PSP credentials, and any cryptographic secret must **not** be stored in Sovereign OS application database tables. All secrets must be stored in HashiCorp Vault with AES-256 encryption and automatic rotation.
+**Statement:** API keys, OAuth secrets, PSP credentials, and any cryptographic secret must **not** be stored in Moventios application database tables. All secrets must be stored in HashiCorp Vault with AES-256 encryption and automatic rotation.
 
 **Rationale:** Database breaches must not expose secrets. Vault provides audited access, rotation, and revocation.
 
@@ -693,7 +693,7 @@ This test must be present in the test suite for every new table before productio
 
 ### 7.1 Regulatory Alignment
 
-| Regulation | Requirement | Sovereign OS Implementation |
+| Regulation | Requirement | Moventios Implementation |
 |-----------|-------------|----------------------------|
 | **GDPR** | Right to erasure | Soft-delete + PII anonymization (not physical deletion) |
 | **GDPR** | Data portability | Export API per tenant (tenant data export in JSON/CSV) |
@@ -741,7 +741,7 @@ Before a compliance or security audit, verify:
 
 ### 8.1 Zero Trust Architecture
 
-Sovereign OS enforces Zero Trust at seven layers:
+Moventios enforces Zero Trust at seven layers:
 
 | Layer | Control | Implemented By |
 |-------|---------|---------------|
@@ -817,6 +817,6 @@ SEVERITY 3 (Medium): Idempotency key collision, schema drift, API rate limit bre
 
 **End of Volume 06**
 
-*This volume is the governance backbone of Sovereign OS. Every Enterprise Law has teeth here — automated, auditable, and enforced at multiple layers. Compliance is not optional; it is architecturally enforced.*
+*This volume is the governance backbone of Moventios. Every Enterprise Law has teeth here — automated, auditable, and enforced at multiple layers. Compliance is not optional; it is architecturally enforced.*
 
 *[Constitution Part 9] [Volume 01 Part 1] [ADR-001] [ADR-002] [EPXA Part 6 (implied)]*

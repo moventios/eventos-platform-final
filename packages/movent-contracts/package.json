@@ -1,0 +1,25 @@
+{
+  "name": "@movent/contracts",
+  "version": "0.0.1",
+  "description": "Contracts (commands and events) for the Movent relationship infrastructure.",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./commands/*": "./dist/commands/*.js",
+    "./events/*": "./dist/events/*.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

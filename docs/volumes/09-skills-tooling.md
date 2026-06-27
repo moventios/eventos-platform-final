@@ -26,9 +26,9 @@ concerns: SEO, UI/UX, data pipelines, codebase exploration, or complex workflows
 
 ---
 
-## 2. Installed Plugin: `eventos-skills`
+## 2. Installed Plugin: `movent-skills`
 
-Location: `/Users/mac/.gemini/config/plugins/eventos-skills/`
+Location: `/Users/mac/.gemini/config/plugins/movent-skills/`
 
 A curated plugin bundle with 7 skills derived from 9 GitHub repositories.  
 All skills are adapted for this platform's architectural constraints (Hexagonal + DDD + L-06).
@@ -37,13 +37,13 @@ All skills are adapted for this platform's architectural constraints (Hexagonal 
 
 | Skill | Trigger Keywords | Primary Use |
 |-------|-----------------|-------------|
-| [`agentic-seo`](../../.gemini/config/plugins/eventos-skills/skills/agentic-seo/SKILL.md) | seo audit, technical seo, GEO, AEO, sitemap, schema | SEO analysis and optimization |
-| [`ui-ux-pro-max`](../../.gemini/config/plugins/eventos-skills/skills/ui-ux-pro-max/SKILL.md) | design system, build UI, colors, typography | UI/UX design intelligence |
-| [`understand-codebase`](../../.gemini/config/plugins/eventos-skills/skills/understand-codebase/SKILL.md) | map architecture, where is X, what depends on Y | Codebase exploration and impact analysis |
-| [`ai-dataset-generator`](../../.gemini/config/plugins/eventos-skills/skills/ai-dataset-generator/SKILL.md) | generate training data, SFT, DPO, fine-tuning | AI training dataset creation |
-| [`vibe-coder-workflow`](../../.gemini/config/plugins/eventos-skills/skills/vibe-coder-workflow/SKILL.md) | new feature, architecture review, code review | Structured development workflow |
-| [`codymaster-workflow`](../../.gemini/config/plugins/eventos-skills/skills/codymaster-workflow/SKILL.md) | build end-to-end, chain skills, full pipeline | Multi-skill coordinated execution |
-| [`antigravity-skill-vault`](../../.gemini/config/plugins/eventos-skills/skills/antigravity-skill-vault/SKILL.md) | backend architect, security audit, kubernetes | 300+ specialist skills access |
+| [`agentic-seo`](../../.gemini/config/plugins/movent-skills/skills/agentic-seo/SKILL.md) | seo audit, technical seo, GEO, AEO, sitemap, schema | SEO analysis and optimization |
+| [`ui-ux-pro-max`](../../.gemini/config/plugins/movent-skills/skills/ui-ux-pro-max/SKILL.md) | design system, build UI, colors, typography | UI/UX design intelligence |
+| [`understand-codebase`](../../.gemini/config/plugins/movent-skills/skills/understand-codebase/SKILL.md) | map architecture, where is X, what depends on Y | Codebase exploration and impact analysis |
+| [`ai-dataset-generator`](../../.gemini/config/plugins/movent-skills/skills/ai-dataset-generator/SKILL.md) | generate training data, SFT, DPO, fine-tuning | AI training dataset creation |
+| [`vibe-coder-workflow`](../../.gemini/config/plugins/movent-skills/skills/vibe-coder-workflow/SKILL.md) | new feature, architecture review, code review | Structured development workflow |
+| [`codymaster-workflow`](../../.gemini/config/plugins/movent-skills/skills/codymaster-workflow/SKILL.md) | build end-to-end, chain skills, full pipeline | Multi-skill coordinated execution |
+| [`antigravity-skill-vault`](../../.gemini/config/plugins/movent-skills/skills/antigravity-skill-vault/SKILL.md) | backend architect, security audit, kubernetes | 300+ specialist skills access |
 
 ### Skill Selection Guide
 
@@ -307,7 +307,7 @@ npx uipro-cli install
 ### 4.1 Project Structure
 
 ```
-/Users/mac/Downloads/PROYEK/EVENTOS/
+/Users/mac/Downloads/PROYEK/MOVENT/
 │
 ├── apps/
 │   ├── web/                          # Next.js 15 App Router frontend
@@ -464,7 +464,7 @@ All code, UI, and content must use canonical names from Layer-1:
 ## 7. Implementation Roadmap for Skill Adoption
 
 ### Immediate (This Week)
-- [x] `eventos-skills` plugin created with 7 skills
+- [x] `movent-skills` plugin created with 7 skills
 - [ ] Install `agentic-seo` scripts: `curl ... | bash -s -- --online --target claude`
 - [ ] Install `ui-ux-pro-max` CLI: `npm install -g uipro-cli && uipro install`
 - [ ] Install `Understand Anything`: `/plugin install understand-anything`
@@ -522,4 +522,4 @@ When an AI agent reads this volume, it should:
 | `docs/strategy/seo-aeo-geo-strategy.md` | Full SEO/GEO strategy context |
 | `docs/ai-ide/SEKB-AI-Agent-Instructions.md` | Agent operating instructions |
 | `.cursorrules` | IDE-level rules (read every session) |
-| `/Users/mac/.gemini/config/plugins/eventos-skills/` | Installed skill files |
+| `/Users/mac/.gemini/config/plugins/movent-skills/` | Installed skill files |

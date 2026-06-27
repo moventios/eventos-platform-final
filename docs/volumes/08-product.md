@@ -1,5 +1,5 @@
 # Volume 08: Product Experience
-## Event & Project Operations Platform
+## Moventios
 
 **UX Design System, Interface Standards & Product Specifications for Running Events and Projects**
 
@@ -16,7 +16,7 @@
 > **Canonical Source:** Stoic UX philosophy ada di [Layer-1-Constitution-v5.0.2.md](../Layer-1-Constitution-v5.0.2.md) Part 2.3. Design system architecture ada di [Layer-3-EPXA-v5.1.md](../Layer-3-EPXA-v5.1.md) Part 3.  
 > Volume ini menyediakan **design tokens, component specifications, accessibility checklist, dan performance budgets** — tidak ada di Layer-1 atau Layer-3. Bila ada konflik UX principle, Layer-1 menang.
 
-Volume 08 defines the **complete product experience standard** for the Event & Project Operations Platform. The interface is designed for professionals who run real operations: **data-dense, high signal, clear, and efficient** — so teams can focus on coordination and execution rather than fighting the tool.
+Volume 08 defines the **complete product experience standard** for the Moventios. The interface is designed for professionals who run real operations: **data-dense, high signal, clear, and efficient** — so teams can focus on coordination and execution rather than fighting the tool.
 
 This volume governs:
 - Design language and token system
@@ -61,7 +61,7 @@ If the answer is "slow them down" — redesign it.
 [Authority: EPXA Part 3.2]
 
 ```css
-/* Sovereign OS Design Tokens — CSS Custom Properties */
+/* Moventios Design Tokens — CSS Custom Properties */
 :root {
   /* Background Scale */
   --color-bg-base:        #09090b;   /* Deep onyx — page background */
@@ -602,6 +602,6 @@ All screens follow the ID convention: `SCR_{DOMAIN}_{PURPOSE}_{SEQ}`
 
 **End of Volume 08**
 
-*The Sovereign OS interface is not beautiful because it has gradients. It is useful because every pixel earns its place. The finance director at 11pm will thank you for choosing data density over decoration.*
+*The Moventios interface is not beautiful because it has gradients. It is useful because every pixel earns its place. The finance director at 11pm will thank you for choosing data density over decoration.*
 
 *[Constitution Part 2.3] [EPXA Part 3] [Volume 01, Part 4 — Value Objects: Money] [Volume 06, L-04 — Idempotency in forms]*

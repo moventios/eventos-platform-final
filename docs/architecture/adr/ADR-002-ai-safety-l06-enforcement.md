@@ -20,7 +20,7 @@ Without a precise enforcement mechanism, L-06 becomes an honor system — AI age
 ## Decision Drivers
 
 - **L-06 is non-bypassable**: "No bypass based on confidence score or model capability" (Constitution Part 9, L-06).
-- **MCP (Model Context Protocol)** is the exclusive interface for AI agents to interact with Sovereign OS (Layer 3 EPXA Part 10, Constitution Part 16.1).
+- **MCP (Model Context Protocol)** is the exclusive interface for AI agents to interact with Moventios (Layer 3 EPXA Part 10, Constitution Part 16.1).
 - **Zero trust principle**: Every action, including AI actions, must be authenticated, authorized, and auditable at every boundary.
 - **Immutable audit trail**: All AI actions must be traceable via `trace_id` and appear in the `approvals` table.
 

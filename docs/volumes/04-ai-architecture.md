@@ -1,5 +1,5 @@
 # Volume 04: AI Architecture
-## Sovereign OS Enterprise Knowledge Base
+## Moventios Enterprise Knowledge Base
 
 **LLM Agent Governance, MCP Tool Registry, RAG Pipeline & Safety Enforcement**
 
@@ -16,9 +16,9 @@
 > **Canonical Source:** L-06 AI Safety Law ada di [Layer-1-Constitution-v5.0.2.md](../Layer-1-Constitution-v5.0.2.md) Part 9. Enforcement architecture diputuskan via [ADR-002](../architecture/adr/ADR-002-ai-safety-l06-enforcement.md).  
 > Volume ini menyediakan **implementation details**: MCP registry, RAG pipeline, semantic cache, prompt management, cost metering — yang tidak ada di Layer-1. Bila ada konflik L-06 definition, Layer-1 + ADR-002 menang.
 
-Volume 04 defines the **complete AI architecture** of Sovereign OS — from the cognitive safety model (L-06) down to the embedding vector dimensions and semantic cache TTL values.
+Volume 04 defines the **complete AI architecture** of Moventios — from the cognitive safety model (L-06) down to the embedding vector dimensions and semantic cache TTL values.
 
-AI in Sovereign OS is **not a chatbot feature**. It is a background cognitive routing engine operating under strict guardrails that make it mathematically incapable of directly mutating material state. Every AI capability is designed around three axioms:
+AI in Moventios is **not a chatbot feature**. It is a background cognitive routing engine operating under strict guardrails that make it mathematically incapable of directly mutating material state. Every AI capability is designed around three axioms:
 
 1. **AI reads, humans decide**: AI agents have unrestricted READ access to business knowledge. Any WRITE that matters requires explicit human approval.
 2. **Deterministic over probabilistic**: Prompt drift, model version changes, and hallucination risks are mitigated through versioned prompts, evaluation harnesses, and approval gates.
@@ -40,7 +40,7 @@ There is **no confidence score threshold** that bypasses this. An AI agent with 
 
 ### 1.2 MCP Tool Registry (Complete)
 
-The **Model Context Protocol (MCP)** is the exclusive interface between AI agents and Sovereign OS. No AI agent may interact with business data through any other channel.
+The **Model Context Protocol (MCP)** is the exclusive interface between AI agents and Moventios. No AI agent may interact with business data through any other channel.
 
 [Authority: ADR-002, Constitution Part 16.1]
 
@@ -539,7 +539,7 @@ class OpenRouterLLMAdapter implements ILLMAdapter {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${await vault.read('secret/system/openrouter_key')}`,
-        'X-Title': 'Sovereign OS',
+        'X-Title': 'Moventios',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -771,6 +771,6 @@ Cache:
 
 **End of Volume 04**
 
-*AI in Sovereign OS is powerful precisely because it is constrained. The MCP Tool Level system makes it mathematically impossible for an AI agent to mutate material state without human approval — not by policy, but by architecture.*
+*AI in Moventios is powerful precisely because it is constrained. The MCP Tool Level system makes it mathematically impossible for an AI agent to mutate material state without human approval — not by policy, but by architecture.*
 
 *[Constitution Part 16] [ADR-002] [Volume 06, L-06] [Volume 02, Context 6 — AI & Knowledge]*

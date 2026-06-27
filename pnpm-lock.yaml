@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@trigger.dev/sdk':
+        specifier: ^3.3.17
+        version: 3.3.17(zod@3.25.76)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -30,23 +34,8 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
-  apps/web:
+  apps/movent-web:
     dependencies:
-      '@eventos/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
-      '@eventos/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@eventos/database':
-        specifier: workspace:*
-        version: link:../../packages/database
-      '@eventos/infrastructure':
-        specifier: workspace:*
-        version: link:../../packages/infrastructure
-      '@eventos/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@fullcalendar/daygrid':
         specifier: ^6.1.21
         version: 6.1.21(@fullcalendar/core@6.1.21)
@@ -62,6 +51,21 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.4.0
         version: 5.4.0(react-hook-form@7.80.0(react@19.2.7))
+      '@movent/contracts':
+        specifier: workspace:*
+        version: link:../../packages/movent-contracts
+      '@movent/core':
+        specifier: workspace:*
+        version: link:../../packages/movent-core
+      '@movent/database':
+        specifier: workspace:*
+        version: link:../../packages/movent-database
+      '@movent/infrastructure':
+        specifier: workspace:*
+        version: link:../../packages/movent-infrastructure
+      '@movent/ui':
+        specifier: workspace:*
+        version: link:../../packages/movent-ui
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.1
@@ -160,26 +164,26 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.0)
 
-  apps/workers:
+  apps/movent-workers:
     dependencies:
-      '@eventos/contracts':
+      '@movent/contracts':
         specifier: workspace:*
-        version: link:../../packages/contracts
-      '@eventos/core':
+        version: link:../../packages/movent-contracts
+      '@movent/core':
         specifier: workspace:*
-        version: link:../../packages/core
-      '@eventos/database':
+        version: link:../../packages/movent-core
+      '@movent/database':
         specifier: workspace:*
-        version: link:../../packages/database
-      '@eventos/infrastructure':
+        version: link:../../packages/movent-database
+      '@movent/infrastructure':
         specifier: workspace:*
-        version: link:../../packages/infrastructure
+        version: link:../../packages/movent-infrastructure
       '@trigger.dev/sdk':
         specifier: ^3.3.13
         version: 3.3.17(zod@3.25.76)
       drizzle-orm:
         specifier: ^0.38.4
-        version: 0.38.4(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.1)(@types/react@19.2.17)(pg@8.22.0)(postgres@3.4.9)(react@19.2.7)
+        version: 0.38.4(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.1)(@types/pg@8.6.1)(@types/react@19.2.17)(pg@8.22.0)(postgres@3.4.9)(react@19.2.7)
       pg-boss:
         specifier: ^10.1.5
         version: 10.4.2
@@ -194,7 +198,7 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
-  packages/contracts:
+  packages/movent-contracts:
     dependencies:
       zod:
         specifier: ^3.24.1
@@ -204,11 +208,11 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
-  packages/core:
+  packages/movent-core:
     dependencies:
-      '@eventos/contracts':
+      '@movent/contracts':
         specifier: workspace:*
-        version: link:../contracts
+        version: link:../movent-contracts
       decimal.js:
         specifier: ^10.4.3
         version: 10.6.0
@@ -223,7 +227,7 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.0)
 
-  packages/database:
+  packages/movent-database:
     dependencies:
       drizzle-orm:
         specifier: ^0.38.4
@@ -239,17 +243,17 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
-  packages/infrastructure:
+  packages/movent-infrastructure:
     dependencies:
-      '@eventos/contracts':
+      '@movent/contracts':
         specifier: workspace:*
-        version: link:../contracts
-      '@eventos/core':
+        version: link:../movent-contracts
+      '@movent/core':
         specifier: workspace:*
-        version: link:../core
-      '@eventos/database':
+        version: link:../movent-core
+      '@movent/database':
         specifier: workspace:*
-        version: link:../database
+        version: link:../movent-database
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.1
@@ -285,7 +289,7 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.0)
 
-  packages/ui:
+  packages/movent-ui:
     dependencies:
       '@radix-ui/react-dialog':
         specifier: ^1.1.4
@@ -4606,7 +4610,7 @@ snapshots:
 
   '@opentelemetry/api-logs@0.52.1':
     dependencies:
-      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/api': 1.9.1
 
   '@opentelemetry/api-logs@0.57.2':
     dependencies:
@@ -6350,16 +6354,6 @@ snapshots:
       gel: 2.2.0
     transitivePeerDependencies:
       - supports-color
-
-  drizzle-orm@0.38.4(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.0)(@types/pg@8.6.1)(@types/react@19.2.17)(pg@8.22.0)(postgres@3.4.9)(react@19.2.7):
-    optionalDependencies:
-      '@electric-sql/pglite': 0.2.17
-      '@opentelemetry/api': 1.9.0
-      '@types/pg': 8.6.1
-      '@types/react': 19.2.17
-      pg: 8.22.0
-      postgres: 3.4.9
-      react: 19.2.7
 
   drizzle-orm@0.38.4(@electric-sql/pglite@0.2.17)(@opentelemetry/api@1.9.1)(@types/pg@8.6.1)(@types/react@19.2.17)(pg@8.22.0)(postgres@3.4.9)(react@19.2.7):
     optionalDependencies:

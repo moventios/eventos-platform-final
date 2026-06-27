@@ -1,5 +1,5 @@
 # Volume 02: Enterprise Architecture
-## Sovereign OS Enterprise Knowledge Base
+## Moventios Enterprise Knowledge Base
 
 **Bounded Contexts, Domain Model, and Inter-Service Relationships**
 
@@ -15,7 +15,7 @@
 > **Canonical Source:** Definisi Bounded Context, Aggregate, dan Domain Event ada di [Layer-1-Constitution-v5.0.2.md](../Layer-1-Constitution-v5.0.2.md) Parts 7–10.  
 > Volume ini menambahkan **BC-specific invariants, repository interfaces, dan communication patterns** — bukan menduplikasi Layer-1 ontology. Bila ada konflik, Layer-1 menang.
 
-Volume 02 defines the **strategic domain architecture** of Sovereign OS. It partitions the platform into clearly owned Bounded Contexts, specifies aggregate boundaries, and defines how contexts communicate via Domain Events (never RPC).
+Volume 02 defines the **strategic domain architecture** of Moventios. It partitions the platform into clearly owned Bounded Contexts, specifies aggregate boundaries, and defines how contexts communicate via Domain Events (never RPC).
 
 This volume is the source of truth for:
 - Bounded context ownership and responsibilities
@@ -31,7 +31,7 @@ This volume is the source of truth for:
 
 ### 1.1 Context Taxonomy
 
-Sovereign OS is partitioned into **6 core Bounded Contexts** plus **supporting domains**:
+Moventios is partitioned into **6 core Bounded Contexts** plus **supporting domains**:
 
 **Core Domains** (Competitive Advantage)
 - Financial Ledger (Swiss-standard accounting)

@@ -1,48 +1,57 @@
 # Platform Enterprise Knowledge Base (EKB) — AI IDE Agent Rules v5.1.1
 
-## Mandatory Context Loading Order (for AI IDE Agents)
+## Knowledge Architecture — Movent (Infrastructure) + Moventios (Ecosystem)
 
-Load in this exact sequence before any coding or implementation task:
+AI agents MUST follow this hierarchy. The goal is radical context reduction and implementation priority.
 
-1. This file (`.cursorrules`)  ← Contains rules + essential file mapping
-2. `docs/ai-ide/EKB-AI-Agent-Instructions.md`
-3. `docs/layers/Layer-1-Constitution-v5.0.2.md` — ALWAYS (ontology + laws + events)
-4. `docs/layers/Layer-3-EPXA-v5.1.md` — when engineering/tech/DX decisions required
-5. `docs/layers/Layer-2-Database-SSOT-v5.0.2.md` — when schema/DB work required
-6. Specific `volumes/XX-*.md` — **only** when the task requires that domain
+**Core** (always loaded first)
+- Brand: Movent (Infrastructure), Moventios (Ecosystem)
+- Engines: Identity, Place, Activation, Governance
+- Canonical terms (use consistently):
+  Identity | Organization | Place | Event | Participation | Governance | Workspace | Network
+- Files: .cursorrules + docs/core/
 
-**Rule:** Load the fewest files possible. This .cursorrules now includes the key mapping to decide.
+**Build** (only when implementing)
+- Specifications for Movent engines or Moventios experience (see docs/knowledge/ for old research).
 
-**NEVER load from `archive/` or `archive/meta/` — those are historical/superseded.**
+**Operate / Knowledge** (docs/knowledge/, docs/volumes/) only on explicit need.
 
-**Mapping note:** The detailed map has been integrated here in .cursorrules. (EKB-AI-INDEX archived.)
+**Documentation Freeze Mode + Implementation Priority (Permanent)**
+Default action = edit existing files and implement in code. Target ~20% documentation, 80% implementation. Documentation may only grow to eliminate technical ambiguity.
 
-## File Mapping (for quick decisions during coding)
+## AI Context Loading Rules (80%+ reduction)
 
-**Load only what you need:**
+1. Every session begins with **Core only**.
+2. Detect the task.
+3. Load the absolute minimum Build files required for the current implementation task.
+4. Never load docs/strategy/, docs/volumes/, or docs/knowledge/ by default.
+5. After code changes, update only the affected existing document(s) if necessary.
 
-- **Core / Laws / Ontology / Events / Commands:** `docs/layers/Layer-1-Constitution-v5.0.2.md` (always start here for most tasks)
-- **Engineering patterns, tech stack, monorepo, DX, traceability:** `docs/layers/Layer-3-EPXA-v5.1.md` + `docs/volumes/03-engineering.md`
-- **Database schema, RLS, enums, stored procedures:** `docs/layers/Layer-2-Database-SSOT-v5.0.2.md`
-- **New feature or domain work:** Layer-1 + Layer-3 + relevant `docs/volumes/XX-*.md` (use the mapping in this file)
-- **AI / Agents / MCP / RAG / L-06:** Layer-1 + Layer-3 + `docs/volumes/04-ai-architecture.md`
-- **Governance, ADR, compliance:** `docs/volumes/06-governance.md` + `docs/architecture/adr/`
-- **Business justification:** `docs/volumes/07-business.md`
-- **UX / Product:** `docs/volumes/08-product.md`
-- **AI IDE Skills / Tooling / SEO / UI tools:** `docs/volumes/09-skills-tooling.md`
-- **SEO, GEO, AEO tasks:** `docs/strategy/seo-aeo-geo-strategy.md` + use `agentic-seo` skill
-- **UI/UX design work:** `docs/volumes/08-product.md` + `docs/strategy/copywriting-system.md` + use `ui-ux-pro-max` skill
-- **Content / Copywriting:** `docs/strategy/copywriting-system.md` + `docs/strategy/messaging-framework.md`
+## Mandatory Context Loading Order
 
-**Full detailed indexing:** See the mapping section above in this file. (Archived copy in archive/EKB-AI-INDEX.md)
+1. `.cursorrules` (Core)
+2. `docs/core/EKB-AI-Agent-Instructions.md` (Core)
+3. `docs/core/Layer-1-Constitution-v5.0.2.md` (Core)
 
-**Authority (always):** Layer-1 > Layer-2 > Layer-3 > EKB Volumes
+Load from docs/build/ only when the specific task requires it.
 
-**Golden rule:** Start with Layer-1 + one other. Never dump the whole repo into context.
+**Never** preload large parts of the old structure.
 
 **Authority:** Layer-1 > Layer-2 > Layer-3 > EKB Volumes
 
 **Never load everything.** Start minimal.
+
+## Documentation Freeze Mode (Permanent Rule)
+
+After the architecture foundation is considered adequate, AI Agents are **prohibited** from creating new strategy documents, blueprints, roadmaps, or guidelines unless explicitly requested by the user.
+
+**Default action** for every decision or task: modify existing artifacts and implement the changes directly into the code.
+
+**Target project ratio:** ~20% documentation / 80% implementation.
+
+Documentation may only grow if strictly required to avoid technical ambiguity. It must **not** be used to repeat or re-document decisions that have already been made. 
+
+Implementation takes priority. When documentation already exists, edit the existing file instead of creating a new one.
 
 ## Authority Hierarchy
 

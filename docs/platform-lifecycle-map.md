@@ -1,4 +1,4 @@
-# Peta Siklus Hidup Platform — Sovereign OS / Eventos
+# Peta Siklus Hidup Platform — Moventios (Movent)
 **Planning → Development → Production → Operations → Maintenance**
 
 > Dokumen ini adalah **peta sintetis** dari seluruh SEKB (Volume 00–10 + Layer 1–3).  
@@ -182,24 +182,24 @@ Payments            Xendit/Stripe/Mid  SaaS      —         EXTEND (ACL)
 ### 2.2 Monorepo Structure
 
 ```
-EVENTOS/ (pnpm workspace + Turborepo)
+movent/ (pnpm workspace + Turborepo)
 ├── apps/
-│   ├── web/          ← Next.js 15 App Router (BFF + Experience)
+│   ├── movent-web/   ← Next.js 15 App Router (BFF + Experience)
 │   │   └── middleware.ts  ← ⚠️ KRITIS: JWT, tenant extract, rate limit
 │   ├── admin/        ← Internal ops console
-│   └── workers/      ← Trigger.dev + Go workers
+│   └── movent-workers/ ← Trigger.dev + Go workers
 ├── packages/
-│   ├── contracts/    ← Zod schemas, OpenAPI/AsyncAPI, shared types
-│   ├── core/         ← 🚫 ZERO infrastructure imports
+│   ├── movent-contracts/  ← Zod schemas, OpenAPI/AsyncAPI, shared types
+│   ├── movent-core/       ← 🚫 ZERO infrastructure imports
 │   │   ├── iam/      ← IAM domain logic
 │   │   ├── spatial/  ← Facility, Booking
 │   │   ├── commerce/ ← Event, AccessPass
 │   │   ├── finance/  ← Ledger, JournalEntry
 │   │   ├── workflow/ ← WorkflowInstance, Approval
 │   │   └── ai/       ← KnowledgeBase, Embedding, Prompt
-│   ├── database/     ← Drizzle schemas + SQL migrations + RLS
-│   ├── ui/           ← @sovereign/ui component library
-│   └── infrastructure/ ← Adapters (pg, valkey, payment, notif, mcp)
+│   ├── movent-database/      ← Drizzle schemas + SQL migrations + RLS
+│   ├── movent-ui/            ← @movent/ui component library
+│   └── movent-infrastructure/ ← Adapters (pg, valkey, payment, notif, mcp)
 ├── supabase/         ← Migrations, edge functions
 ├── docs/             ← SEKB (canonical knowledge base)
 └── infrastructure/   ← OpenTofu IaC modules
@@ -227,9 +227,9 @@ SIKLUS PENGEMBANGAN FITUR
    └─ Tulis E2E test (happy + failure path, Playwright)
 
 4. IMPLEMENTATION (Hexagonal Architecture)
-   └─ Domain logic → packages/core/{domain}/
-   └─ API route → apps/web/app/api/v1/{domain}/
-   └─ Adapter → packages/infrastructure/
+   └─ Domain logic → packages/movent-core/{domain}/
+   └─ API route → apps/movent-web/app/api/v1/{domain}/
+   └─ Adapter → packages/movent-infrastructure/
    └─ TIDAK ADA business logic di middleware atau API route
 
 5. TRACEABILITY CHAIN (Wajib)
@@ -270,18 +270,18 @@ L-10  No secrets in code             → HashiCorp Vault SAJA
 
 ```typescript
 // TEMPLATE: API Route yang benar
-// apps/web/app/api/v1/{domain}/{resource}/route.ts
+// apps/movent-web/app/api/v1/{domain}/{resource}/route.ts
 
 export const POST = withTracing(
   withTenantContext(
     withIdempotency(
       async (req, { tenantId, actorId, traceId }) => {
-        // 1. Parse + validate (Zod dari packages/contracts)
+        // 1. Parse + validate (Zod dari packages/movent-contracts)
         const body = CommandSchema.parse(await req.json());
         // 2. Build command (dengan tenantId, actorId, traceId)
         const command = { ...body, tenantId, actorId, traceId,
                           idempotencyKey: req.headers.get('X-Idempotency-Key') };
-        // 3. Execute via Command Handler (packages/core)
+        // 3. Execute via Command Handler (packages/movent-core)
         const result = await handler.execute(command);
         // 4. Return
         return NextResponse.json(result, { status: 201 });

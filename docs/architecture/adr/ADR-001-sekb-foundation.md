@@ -9,12 +9,12 @@
 
 ## Context
 
-Sovereign OS previously operated with three canonical source documents:
+Moventios previously operated with three canonical source documents:
 - **Layer 1:** Platform Constitution — Governance, principles, ontology, laws, state machines
 - **Layer 2:** Enterprise Database SSOT — Physical schema, RLS, stored procedures, enums
 - **Layer 3:** EPXA (Enterprise Product Experience Architecture) — Technology stack, bounded contexts, traceability, DX rules
 
-While these three documents established a solid canonical foundation, they were insufficient to serve as the complete operational brain of Sovereign OS for the following reasons:
+While these three documents established a solid canonical foundation, they were insufficient to serve as the complete operational brain of Moventios for the following reasons:
 
 1. **Coverage gaps**: Architecture, engineering, product, operations, governance, business, and AI agents each required specialized documentation that the three SSOTs did not provide at the depth needed.
 2. **AI consumption friction**: The three-document model was not optimally structured for AI IDE agents (Cursor, Claude, Copilot, Antigravity) to efficiently load targeted context.

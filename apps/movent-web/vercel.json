@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "cd ../.. && turbo build --filter=@movent/web",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile --ignore-scripts",
+  "outputDirectory": ".next"
+}

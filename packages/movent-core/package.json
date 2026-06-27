@@ -1,0 +1,31 @@
+{
+  "name": "@movent/core",
+  "version": "0.0.1",
+  "description": "Movent core engines (Identity, Place, Activation, Governance). Reusable relationship infrastructure.",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./iam": "./dist/iam/index.js",
+    "./spatial": "./dist/spatial/index.js",
+    "./commerce": "./dist/commerce/index.js",
+    "./workflow": "./dist/workflow/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@movent/contracts": "workspace:*",
+    "decimal.js": "^10.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

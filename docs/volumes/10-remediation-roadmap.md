@@ -1,5 +1,5 @@
 # Volume 10: Remediation & Roadmap
-## Sovereign OS Enterprise Knowledge Base
+## Moventios Enterprise Knowledge Base
 
 **Gap Resolution Audit, Technical Debt, Risk Register & Implementation Roadmap**
 
@@ -15,7 +15,7 @@
 
 > **Canonical Source:** Gap tracking references [00-SEKB-AUDIT-MAPPING-CLEANUP-PLAN.md](../00-SEKB-AUDIT-MAPPING-CLEANUP-PLAN.md) and ADR-003. Technology replacement horizon and Layer decisions are in Layer-3 and the Constitution.
 
-Volume 10 is the **operational health dashboard** of the Sovereign OS platform. It is the only volume that is explicitly a living document with quarterly update cadence.
+Volume 10 is the **operational health dashboard** of the Moventios platform. It is the only volume that is explicitly a living document with quarterly update cadence.
 
 It answers:
 - What gaps existed and how were they resolved?

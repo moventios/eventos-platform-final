@@ -10,7 +10,7 @@
 
 ```bash
 git clone <repo-url>
-cd eventos
+cd movent
 pnpm install
 cp .env.example .env
 ```
@@ -19,7 +19,7 @@ Fill in the Supabase variables in `.env` (see below), then:
 
 ```bash
 supabase start
-pnpm --filter @eventos/database db:push
+pnpm --filter @movent/database db:push
 pnpm dev
 ```
 
@@ -30,13 +30,13 @@ After `supabase start`, the CLI prints `API URL`, `anon key`, and `service_role 
 ### RLS Policies
 
 ```bash
-psql $DATABASE_URL -f packages/database/rls/*.sql
+psql $DATABASE_URL -f packages/movent-database/rls/*.sql
 ```
 
 ### Stored Procedures
 
 ```bash
-psql $DATABASE_URL -f packages/database/procedures/*.sql
+psql $DATABASE_URL -f packages/movent-database/procedures/*.sql
 ```
 
 ## Testing

@@ -1,5 +1,5 @@
 # Volume 05: Operations & Reliability
-## Sovereign OS Enterprise Knowledge Base
+## Moventios Enterprise Knowledge Base
 
 **SRE Patterns, Observability, Disaster Recovery & Production Runbooks**
 
@@ -16,7 +16,7 @@
 > **Canonical Source:** Reliability principles and SLA model ada di [Layer-1-Constitution-v5.0.2.md](../Layer-1-Constitution-v5.0.2.md) Part 18 + Part 2.5. Technology observability choices di [Layer-3-EPXA-v5.1.md](../Layer-3-EPXA-v5.1.md).  
 > Volume ini menyediakan **SRE runbooks, circuit breaker patterns, deployment strategies, dan production checklists** — practical operations content. Bila ada konflik, Layer-1 / Layer-3 menang.
 
-Volume 05 defines the **operational and reliability standards** for Sovereign OS. It translates the reliability principles from Layer 1 (Constitution Part 2.5 — Reliability & Scalability Principles) into concrete SRE practices, runbooks, and infrastructure patterns.
+Volume 05 defines the **operational and reliability standards** for Moventios. It translates the reliability principles from Layer 1 (Constitution Part 2.5 — Reliability & Scalability Principles) into concrete SRE practices, runbooks, and infrastructure patterns.
 
 This volume governs:
 - How the platform maintains SLAs under failure conditions
@@ -25,7 +25,7 @@ This volume governs:
 - How observability data flows from user action to database query
 - How the platform scales and when to trigger replacement plans
 
-**SRE Philosophy at Sovereign OS:** Every failure is expected. Every failure must be observable. Every failure must be recoverable deterministically.
+**SRE Philosophy at Moventios:** Every failure is expected. Every failure must be observable. Every failure must be recoverable deterministically.
 
 ---
 
