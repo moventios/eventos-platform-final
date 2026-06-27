@@ -23,7 +23,6 @@ const PUBLIC_PATHS = [
   '/organizations',
   '/api/v1/commerce/events',
   '/api/v1/spatial/facilities',
-  '/api/v1/iam/tenants',
 ];
 
 // Synthetic tenant/actor for public unauthenticated discovery reads on events/facilities lists.
@@ -66,7 +65,6 @@ export async function middleware(request: NextRequest) {
       request.method === 'GET' &&
       (pathname === '/api/v1/commerce/events' ||
         pathname === '/api/v1/spatial/facilities' ||
-        pathname === '/api/v1/iam/tenants' ||
         (pathname.startsWith('/api/v1/spatial/facilities/') && pathname.endsWith('/rooms')));
     if (isPublicReadApi) {
       const requestHeaders = new Headers(request.headers);

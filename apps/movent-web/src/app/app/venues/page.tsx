@@ -110,7 +110,7 @@ const columns: ColumnDef<Facility>[] = [
 
 import { ResourcePageLayout } from '@/components/layout/resource-page';
 
-function FacilitiesContent() {
+function VenuesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const q = (searchParams.get('search') || '').toLowerCase();
@@ -169,7 +169,7 @@ function FacilitiesContent() {
       .catch(() => {
         setFacilities([]);
         setBookings([]);
-        setError('Could not load places.');
+        setError('Could not load venues.');
       })
       .finally(() => setLoading(false));
   }, []);
@@ -243,7 +243,7 @@ function FacilitiesContent() {
         <Label htmlFor="name">
           Name <span className="text-destructive">*</span>
         </Label>
-        <Input id="name" {...register('name')} placeholder="Place name" />
+        <Input id="name" {...register('name')} placeholder="Venue name" />
         {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
       </div>
       <div className="space-y-1.5">
@@ -263,7 +263,7 @@ function FacilitiesContent() {
           disabled={submitting}
           className="border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
         >
-          {submitting ? 'Creating…' : 'Create Place'}
+          {submitting ? 'Creating…' : 'Create Venue'}
         </Button>
       </div>
     </form>
@@ -278,7 +278,7 @@ function FacilitiesContent() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Activate Participation at this Place</DialogTitle>
+          <DialogTitle>Activate Participation at this Venue</DialogTitle>
         </DialogHeader>
         {bookingError && (
           <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
@@ -329,25 +329,25 @@ function FacilitiesContent() {
 
   return (
     <ResourcePageLayout
-      title="Places"
-      description="Spaces where Participation & Collaboration happen in the Network"
+      title="Venues"
+      description="Venues where Participation & Collaboration happen in the Network"
       icon={<MapPin className="h-5 w-5 text-white" />}
       iconGradient="from-emerald-500 to-teal-600"
-      searchPlaceholder="Search places in the network..."
+      searchPlaceholder="Search venues in the network..."
       searchQuery={q}
       onSearchChange={handleSearchChange}
       data={filteredFacilities}
       loading={loading}
       error={error}
-      emptyMessage="No places match. Broaden search or create one."
-      createButtonText="New Place"
+      emptyMessage="No venues match. Broaden search or create one."
+      createButtonText="New Venue"
       createButtonIcon={<Plus className="mr-1.5 h-3.5 w-3.5" />}
       isCreateOpen={open}
       onCreateOpenChange={setOpen}
-      createDialogTitle="Add New Place"
+      createDialogTitle="Add New Venue"
       createDialogContent={createForm}
       featuredItems={filteredFacilities.slice(0, 3)}
-      featuredTitle="Featured Places"
+      featuredTitle="Featured Venues"
       renderFeaturedItem={(f) => (
         <Link
           key={f.id}
@@ -387,7 +387,7 @@ function FacilitiesContent() {
   );
 }
 
-export default function FacilitiesPage() {
+export default function VenuesPage() {
   return (
     <Suspense
       fallback={
@@ -397,7 +397,7 @@ export default function FacilitiesPage() {
         </div>
       }
     >
-      <FacilitiesContent />
+      <VenuesContent />
     </Suspense>
   );
 }

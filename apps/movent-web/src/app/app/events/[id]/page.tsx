@@ -1,6 +1,5 @@
 'use client';
 
-import { DataTable } from '@/components/data-table';
 import { StatusBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -179,54 +178,6 @@ export default function EventDetailPage() {
       setError(e.error || 'Check-in failed');
     }
   }
-
-  const columns: ColumnDef<AccessPass>[] = [
-    {
-      accessorKey: 'customerId',
-      header: 'Customer',
-      cell: ({ getValue }) => (
-        <span className="block max-w-[160px] truncate rounded bg-muted/60 px-1.5 py-0.5 font-mono text-xs">
-          {getValue<string>()}
-        </span>
-      ),
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ getValue }) => <StatusBadge status={getValue<string>()} />,
-    },
-    {
-      accessorKey: 'issuedAt',
-      header: 'Issued At',
-      cell: ({ getValue }) => {
-        const v = getValue<string | undefined>();
-        return v ? (
-          <span className="text-xs text-muted-foreground">{new Date(v).toLocaleString()}</span>
-        ) : (
-          <span className="text-xs text-muted-foreground">—</span>
-        );
-      },
-    },
-    {
-      header: 'Action',
-      cell: ({ row }) => {
-        const p = row.original;
-        if (p.status === 'issued' || p.status === 'pending') {
-          return (
-            <Button
-              size="sm"
-              className="h-7 border-0 bg-emerald-600 text-xs text-white hover:bg-emerald-700"
-              onClick={() => doCheckIn(p.id)}
-            >
-              <CheckCircle2 className="mr-1 h-3 w-3" />
-              Check In
-            </Button>
-          );
-        }
-        return <span className="text-xs text-muted-foreground">—</span>;
-      },
-    },
-  ];
 
   return (
     <div className="space-y-6 p-6">

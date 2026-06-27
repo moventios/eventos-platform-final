@@ -3,7 +3,7 @@
 import { StatusBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, Search, Plus, Radio, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Users, Search, Radio, ArrowRight, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';

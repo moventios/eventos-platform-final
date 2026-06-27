@@ -4,8 +4,6 @@ import { CreateRoomSchema } from '@movent/contracts';
 import { CreateRoomHandler } from '@movent/core/spatial';
 import { DrizzleRoomRepository } from '@movent/infrastructure/postgres/spatial';
 import { OutboxEventBus, createDbWithTenant } from '@movent/infrastructure/postgres';
-import { rooms } from '@movent/database/schema';
-import { eq, and } from 'drizzle-orm';
 
 export const POST = withTenantContext(async (req: NextRequest, { tenantId, actorId }) => {
   const body = CreateRoomSchema.safeParse(await req.json());

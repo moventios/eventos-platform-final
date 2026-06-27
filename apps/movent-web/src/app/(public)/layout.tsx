@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Calendar, Building2, Shield, Users, Menu, X } from 'lucide-react';
+import { Calendar, Building2, Users, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const publicNavItems = [
@@ -60,7 +60,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               </Link>
               <Link href="/login?tab=register">
                 <Button size="sm" className="bg-teal-600 hover:bg-teal-500 text-white font-medium shadow-lg shadow-teal-600/10 rounded-lg">
-                  Get Started
+                  Mulai Sekarang
                 </Button>
               </Link>
             </div>
@@ -98,7 +98,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               </Link>
               <Link href="/login?tab=register" onClick={() => setMobileMenuOpen(false)}>
                 <Button className="w-full bg-teal-600 hover:bg-teal-500 text-white">
-                  Get Started
+                  Mulai Sekarang
                 </Button>
               </Link>
             </div>
@@ -123,25 +123,25 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 <span className="text-md font-bold tracking-tight text-white">Moventios</span>
               </div>
               <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
-                The open event operating desktop and community collaboration matrix. Built on robust sovereign infrastructure.
+                Platform manajemen event dan pemesanan venue komunitas mandiri yang aman, andal, dan transparan.
               </p>
             </div>
 
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Directories</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Direktori</h4>
               <ul className="space-y-2 text-xs text-slate-500">
-                <li><Link href="/events" className="hover:text-slate-300">Public Events</Link></li>
-                <li><Link href="/venues" className="hover:text-slate-300">Ecosystem Venues</Link></li>
-                <li><Link href="/organizations" className="hover:text-slate-300">Organizations Matrix</Link></li>
+                <li><Link href="/events" className="hover:text-slate-300">Jadwal Event</Link></li>
+                <li><Link href="/venues" className="hover:text-slate-300">Daftar Venue</Link></li>
+                <li><Link href="/organizations" className="hover:text-slate-300">Daftar Organisasi Matrix</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Product</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Produk</h4>
               <ul className="space-y-2 text-xs text-slate-500">
                 <li><Link href="/app" className="hover:text-slate-300">Mission Control</Link></li>
-                <li><Link href="/login" className="hover:text-slate-300">Tenant Registration</Link></li>
-                <li><a href="#" className="hover:text-slate-300">Pricing Model</a></li>
+                <li><Link href="/login" className="hover:text-slate-300">Pendaftaran Ruang Kerja</Link></li>
+                <li><a href="#" className="hover:text-slate-300">Model Layanan</a></li>
               </ul>
             </div>
 
@@ -149,8 +149,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Legal & Ops</h4>
               <ul className="space-y-2 text-xs text-slate-500">
                 <li><a href="#" className="hover:text-slate-300">Platform Terms</a></li>
-                <li><a href="#" className="hover:text-slate-300">Sovereign Hosting</a></li>
-                <li><a href="#" className="hover:text-slate-300">Security Constitutions</a></li>
+                <li><a href="#" className="hover:text-slate-300">Server Mandiri</a></li>
+                <li><a href="#" className="hover:text-slate-300">Kebijakan Keamanan</a></li>
               </ul>
             </div>
           </div>

@@ -3,7 +3,7 @@
 import { StatusBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, BookOpen, KeyRound, MapPin, Users } from 'lucide-react';
+import { ArrowLeft, BookOpen, KeyRound, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';

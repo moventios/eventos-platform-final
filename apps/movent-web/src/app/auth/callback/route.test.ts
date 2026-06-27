@@ -60,7 +60,7 @@ describe('auth callback GET', () => {
     const res = await GET(req);
 
     expect(res.status).toBe(307);
-    expect(res.headers.get('location')).toBe('http://localhost/');
+    expect(res.headers.get('location')).toBe('http://localhost/app');
     expect(exchangeCodeForSession).not.toHaveBeenCalled();
   });
 
@@ -74,7 +74,7 @@ describe('auth callback GET', () => {
     const req = new NextRequest('http://localhost/auth/callback?code=good&next=//evil.test');
     const res = await GET(req);
 
-    expect(res.headers.get('location')).toBe('http://localhost/');
+    expect(res.headers.get('location')).toBe('http://localhost/app');
   });
 
   it('rejects absolute URL next targets', async () => {
@@ -82,6 +82,6 @@ describe('auth callback GET', () => {
     const req = new NextRequest('http://localhost/auth/callback?next=https%3A%2F%2Fevil.test');
     const res = await GET(req);
 
-    expect(res.headers.get('location')).toBe('http://localhost/');
+    expect(res.headers.get('location')).toBe('http://localhost/app');
   });
 });

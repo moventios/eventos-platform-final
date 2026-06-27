@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Building2, Shield, Ticket, ArrowRight, Activity, Cpu, KeyRound } from 'lucide-react';
 
 export const metadata = {
-  title: 'Moventios — Event Operating System (Event OS)',
-  description: 'The relationship, booking, and collaboration protocol for sovereign community networks. Manage physical assets, access credentials, and live event pipelines.',
+  title: 'Moventios — Kalender Event & Pemesanan Venue Komunitas',
+  description: 'Kelola jadwal ruang gathering, pendaftaran peserta, dan tiket masuk dalam satu tempat yang aman dan terorganisir untuk komunitasmu.',
 };
 
 export default function MarketingLandingPage() {
@@ -24,29 +24,29 @@ export default function MarketingLandingPage() {
             {/* Badge */}
             <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-950/40 px-3.5 py-1 text-xs font-medium text-teal-400">
               <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
-              Sovereign Community Operating Protocol
+              Sistem Manajemen Komunitas Mandiri
             </div>
             
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl font-sans">
-              The Event Operating System for{' '}
+              Kelola Event & Ruangan{' '}
               <span className="bg-gradient-to-r from-teal-400 via-emerald-400 to-emerald-300 bg-clip-text text-transparent">
-                Modern Networks
+                Komunitas Modern
               </span>
             </h1>
             
             <p className="text-lg sm:text-xl text-slate-400 leading-relaxed font-sans max-w-2xl mx-auto">
-              Moventios is the operational layer for physical gathering spaces, live collaboration pipelines, and self-sovereign community credentials.
+              Moventios membantu komunitas mengelola tempat kumpul fisik, registrasi event langsung, dan data kehadiran dalam satu dasbor terpadu.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Link href="/login?tab=register" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold text-base py-6 shadow-xl shadow-teal-600/10 rounded-xl">
-                  Deploy Workspace <ArrowRight className="ml-2 h-4 w-4" />
+                  Buat Ruang Kerja <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/events" className="w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="w-full border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 hover:text-white text-base py-6 rounded-xl">
-                  Explore Directories
+                  Lihat Jadwal & Lokasi
                 </Button>
               </Link>
             </div>
@@ -59,10 +59,10 @@ export default function MarketingLandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { val: '100% Sovereign', desc: 'Self-hosted and tenant-isolated data structures.' },
-              { val: 'Access Protocol', desc: 'Secure verification via outbox pipelines.' },
-              { val: 'Spatial Booking', desc: 'No-conflict room booking calendars.' },
-              { val: 'AI Verification', desc: 'Mutations require administrative oversight.' },
+              { val: 'Data 100% Aman', desc: 'Setiap komunitas memiliki penyimpanan data terisolasi yang aman.' },
+              { val: 'Tiket Digital', desc: 'Verifikasi kehadiran peserta otomatis tanpa antrean.' },
+              { val: 'Reservasi Real-Time', desc: 'Kalender pemesanan ruangan terintegrasi bebas bentrok.' },
+              { val: 'Kontrol Admin', desc: 'Setiap perubahan penting memerlukan persetujuan sebelum aktif.' },
             ].map((stat) => (
               <div key={stat.val} className="p-4 rounded-xl border border-slate-900 bg-slate-900/30">
                 <div className="text-lg font-bold text-teal-400">{stat.val}</div>
@@ -78,10 +78,10 @@ export default function MarketingLandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Engineered for Real-World Activations
+              Dirancang untuk Kelancaran Acara Anda
             </h2>
             <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
-              Unlike simple software-as-a-service platforms, Moventios links database schemas, physical venue mapping, and real-time outboxes into a single engine.
+              Berbeda dari sekadar aplikasi kalender biasa, Moventios menyatukan penjadwalan, sewa ruangan, dan kontrol kehadiran peserta dalam satu sistem.
             </p>
           </div>
 
@@ -89,23 +89,23 @@ export default function MarketingLandingPage() {
             {[
               {
                 icon: Calendar,
-                title: 'Event Lifecycles',
-                desc: 'Create, schedule, and publish events to public search crawlers. Coordinate starts, timezones, and participant limits.',
+                title: 'Manajemen Event',
+                desc: 'Buat acara, jadwalkan waktu pelaksanaan, batasi kuota, dan tayangkan di direktori pencarian publik dengan sekali klik.',
               },
               {
                 icon: Building2,
-                title: 'Spatial Reservations',
-                desc: 'Map rooms, occupancy loads, and facilities. Enable conflicts-free booking calendars for resources and gather spots.',
+                title: 'Pemesanan Ruangan',
+                desc: 'Atur kapasitas tempat duduk, fasilitas pendukung, serta lihat jadwal sewa ruangan secara transparan tanpa bentrok.',
               },
               {
                 icon: Ticket,
-                title: 'Participation Credentials',
-                desc: 'Issue digital tickets and entrance credentials. Scan and check-in attendees securely at the gate via RLS rules.',
+                title: 'Tiket & Registrasi',
+                desc: 'Kirimkan tiket masuk digital ke peserta. Cukup pindai kode unik di pintu masuk saat acara dimulai.',
               },
               {
                 icon: Shield,
-                title: 'Governance Gateways',
-                desc: 'Every sensitive operation is staged in the workflow queue. Approve or reject AI mutations before they hit the ledger.',
+                title: 'Persetujuan Keanggotaan',
+                desc: 'Kelola izin akses tim penyelenggara dan verifikasi pendaftaran anggota baru secara terpusat oleh administrator.',
               },
             ].map((feature) => (
               <div key={feature.title} className="bg-slate-950/40 border border-slate-800/80 p-6 rounded-2xl flex flex-col justify-between hover:border-slate-700/80 transition-colors">
@@ -129,23 +129,23 @@ export default function MarketingLandingPage() {
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-teal-500">
                 <Cpu className="h-4 w-4" />
-                Technical Architecture
+                Teknologi & Keamanan
               </div>
               <h2 className="text-3xl font-bold tracking-tight text-white">
-                Built on the Outbox & RLS Isolation Principles
+                Didesain dengan Standar Keamanan Tinggi
               </h2>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Moventios runs under a strict Layer-1 Constitution. Database records utilize PostgreSQL Row-Level Security (RLS) bound by tenant cookies. Internal states synchronize via an transactional Outbox pipeline, preventing data corruption and double bookings.
+                Keamanan data komunitas adalah prioritas utama. Moventios menggunakan enkripsi data terisolasi untuk memastikan informasi penting komunitas Anda tidak bocor ke pihak luar, serta sistem pencatatan transaksi terverifikasi untuk mencegah kegagalan jadwal reservasi.
               </p>
               
               <ul className="space-y-3.5 text-xs text-slate-300">
                 <li className="flex items-start gap-2.5">
                   <KeyRound className="h-4.5 w-4.5 text-teal-500 shrink-0 mt-0.5" />
-                  <span><strong>Tenant Separation:</strong> No cross-tenant data leaks. RLS queries authenticate via user JWT.</span>
+                  <span><strong>Privasi Data Komunitas:</strong> Setiap komunitas memiliki isolasi data penuh. Informasi Anda tidak akan tercampur dengan penyewa lain.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <Activity className="h-4.5 w-4.5 text-teal-500 shrink-0 mt-0.5" />
-                  <span><strong>Realtime Sync:</strong> Subscriptions link directly to Supabase CDC pipelines for immediate gate check-ins.</span>
+                  <span><strong>Sinkronisasi Instan:</strong> Pembaruan status tiket dan izin masuk terupdate dalam hitungan detik di semua perangkat panitia.</span>
                 </li>
               </ul>
             </div>
@@ -161,7 +161,7 @@ export default function MarketingLandingPage() {
                   <span className="w-2.5 h-2.5 bg-emerald-500/80 rounded-full" />
                 </div>
                 <span className="font-mono text-[10px] text-slate-500 uppercase tracking-widest">
-                  Live OS Event Pipeline
+                  Log Aktivitas Event Terkini
                 </span>
               </div>
 
@@ -169,28 +169,28 @@ export default function MarketingLandingPage() {
                 <div className="p-2.5 bg-slate-950/80 border border-slate-800 rounded-lg flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 bg-amber-500 rounded-full" />
-                    <span className="text-amber-500 font-bold">[STAGED]</span>
-                    <span>IssueAccessPass</span>
+                    <span className="text-amber-500 font-bold">[MENUNGGU]</span>
+                    <span>Pendaftaran Anggota Baru - Budi Santoso</span>
                   </div>
-                  <span className="text-slate-500">Wait for Admin Approve</span>
+                  <span className="text-slate-500">Persetujuan Admin</span>
                 </div>
 
                 <div className="p-2.5 bg-slate-950/80 border border-slate-800 rounded-lg flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 bg-emerald-500 rounded-full" />
-                    <span className="text-emerald-500 font-bold">[COMMITTED]</span>
-                    <span>ReserveVenueSpace</span>
+                    <span className="text-emerald-500 font-bold">[BERHASIL]</span>
+                    <span>Sewa Ruang Aula Utama - Komunitas Seni</span>
                   </div>
-                  <span className="text-slate-500">Room A reserved</span>
+                  <span className="text-slate-500">Ruangan Dipesan</span>
                 </div>
 
                 <div className="p-2.5 bg-slate-950/80 border border-slate-800 rounded-lg flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 bg-blue-500 rounded-full" />
-                    <span className="text-blue-500 font-bold">[OUTBOX]</span>
-                    <span>AccessPassIssuedEvent</span>
+                    <span className="text-blue-500 font-bold">[SELESAI]</span>
+                    <span>Tiket Masuk Dikirim - Budiyono</span>
                   </div>
-                  <span className="text-slate-500">Synced to workers</span>
+                  <span className="text-slate-500">Terkirim ke Email</span>
                 </div>
               </div>
             </div>
@@ -203,15 +203,15 @@ export default function MarketingLandingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 to-emerald-500/5" />
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center relative space-y-6">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Orchestrate Your Network Today
+            Mulai Kelola Komunitasmu Hari Ini
           </h2>
           <p className="text-sm sm:text-base text-slate-400 max-w-lg mx-auto">
-            Ready to deploy an Event OS? Register a tenant namespace and sync your physical spaces.
+            Siap untuk mengelola event dengan mudah? Daftarkan ruang kerja komunitasmu sekarang dan kelola jadwal secara efisien.
           </p>
           <div className="pt-4">
             <Link href="/login?tab=register">
               <Button size="lg" className="bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl px-8 shadow-xl shadow-teal-600/10">
-                Deploy Workspace
+                Buat Ruang Kerja
               </Button>
             </Link>
           </div>
