@@ -34,7 +34,7 @@
     "@trigger.dev/sdk": "^3.3.17"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
+    "approvedBuilds": [
       "@biomejs/biome",
       "esbuild",
       "protobufjs",

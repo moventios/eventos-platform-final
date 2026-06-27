@@ -1,3 +1,0 @@
-{
-  "installCommand": "pnpm config set ignore-scripts false && pnpm install"
-}
