@@ -233,7 +233,7 @@ export default function EventDetailPage() {
       {/* Breadcrumb */}
       <div>
         <Link
-          href="/events"
+          href="/app/events"
           className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
@@ -423,7 +423,7 @@ export default function EventDetailPage() {
               Validate guest credentials, search issued passes, and register check-ins at the gate.
             </p>
           </div>
-          <Link href={`/passes?eventId=${eventId}`} className="shrink-0">
+          <Link href={`/app/passes?eventId=${eventId}`} className="shrink-0">
             <Button size="sm" className="bg-gradient-brand border-0 text-white shadow-sm">
               Open Gate & Scan Passes →
             </Button>
@@ -436,7 +436,7 @@ export default function EventDetailPage() {
         <span>
           This Event connects via Participation to Places and Organizations in the Network.
         </span>
-        <Link href="/facilities" className="ml-3 shrink-0 font-medium text-primary hover:underline">
+        <Link href="/app/venues" className="ml-3 shrink-0 font-medium text-primary hover:underline">
           See connected Places →
         </Link>
       </div>

@@ -197,7 +197,7 @@ export default function EcosystemHome() {
                 <Shield className="h-4.5 w-4.5 text-amber-500" />
                 <h2 className="text-base font-semibold">Pending Approvals Queue</h2>
               </div>
-              <Link href="/approvals" className="text-xs font-medium text-primary hover:underline">
+              <Link href="/app/approvals" className="text-xs font-medium text-primary hover:underline">
                 View Queue →
               </Link>
             </div>
@@ -274,7 +274,7 @@ export default function EcosystemHome() {
                 <Building2 className="h-4.5 w-4.5 text-primary" />
                 <h2 className="text-base font-semibold">Active Space Allocations</h2>
               </div>
-              <Link href="/bookings" className="text-xs font-medium text-primary hover:underline">
+              <Link href="/app/bookings" className="text-xs font-medium text-primary hover:underline">
                 Open Scheduler →
               </Link>
             </div>
@@ -332,7 +332,7 @@ export default function EcosystemHome() {
                 <Ticket className="h-4.5 w-4.5 text-emerald-500" />
                 <h2 className="text-base font-semibold">Live Event Hub</h2>
               </div>
-              <Link href="/events" className="text-xs font-medium text-primary hover:underline">
+              <Link href="/app/events" className="text-xs font-medium text-primary hover:underline">
                 All Events →
               </Link>
             </div>
@@ -370,7 +370,7 @@ export default function EcosystemHome() {
                           Gate Checked-in
                         </span>
                         <Link
-                          href={`/passes?eventId=${e.id}`}
+                          href={`/app/passes?eventId=${e.id}`}
                           className="text-[10px] font-medium text-primary hover:underline"
                         >
                           Manage Tickets →
@@ -390,7 +390,7 @@ export default function EcosystemHome() {
               Configure tenant parameters, roles, and integrations in the Administration workspace.
             </p>
             <Link
-              href="/admin"
+              href="/app/admin"
               className="bg-gradient-brand inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-medium text-white shadow transition-all hover:opacity-90"
             >
               Open Administration

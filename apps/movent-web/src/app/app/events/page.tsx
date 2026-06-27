@@ -51,7 +51,7 @@ const columns: ColumnDef<Event>[] = [
     cell: ({ getValue, row }) => (
       <div>
         <Link
-          href={`/events/${row.original.id}`}
+          href={`/app/events/${row.original.id}`}
           className="font-medium text-foreground transition-colors hover:text-primary"
         >
           {getValue<string>()}
@@ -99,7 +99,7 @@ const columns: ColumnDef<Event>[] = [
     header: '',
     cell: ({ row }) => (
       <Link
-        href={`/events/${row.original.id}`}
+        href={`/app/events/${row.original.id}`}
         className="text-xs font-medium text-primary hover:underline"
       >
         View & Connect →
@@ -247,7 +247,7 @@ function EventsContent() {
       renderFeaturedItem={(e) => (
         <Link
           key={e.id}
-          href={`/events/${e.id}`}
+          href={`/app/events/${e.id}`}
           className="bg-card card-hover group rounded-xl border border-border/60 p-4 shadow-sm"
         >
           <div className="flex items-start gap-3">

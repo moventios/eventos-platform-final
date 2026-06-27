@@ -73,7 +73,7 @@ export default function OnboardingPage() {
 
     setDone(true);
     setTimeout(() => {
-      router.push('/');
+      router.push('/app');
       router.refresh();
     }, 1500);
   };

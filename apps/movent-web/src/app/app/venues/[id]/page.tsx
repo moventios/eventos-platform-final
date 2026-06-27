@@ -183,7 +183,7 @@ export default function PlaceDetailPage() {
       {/* Breadcrumb */}
       <div>
         <Link
-          href="/facilities"
+          href="/app/venues"
           className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
@@ -365,7 +365,7 @@ export default function PlaceDetailPage() {
               venue.
             </p>
           </div>
-          <Link href={`/bookings?facilityId=${facilityId}`} className="shrink-0">
+          <Link href={`/app/bookings?facilityId=${facilityId}`} className="shrink-0">
             <Button size="sm" className="bg-gradient-brand border-0 text-white shadow-sm">
               Open Scheduler →
             </Button>
@@ -378,7 +378,7 @@ export default function PlaceDetailPage() {
         <span>
           This Place connects via Participation to Events and Organizations in the Network.
         </span>
-        <Link href="/events" className="ml-3 shrink-0 font-medium text-primary hover:underline">
+        <Link href="/app/events" className="ml-3 shrink-0 font-medium text-primary hover:underline">
           See connected Events →
         </Link>
       </div>

@@ -25,29 +25,29 @@ import { useTheme } from 'next-themes';
 import { Building2, CalendarDays, LayoutDashboard, Settings, Ticket } from 'lucide-react';
 
 const primaryNavItems = [
-  { href: '/', label: 'Mission Control', icon: LayoutDashboard, exact: true },
+  { href: '/app', label: 'Mission Control', icon: LayoutDashboard, exact: true },
 ];
 
 const operationsNavItems = [
-  { href: '/passes', label: 'Access Passes', icon: Ticket },
-  { href: '/bookings', label: 'Reservations', icon: CalendarDays },
+  { href: '/app/passes', label: 'Access Passes', icon: Ticket },
+  { href: '/app/bookings', label: 'Reservations', icon: CalendarDays },
 ];
 
-const enginesNavItems = [
-  { href: '/events', label: 'Event Directory', icon: Calendar },
-  { href: '/facilities', label: 'Venue Directory', icon: Building2 },
+const assetsNavItems = [
+  { href: '/app/events', label: 'Events', icon: Calendar },
+  { href: '/app/venues', label: 'Venues', icon: Building2 },
 ];
 
-const governanceNavItems = [{ href: '/approvals', label: 'Approvals Queue', icon: Shield }];
+const governanceNavItems = [{ href: '/app/approvals', label: 'Approvals Queue', icon: Shield }];
 
-const managementNavItems = [{ href: '/admin', label: 'Administration', icon: Settings }];
+const managementNavItems = [{ href: '/app/admin', label: 'Administration', icon: Settings }];
 
 export default function EcosystemLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [pendingCount, setPendingCount] = useState<number>(0);
 
   useEffect(() => {
-    if (!pathname.startsWith('/approvals')) {
+    if (!pathname.startsWith('/app/approvals')) {
       setPendingCount(0);
       return;
     }
@@ -94,8 +94,8 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
             ))}
           </NavSection>
 
-          <NavSection label="Engines">
-            {enginesNavItems.map((item) => (
+          <NavSection label="Assets">
+            {assetsNavItems.map((item) => (
               <NavLink
                 key={item.href}
                 href={item.href}
@@ -148,14 +148,14 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
             <div>
               <span className="text-sm font-semibold text-foreground">
                 {[
-                  { href: '/', label: 'Mission Control' },
-                  { href: '/passes', label: 'Access & Tickets' },
-                  { href: '/bookings', label: 'Reservations' },
-                  { href: '/events', label: 'Event Directory' },
-                  { href: '/facilities', label: 'Venue Directory' },
-                  { href: '/approvals', label: 'Approvals Queue' },
-                  { href: '/admin', label: 'Administration' },
-                ].find((n) => (n.href === '/' ? pathname === '/' : pathname.startsWith(n.href)))
+                  { href: '/app', label: 'Mission Control', exact: true },
+                  { href: '/app/passes', label: 'Access & Tickets' },
+                  { href: '/app/bookings', label: 'Reservations' },
+                  { href: '/app/events', label: 'Events' },
+                  { href: '/app/venues', label: 'Venues' },
+                  { href: '/app/approvals', label: 'Approvals Queue' },
+                  { href: '/app/admin', label: 'Administration' },
+                ].find((n) => (n.exact ? pathname === n.href : pathname.startsWith(n.href)))
                   ?.label ?? 'Moventios'}
               </span>
               <span className="ml-2.5 hidden text-xs text-muted-foreground md:inline">

@@ -65,9 +65,9 @@ export function createDbWithTenant(tenantId: string) {
   return {
     db,
     async withTenant<T>(fn: (db: ReturnType<typeof drizzle>) => Promise<T>): Promise<T> {
-      return db.transaction(async (tx) => {
+      return db.transaction(async (tx: any) => {
         await tx.execute(`SET LOCAL app.tenant_id = '${tenantId.replace(/'/g, "''")}'`);
-        return fn(tx as unknown as ReturnType<typeof drizzle>);
+        return fn(tx);
       });
     },
   };

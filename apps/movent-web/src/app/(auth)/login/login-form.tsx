@@ -25,7 +25,7 @@ export function LoginForm() {
   const [magicSent, setMagicSent] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = sanitizeRedirectPath(searchParams.get('redirectTo'));
+  const redirectTo = sanitizeRedirectPath(searchParams.get('redirectTo'), '/app');
   const callbackFailed = searchParams.get('error') === 'auth_callback_failed';
   const supabase = createSupabaseBrowserClient();
 

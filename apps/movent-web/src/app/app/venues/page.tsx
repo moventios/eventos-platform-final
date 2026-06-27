@@ -61,7 +61,7 @@ const columns: ColumnDef<Facility>[] = [
     cell: ({ getValue, row }) => (
       <div>
         <Link
-          href={`/facilities/${row.original.id}`}
+          href={`/app/venues/${row.original.id}`}
           className="font-medium text-foreground transition-colors hover:text-primary"
         >
           {getValue<string>()}
@@ -99,7 +99,7 @@ const columns: ColumnDef<Facility>[] = [
     header: '',
     cell: ({ row }) => (
       <Link
-        href={`/facilities/${row.original.id}`}
+        href={`/app/venues/${row.original.id}`}
         className="text-xs font-medium text-primary hover:underline"
       >
         View →
@@ -351,7 +351,7 @@ function FacilitiesContent() {
       renderFeaturedItem={(f) => (
         <Link
           key={f.id}
-          href={`/facilities/${f.id}`}
+          href={`/app/venues/${f.id}`}
           className="bg-card card-hover group flex items-center gap-3 rounded-xl border border-border/60 p-4 shadow-sm"
         >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
