@@ -37,7 +37,7 @@ function PublicOrganizationsContent() {
   const fetchOrgs = () => {
     setLoading(true);
     setError(null);
-    fetch('/api/v1/iam/tenants')
+    fetch('/api/v1/public/organizations')
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setOrgs(data || []))
       .catch(() => {

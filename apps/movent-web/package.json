@@ -9,7 +9,9 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
-    "capture-p1-evidence": "node scripts/capture-p1-evidence.mjs"
+    "capture-p1-evidence": "node scripts/capture-p1-evidence.mjs",
+    "packageManager": "pnpm@9.15.4"
+
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.21",

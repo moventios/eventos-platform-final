@@ -21,8 +21,13 @@ const PUBLIC_PATHS = [
   '/facilities',
   '/venues',
   '/organizations',
+  '/about',
+  '/terms',
+  '/policy',
+  '/contact',
   '/api/v1/commerce/events',
   '/api/v1/spatial/facilities',
+  '/api/v1/public/organizations',
 ];
 
 // Synthetic tenant/actor for public unauthenticated discovery reads on events/facilities lists.
@@ -64,8 +69,11 @@ export async function middleware(request: NextRequest) {
     const isPublicReadApi =
       request.method === 'GET' &&
       (pathname === '/api/v1/commerce/events' ||
+        pathname.startsWith('/api/v1/commerce/events/') ||
         pathname === '/api/v1/spatial/facilities' ||
-        (pathname.startsWith('/api/v1/spatial/facilities/') && pathname.endsWith('/rooms')));
+        (pathname.startsWith('/api/v1/spatial/facilities/') && pathname.endsWith('/rooms')) ||
+        pathname.startsWith('/api/v1/spatial/facilities/') ||
+        pathname === '/api/v1/public/organizations');
     if (isPublicReadApi) {
       const requestHeaders = new Headers(request.headers);
       requestHeaders.set('x-tenant-id', PUBLIC_DISCOVERY_TENANT_ID);

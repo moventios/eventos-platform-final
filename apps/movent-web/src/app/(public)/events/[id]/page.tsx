@@ -31,18 +31,18 @@ export default function PublicEventDetailPage() {
     setLoading(true);
     setError(null);
     
-    fetch('/api/v1/commerce/events')
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: Event[]) => {
-        const found = data.find((e) => e.id === eventId);
-        if (found) {
-          setEvent(found);
-        } else {
-          setError('Event tidak ditemukan.');
-        }
+    fetch(`/api/v1/commerce/events/${eventId}`)
+      .then((r) => {
+        if (r.status === 404) throw new Error('not_found');
+        return r.ok ? r.json() : Promise.reject(r.status);
       })
-      .catch(() => {
-        setError('Gagal memuat data event.');
+      .then((data: Event) => setEvent(data))
+      .catch((err) => {
+        if (err?.message === 'not_found') {
+          setError('Event tidak ditemukan.');
+        } else {
+          setError('Gagal memuat data event.');
+        }
       })
       .finally(() => setLoading(false));
   }, [eventId]);

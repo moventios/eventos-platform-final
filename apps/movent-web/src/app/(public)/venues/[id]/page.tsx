@@ -37,20 +37,21 @@ export default function PublicVenueDetailPage() {
     setLoading(true);
     setError(null);
 
-    Promise.all([
-      fetch('/api/v1/spatial/facilities')
-        .then((r) => (r.ok ? r.json() : []))
-        .then((data: Venue[]) => {
-          const found = data.find((v) => v.id === venueId);
-          if (found) setVenue(found);
-          else throw new Error('Venue tidak ditemukan');
-        }),
-      fetch(`/api/v1/spatial/facilities/${venueId}/rooms`)
-        .then((r) => (r.ok ? r.json() : []))
-        .then((data: Room[]) => setRooms(data || [])),
-    ])
-      .catch(() => {
-        setError('Gagal memuat detail venue.');
+    fetch(`/api/v1/spatial/facilities/${venueId}`)
+      .then((r) => {
+        if (r.status === 404) throw new Error('not_found');
+        return r.ok ? r.json() : Promise.reject(r.status);
+      })
+      .then((data: Venue & { rooms?: Room[] }) => {
+        setVenue(data);
+        setRooms(data.rooms || []);
+      })
+      .catch((err) => {
+        if (err?.message === 'not_found') {
+          setError('Venue tidak ditemukan.');
+        } else {
+          setError('Gagal memuat detail venue.');
+        }
       })
       .finally(() => setLoading(false));
   }, [venueId]);
