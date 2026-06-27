@@ -108,6 +108,8 @@ const columns: ColumnDef<Event>[] = [
   },
 ];
 
+import { ResourcePageLayout } from '@/components/layout/resource-page';
+
 function EventsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -175,148 +177,94 @@ function EventsContent() {
     fetchEvents();
   };
 
-  return (
-    <div className="space-y-6 p-6">
-      {/* Page header */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-sm">
-            <Calendar className="h-5 w-5 text-white" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Events</h1>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Relationships, Participation & Opportunities in the Network
-            </p>
-          </div>
-        </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button
-              size="sm"
-              className="bg-gradient-brand border-0 text-white shadow-sm hover:opacity-90"
-            >
-              <Plus className="mr-1.5 h-3.5 w-3.5" />
-              Propose Event
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Propose New Event</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="name">
-                  Name <span className="text-destructive">*</span>
-                </Label>
-                <Input id="name" {...register('name')} placeholder="Event name" />
-                {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  {...register('description')}
-                  placeholder="Brief description"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="startsAt">Starts At</Label>
-                  <Input id="startsAt" type="datetime-local" {...register('startsAt')} />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="endsAt">Ends At</Label>
-                  <Input id="endsAt" type="datetime-local" {...register('endsAt')} />
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="timezone">Timezone</Label>
-                <Input id="timezone" {...register('timezone')} />
-              </div>
-              <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-gradient-brand border-0 text-white"
-                >
-                  {isSubmitting ? 'Creating…' : 'Create Event'}
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+  const createForm = (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-1.5">
+        <Label htmlFor="name">
+          Name <span className="text-destructive">*</span>
+        </Label>
+        <Input id="name" {...register('name')} placeholder="Event name" />
+        {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
       </div>
-
-      {/* Search */}
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+      <div className="space-y-1.5">
+        <Label htmlFor="description">Description</Label>
         <Input
-          placeholder="Search events in the network..."
-          defaultValue={q}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="pl-9 text-sm"
+          id="description"
+          {...register('description')}
+          placeholder="Brief description"
         />
       </div>
-
-      {/* Featured Events */}
-      {!loading && filteredEvents.length > 0 && (
-        <div>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            Featured Events
-          </h3>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-            {filteredEvents.slice(0, 3).map((e) => (
-              <Link
-                key={e.id}
-                href={`/events/${e.id}`}
-                className="bg-card card-hover group rounded-xl border border-border/60 p-4 shadow-sm"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
-                    <Calendar className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold">{e.name}</div>
-                    <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                      {e.description || 'No description'}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="startsAt">Starts At</Label>
+          <Input id="startsAt" type="datetime-local" {...register('startsAt')} />
         </div>
-      )}
-
-      {/* Error & loading states */}
-      {loading && (
-        <div className="space-y-2">
-          <Skeleton className="h-10 w-full rounded-xl" />
-          <Skeleton className="h-10 w-full rounded-xl" />
+        <div className="space-y-1.5">
+          <Label htmlFor="endsAt">Ends At</Label>
+          <Input id="endsAt" type="datetime-local" {...register('endsAt')} />
         </div>
-      )}
-      {error && (
-        <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
-          {error}
-        </div>
-      )}
-
-      {/* Data table */}
-      <div className="bg-card overflow-hidden rounded-xl border border-border/60 shadow-sm">
-        <DataTable data={filteredEvents} columns={columns} />
       </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="timezone">Timezone</Label>
+        <Input id="timezone" {...register('timezone')} />
+      </div>
+      <div className="flex justify-end gap-2 pt-2">
+        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-gradient-brand border-0 text-white"
+        >
+          {isSubmitting ? 'Creating…' : 'Create Event'}
+        </Button>
+      </div>
+    </form>
+  );
 
-      {!loading && filteredEvents.length === 0 && (
-        <div className="py-12 text-center text-muted-foreground">
-          <Calendar className="mx-auto mb-3 h-8 w-8 opacity-30" />
-          <p className="text-sm">No events match. Try broadening your search or propose one.</p>
-        </div>
+  return (
+    <ResourcePageLayout
+      title="Events"
+      description="Relationships, Participation & Opportunities in the Network"
+      icon={<Calendar className="h-5 w-5 text-white" />}
+      iconGradient="from-blue-500 to-indigo-600"
+      searchPlaceholder="Search events in the network..."
+      searchQuery={q}
+      onSearchChange={handleSearchChange}
+      data={filteredEvents}
+      loading={loading}
+      error={error}
+      emptyMessage="No events match. Try broadening your search or propose one."
+      createButtonText="Propose Event"
+      createButtonIcon={<Plus className="mr-1.5 h-3.5 w-3.5" />}
+      isCreateOpen={open}
+      onCreateOpenChange={setOpen}
+      createDialogTitle="Propose New Event"
+      createDialogContent={createForm}
+      featuredItems={filteredEvents.slice(0, 3)}
+      featuredTitle="Featured Events"
+      renderFeaturedItem={(e) => (
+        <Link
+          key={e.id}
+          href={`/events/${e.id}`}
+          className="bg-card card-hover group rounded-xl border border-border/60 p-4 shadow-sm"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
+              <Calendar className="h-4 w-4 text-white" />
+            </div>
+            <div className="min-w-0">
+              <div className="truncate text-sm font-semibold">{e.name}</div>
+              <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                {e.description || 'No description'}
+              </div>
+            </div>
+          </div>
+        </Link>
       )}
-    </div>
+      columns={columns}
+    />
   );
 }
 

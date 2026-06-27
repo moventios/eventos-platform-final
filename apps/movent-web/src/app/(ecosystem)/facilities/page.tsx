@@ -108,6 +108,8 @@ const columns: ColumnDef<Facility>[] = [
   },
 ];
 
+import { ResourcePageLayout } from '@/components/layout/resource-page';
+
 function FacilitiesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -235,190 +237,137 @@ function FacilitiesContent() {
     }
   }
 
+  const createForm = (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-1.5">
+        <Label htmlFor="name">
+          Name <span className="text-destructive">*</span>
+        </Label>
+        <Input id="name" {...register('name')} placeholder="Place name" />
+        {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="description">Description</Label>
+        <Input id="description" {...register('description')} />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="address">Address</Label>
+        <Input id="address" {...register('address')} placeholder="Full address" />
+      </div>
+      <div className="flex justify-end gap-2 pt-2">
+        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
+        >
+          {submitting ? 'Creating…' : 'Create Place'}
+        </Button>
+      </div>
+    </form>
+  );
+
+  const headerActions = (
+    <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+      <DialogTrigger asChild>
+        <Button size="sm" variant="outline">
+          Activate (Book)
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Activate Participation at this Place</DialogTitle>
+        </DialogHeader>
+        {bookingError && (
+          <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+            {bookingError}
+          </div>
+        )}
+        <form onSubmit={handleB(onSubmitBooking)} className="space-y-4">
+          <div className="space-y-1.5">
+            <Label>Space / Room ID</Label>
+            <Input {...regB('roomId')} placeholder="UUID of room" />
+            {bErrors.roomId && (
+              <p className="text-xs text-destructive">{bErrors.roomId.message}</p>
+            )}
+          </div>
+          <div className="space-y-1.5">
+            <Label>Title (optional)</Label>
+            <Input {...regB('title')} />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Start</Label>
+              <Input type="datetime-local" {...regB('startsAt')} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>End</Label>
+              <Input type="datetime-local" {...regB('endsAt')} />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setBookingOpen(false);
+                setBookingError(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={bSubmitting}>
+              {bSubmitting ? 'Booking…' : 'Submit Booking'}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
-    <div className="space-y-6 p-6">
-      {/* Page header */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-sm">
-            <MapPin className="h-5 w-5 text-white" />
+    <ResourcePageLayout
+      title="Places"
+      description="Spaces where Participation & Collaboration happen in the Network"
+      icon={<MapPin className="h-5 w-5 text-white" />}
+      iconGradient="from-emerald-500 to-teal-600"
+      searchPlaceholder="Search places in the network..."
+      searchQuery={q}
+      onSearchChange={handleSearchChange}
+      data={filteredFacilities}
+      loading={loading}
+      error={error}
+      emptyMessage="No places match. Broaden search or create one."
+      createButtonText="New Place"
+      createButtonIcon={<Plus className="mr-1.5 h-3.5 w-3.5" />}
+      isCreateOpen={open}
+      onCreateOpenChange={setOpen}
+      createDialogTitle="Add New Place"
+      createDialogContent={createForm}
+      featuredItems={filteredFacilities.slice(0, 3)}
+      featuredTitle="Featured Places"
+      renderFeaturedItem={(f) => (
+        <Link
+          key={f.id}
+          href={`/facilities/${f.id}`}
+          className="bg-card card-hover group flex items-center gap-3 rounded-xl border border-border/60 p-4 shadow-sm"
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
+            <MapPin className="h-4 w-4 text-white" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Places</h1>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Spaces where Participation & Collaboration happen in the Network
-            </p>
+          <div className="min-w-0">
+            <div className="truncate text-sm font-semibold">{f.name}</div>
+            <div className="mt-0.5 truncate text-xs text-muted-foreground">
+              {f.address || 'No address'}
+            </div>
           </div>
-        </div>
-        <div className="flex gap-2">
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button
-                size="sm"
-                className="border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-sm hover:opacity-90"
-              >
-                <Plus className="mr-1.5 h-3.5 w-3.5" />
-                New Place
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Add New Place</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name">
-                    Name <span className="text-destructive">*</span>
-                  </Label>
-                  <Input id="name" {...register('name')} placeholder="Place name" />
-                  {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="description">Description</Label>
-                  <Input id="description" {...register('description')} />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="address">Address</Label>
-                  <Input id="address" {...register('address')} placeholder="Full address" />
-                </div>
-                <div className="flex justify-end gap-2 pt-2">
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={submitting}
-                    className="border-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
-                  >
-                    {submitting ? 'Creating…' : 'Create Place'}
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-
-          <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm" variant="outline">
-                Activate (Book)
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Activate Participation at this Place</DialogTitle>
-              </DialogHeader>
-              {bookingError && (
-                <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
-                  {bookingError}
-                </div>
-              )}
-              <form onSubmit={handleB(onSubmitBooking)} className="space-y-4">
-                <div className="space-y-1.5">
-                  <Label>Space / Room ID</Label>
-                  <Input {...regB('roomId')} placeholder="UUID of room" />
-                  {bErrors.roomId && (
-                    <p className="text-xs text-destructive">{bErrors.roomId.message}</p>
-                  )}
-                </div>
-                <div className="space-y-1.5">
-                  <Label>Title (optional)</Label>
-                  <Input {...regB('title')} />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <Label>Start</Label>
-                    <Input type="datetime-local" {...regB('startsAt')} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>End</Label>
-                    <Input type="datetime-local" {...regB('endsAt')} />
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2 pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setBookingOpen(false);
-                      setBookingError(null);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={bSubmitting}>
-                    {bSubmitting ? 'Booking…' : 'Submit Booking'}
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-
-      {/* Search */}
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          placeholder="Search places in the network..."
-          defaultValue={q}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="pl-9 text-sm"
-        />
-      </div>
-
-      {/* Featured Places */}
-      {!loading && filteredFacilities.length > 0 && (
-        <div>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            Featured Places
-          </h3>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-            {filteredFacilities.slice(0, 3).map((f) => (
-              <Link
-                key={f.id}
-                href={`/facilities/${f.id}`}
-                className="bg-card card-hover group flex items-center gap-3 rounded-xl border border-border/60 p-4 shadow-sm"
-              >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
-                  <MapPin className="h-4 w-4 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold">{f.name}</div>
-                  <div className="mt-0.5 truncate text-xs text-muted-foreground">
-                    {f.address || 'No address'}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        </Link>
       )}
-
-      {loading && (
-        <div className="space-y-2">
-          <Skeleton className="h-10 w-full rounded-xl" />
-          <Skeleton className="h-10 w-full rounded-xl" />
-        </div>
-      )}
-      {error && (
-        <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
-          {error}
-        </div>
-      )}
-
-      {/* Data table */}
-      <div className="bg-card overflow-hidden rounded-xl border border-border/60 shadow-sm">
-        <DataTable data={filteredFacilities} columns={columns} />
-      </div>
-
-      {!loading && filteredFacilities.length === 0 && (
-        <div className="py-12 text-center text-muted-foreground">
-          <MapPin className="mx-auto mb-3 h-8 w-8 opacity-30" />
-          <p className="text-sm">No places match. Broaden search or create one.</p>
-        </div>
-      )}
-
-      {/* Bookings calendar */}
+      columns={columns}
+      headerActions={headerActions}
+    >
       <div className="space-y-3">
         <h2 className="text-base font-semibold">Bookings Calendar</h2>
         <div className="bg-card rounded-xl border border-border/60 p-4 shadow-sm">
@@ -434,7 +383,7 @@ function FacilitiesContent() {
           />
         </div>
       </div>
-    </div>
+    </ResourcePageLayout>
   );
 }
 
