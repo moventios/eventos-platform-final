@@ -231,7 +231,7 @@ function NavLink({
   const active = exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
   return (
     <Link
-      href={href}
+      href={href as any}
       className={cn(
         'flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-150',
         active
