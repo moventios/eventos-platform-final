@@ -40,7 +40,10 @@ const assetsNavItems = [
 
 const governanceNavItems = [{ href: '/app/approvals', label: 'Antrean Persetujuan', icon: Shield }];
 
-const managementNavItems = [{ href: '/app/admin', label: 'Administrasi', icon: Settings }];
+const managementNavItems = [
+  { href: '/app/admin', label: 'Administrasi', icon: Settings },
+  { href: '/app/admin/points', label: 'Kelola Koin', icon: Zap },
+];
 
 export default function EcosystemLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -177,9 +180,9 @@ export default function EcosystemLayout({ children }: { children: React.ReactNod
           </div>
           <div className="flex items-center gap-3">
             {points !== null && (
-              <div className="flex items-center gap-1.5 rounded-full bg-teal-500/10 px-3 py-1 text-xs font-semibold text-teal-600 dark:text-teal-400 border border-teal-500/20">
-                <span>✨</span>
-                <span>{points.toLocaleString('id-ID')} Poin</span>
+              <div className="flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                <span>🪙</span>
+                <span>{points.toLocaleString('id-ID')} Koin</span>
               </div>
             )}
             <DarkModeToggle />
