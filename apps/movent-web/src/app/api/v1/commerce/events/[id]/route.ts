@@ -24,7 +24,7 @@ export const GET = withTenantContext(async (_req: NextRequest, { tenantId }, par
     [event] = await db
       .select()
       .from(events)
-      .where(and(eq(events.id, slug), eq(events.tenantId, tenantId)))
+      .where(and(eq(events.id, slug as string), eq(events.tenantId, tenantId)))
       .limit(1);
   } else {
     // Lookup by metadata.slug (SEO-friendly slug)
