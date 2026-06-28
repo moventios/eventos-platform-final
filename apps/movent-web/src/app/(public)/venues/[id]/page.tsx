@@ -168,28 +168,6 @@ export default function PublicVenueDetailPage() {
             </div>
           </div>
 
-          {/* Spaces / Rooms */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-foreground">Ruangan yang Tersedia</h2>
-            <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
-              {rooms.length === 0 ? (
-                <div className="py-12 text-center text-muted-foreground">
-                  <BookOpen className="mx-auto mb-3 h-8 w-8 opacity-35" />
-                  <p className="text-sm">Belum ada ruangan yang terdaftar di venue ini.</p>
-                </div>
-              ) : (
-                <ul className="divide-y divide-border">
-                  {rooms.map((room) => (
-                    <li
-                      key={room.id}
-                      className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-accent/40"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-background">
-                          <BookOpen className="h-4.5 w-4.5 text-muted-foreground" />
-                        </div>
-                        <div>
-                          <span className="text-sm font-semibold text-foreground">{room.name}</span>
           {/* Rooms List */}
           {points !== null ? (
             <div className="bg-card border border-border p-6 sm:p-8 rounded-2xl shadow-sm space-y-6">
