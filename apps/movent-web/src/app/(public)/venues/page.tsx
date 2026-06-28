@@ -18,7 +18,12 @@ type Venue = {
   address?: string;
   status: string;
   createdAt: string;
+  metadata?: { slug?: string; city?: string; category?: string; capacity?: number };
 };
+
+/** Use SEO-friendly slug if available, otherwise fallback to UUID */
+const venueHref = (v: Venue) =>
+  v.metadata?.slug ? `/venues/${v.metadata.slug}` : `/venues/${v.id}`;
 
 const columns: ColumnDef<Venue>[] = [
   {
@@ -27,7 +32,7 @@ const columns: ColumnDef<Venue>[] = [
     cell: ({ getValue, row }) => (
       <div>
         <Link
-          href={`/venues/${row.original.id}`}
+          href={venueHref(row.original)}
           className="font-semibold text-teal-600 dark:text-teal-400 hover:underline transition-colors"
         >
           {getValue<string>()}
@@ -65,7 +70,7 @@ const columns: ColumnDef<Venue>[] = [
     header: '',
     cell: ({ row }) => (
       <Link
-        href={`/venues/${row.original.id}`}
+        href={venueHref(row.original)}
         className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline"
       >
         Lihat Ruangan →

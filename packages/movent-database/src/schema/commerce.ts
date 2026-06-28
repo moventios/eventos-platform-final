@@ -28,6 +28,7 @@ export const events = pgTable(
       .notNull()
       .references(() => tenants.id, { onDelete: 'restrict' }),
     name: varchar('name', { length: 255 }).notNull(),
+    slug: varchar('slug', { length: 300 }),
     description: text('description'),
     status: eventStateEnum('status').default('draft').notNull(),
     startsAt: timestamp('starts_at', { withTimezone: true }),

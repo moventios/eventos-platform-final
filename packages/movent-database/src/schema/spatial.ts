@@ -36,6 +36,7 @@ export const facilities = pgTable(
       .notNull()
       .references(() => tenants.id, { onDelete: 'restrict' }),
     name: varchar('name', { length: 255 }).notNull(),
+    slug: varchar('slug', { length: 300 }),
     description: text('description'),
     address: text('address'),
     geoLat: numeric('geo_lat', { precision: 10, scale: 7 }),

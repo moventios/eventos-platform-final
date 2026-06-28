@@ -1,27 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withTenantContext } from '@/lib/with-tenant-context';
-import { tenants, organizations } from '@movent/database/schema';
+import { organizations } from '@movent/database/schema';
 import { createDbWithTenant } from '@movent/infrastructure/postgres';
 import { eq } from 'drizzle-orm';
 
 /**
- * Public endpoint — returns all organizations (tenants) visible in the public ecosystem.
- * Requires no authentication. The middleware injects the public discovery tenant context.
+ * Public endpoint — returns all organizations visible in the public ecosystem.
+ * No authentication required. Middleware injects the public discovery tenant context.
  */
 export const GET = withTenantContext(async (_req: NextRequest, { tenantId }) => {
   const { db } = createDbWithTenant(tenantId);
 
-  // Return all tenants as public organizations for the discovery directory
-  const allTenants = await db
+  const allOrgs = await db
     .select({
-      id: tenants.id,
-      name: tenants.name,
-      slug: tenants.slug,
-      isActive: tenants.isActive,
-      createdAt: tenants.createdAt,
+      id: organizations.id,
+      name: organizations.name,
+      description: organizations.description,
+      metadata: organizations.metadata,
+      createdAt: organizations.createdAt,
     })
-    .from(tenants)
-    .where(eq(tenants.isActive, true));
+    .from(organizations)
+    .where(eq(organizations.tenantId, tenantId));
 
-  return NextResponse.json(allTenants);
+  return NextResponse.json(allOrgs);
 });

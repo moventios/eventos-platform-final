@@ -12,9 +12,9 @@ import { Input } from '@/components/ui/input';
 type Organization = {
   id: string;
   name: string;
-  slug: string;
-  isActive: boolean;
-  metadata?: Record<string, unknown>;
+  description?: string | null;
+  metadata?: { slug?: string; city?: string; category?: string } | null;
+  createdAt?: string;
 };
 
 function PublicOrganizationsContent() {
@@ -108,13 +108,18 @@ function PublicOrganizationsContent() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-[10px] text-teal-600 dark:text-teal-400 font-bold uppercase tracking-wider">
-                    {org.slug}.movent.io
+                    {org.metadata?.slug || org.id.slice(0, 8)}.movent.io
                   </span>
-                  <StatusBadge status={org.isActive ? 'active' : 'inactive'} />
+                  <StatusBadge status={'active'} />
                 </div>
                 <h3 className="text-lg font-bold text-foreground tracking-tight truncate">
                   {org.name}
                 </h3>
+                {org.description && (
+                  <p className="text-sm text-muted-foreground line-clamp-3">
+                    {org.description}
+                  </p>
+                )}
               </div>
 
               <div className="pt-2 border-t border-border flex items-center justify-between text-xs text-muted-foreground">

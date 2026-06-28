@@ -20,7 +20,12 @@ type Event = {
   timezone: string;
   status: string;
   createdAt: string;
+  metadata?: { slug?: string; category?: string; featured?: boolean; organizer?: string };
 };
+
+/** Use SEO-friendly slug if available, otherwise fallback to UUID */
+const eventHref = (e: Event) =>
+  e.metadata?.slug ? `/events/${e.metadata.slug}` : `/events/${e.id}`;
 
 const columns: ColumnDef<Event>[] = [
   {
@@ -29,7 +34,7 @@ const columns: ColumnDef<Event>[] = [
     cell: ({ getValue, row }) => (
       <div>
         <Link
-          href={`/events/${row.original.id}`}
+          href={eventHref(row.original)}
           className="font-semibold text-teal-600 dark:text-teal-400 hover:underline transition-colors"
         >
           {getValue<string>()}
@@ -71,7 +76,7 @@ const columns: ColumnDef<Event>[] = [
     header: '',
     cell: ({ row }) => (
       <Link
-        href={`/events/${row.original.id}`}
+        href={eventHref(row.original)}
         className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline"
       >
         Lihat Detail →

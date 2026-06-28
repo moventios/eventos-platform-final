@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Calendar, KeyRound } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type Event = {
@@ -16,11 +16,14 @@ type Event = {
   startsAt: string | null;
   endsAt: string | null;
   timezone: string;
+  metadata?: { slug?: string; category?: string; organizer?: string };
+  _slug?: string; // canonical slug returned by API
 };
 
 export default function PublicEventDetailPage() {
   const params = useParams<{ id: string }>();
   const eventId = params?.id;
+  const router = useRouter();
   
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,7 +39,14 @@ export default function PublicEventDetailPage() {
         if (r.status === 404) throw new Error('not_found');
         return r.ok ? r.json() : Promise.reject(r.status);
       })
-      .then((data: Event) => setEvent(data))
+      .then((data: Event) => {
+        setEvent(data);
+        // If accessed by UUID but has a canonical slug, redirect for SEO
+        const slug = data._slug || data.metadata?.slug;
+        if (slug && slug !== eventId) {
+          router.replace(`/events/${slug}`, { scroll: false });
+        }
+      })
       .catch((err) => {
         if (err?.message === 'not_found') {
           setError('Event tidak ditemukan.');
