@@ -205,7 +205,7 @@ export default function PublicVenueDetailPage() {
                             type="datetime-local" 
                             className="w-full text-xs p-2 rounded-md border border-border bg-background text-foreground"
                             value={bookingForm[r.id]?.startsAt || ''}
-                            onChange={(e) => setBookingForm({ ...bookingForm, [r.id]: { ...bookingForm[r.id], startsAt: e.target.value }})}
+                            onChange={(e) => setBookingForm(prev => ({ ...prev, [r.id]: { startsAt: e.target.value, endsAt: prev[r.id]?.endsAt || '' } }))}
                           />
                         </div>
                         <div>
@@ -214,7 +214,7 @@ export default function PublicVenueDetailPage() {
                             type="datetime-local" 
                             className="w-full text-xs p-2 rounded-md border border-border bg-background text-foreground"
                             value={bookingForm[r.id]?.endsAt || ''}
-                            onChange={(e) => setBookingForm({ ...bookingForm, [r.id]: { ...bookingForm[r.id], endsAt: e.target.value }})}
+                            onChange={(e) => setBookingForm(prev => ({ ...prev, [r.id]: { startsAt: prev[r.id]?.startsAt || '', endsAt: e.target.value } }))}
                           />
                         </div>
                       </div>
