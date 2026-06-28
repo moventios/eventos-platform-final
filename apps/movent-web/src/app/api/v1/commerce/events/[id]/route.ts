@@ -15,7 +15,7 @@ export const GET = withTenantContext(async (_req: NextRequest, { tenantId }, par
   const { db } = createDbWithTenant(tenantId);
 
   // UUID pattern check
-  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug || '');
 
   let event;
 
