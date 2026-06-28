@@ -30,7 +30,7 @@ function PublicOrganizationsContent() {
     ? orgs.filter(
         (o) =>
           (o.name || '').toLowerCase().includes(q) ||
-          (o.slug || '').toLowerCase().includes(q),
+          (o.metadata?.slug || '').toLowerCase().includes(q),
       )
     : orgs;
 

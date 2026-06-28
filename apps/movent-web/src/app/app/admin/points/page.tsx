@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -181,7 +180,7 @@ export default function AdminPointsPage() {
               />
             </div>
           </div>
-          <DialogFooter>
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 mt-4">
             <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={submitting}>
               Batal
             </Button>
@@ -192,7 +191,7 @@ export default function AdminPointsPage() {
             >
               {submitting ? 'Memproses...' : 'Kirim Koin'}
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
