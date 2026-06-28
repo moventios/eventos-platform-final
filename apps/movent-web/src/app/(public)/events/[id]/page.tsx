@@ -68,7 +68,6 @@ export default function PublicEventDetailPage() {
         }
       })
       .finally(() => setLoading(false));
-      .finally(() => setLoading(false));
 
     // Optimistically fetch tiers and points
     fetch(`/api/v1/commerce/events/${eventId}/pass-tiers?eventId=${eventId}`)

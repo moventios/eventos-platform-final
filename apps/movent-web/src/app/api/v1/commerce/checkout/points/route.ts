@@ -60,6 +60,10 @@ export const POST = withTenantContext(async (req: NextRequest, { tenantId, actor
         profileId: actorId,
         balance: 0,
       }).returning();
+      
+      if (!newAccount) {
+        return NextResponse.json({ error: 'Gagal membuat dompet koin.' }, { status: 500 });
+      }
       account = newAccount;
     }
 
